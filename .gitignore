@@ -30,3 +30,9 @@ yarn-error.log*
 # Build files
 /dist/
 /build/
+
+#uploaded images
+
+server/Public/uploads/bannerImages/*
+server/Public/uploads/primaryImages/*
+server/Public/uploads/secondaryImages/*

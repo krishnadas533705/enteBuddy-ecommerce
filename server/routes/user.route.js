@@ -12,7 +12,6 @@ import {
   updateAddress,
 } from "../controllers/user.controller.js";
 import { verifyUser } from "../utils/authorisation.js";
-import { createOrder } from "../controllers/payments.controller.js";
 
 const router = Router();
 
@@ -45,9 +44,12 @@ router.delete("/removeAddress/:userId", verifyUser, removeAddress);
 //get all products
 router.get("/getProducts", getProducts);
 
-///payments section
+///order management
+router.post("/newOrder/:userId", verifyUser);
 
-//create razorpayOrder
-router.post("/createOrder", createOrder);
+//razorpay key
+router.get("/getRazorpayKey/:userId", verifyUser, (req, res) => {
+  res.status(200).json({ key: process.env.RAZORPAY_ID });
+});
 
 export default router;

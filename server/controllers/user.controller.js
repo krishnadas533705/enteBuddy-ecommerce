@@ -1,5 +1,6 @@
 import userAddress from "../models/address.model.js";
 import cart from "../models/cart.model.js";
+import order from "../models/order.model.js";
 import product from "../models/product.model.js";
 import { errorHandler } from "../utils/error.js";
 
@@ -88,7 +89,7 @@ export const removeFromCart = async (req, res, next) => {
 export const removeAllFromCart = async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    await cart.updateOne({ userId: userId },{$set:{items:[]}});
+    await cart.updateOne({ userId: userId }, { $set: { items: [] } });
     res.status(200).json("item removed from cart");
   } catch (err) {
     next(err);
@@ -166,3 +167,16 @@ export const getProducts = async (req, res, next) => {
     next(err);
   }
 };
+
+///order management
+//create new order
+export const createOrder = async (req, res, next) => {
+  try {
+    let newOrder = new order(req.body);
+    await newOrder.save();
+  } catch (err) {
+    next(err);
+  }
+};
+
+
