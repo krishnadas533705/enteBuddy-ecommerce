@@ -55,10 +55,11 @@ export const cartMinus = async (req, res, next) => {
 
 ///query products in the cart
 export const getCartItems = async (req, res, next) => {
-  try {
+  try { 
     const cartItems = await cart
       .findOne({ userId: req.user._id })
       .populate("items._id");
+      console.log("2",cartItems)
     const cartProducts = cartItems.items.map((item) => ({
       _id: item._id._id,
       primaryImage: item._id.primaryImage,
@@ -71,7 +72,7 @@ export const getCartItems = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+};  
 
 ///remove item from cart
 export const removeFromCart = async (req, res, next) => {

@@ -16,6 +16,7 @@ const validateProductData = (productData, setError) => {
       ...previous,
       title: "Product title is required!",
     }));
+  
     error = true;
   }
 

@@ -7,6 +7,7 @@ import LoginModel from "./LoginModel";
 import peakpx from '../img/peakpx.jpg'
 import logo from '../img/logo.png';
 import { userContext } from "../contexts/UserContext";
+import { Toaster,toast } from "react-hot-toast";
 
 const Header = () => {
   const { itemAmount } = useContext(CartContext);
@@ -18,6 +19,17 @@ const Header = () => {
   const {userId} = useContext(userContext) 
   
 
+ const handleCart=()=>{
+  if(userId){
+    setIsOpen((prev)=>!prev)
+  }
+    else 
+    { 
+      toast.error("Please log in to order")
+      setShowModal(true)
+    }
+  
+ }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,11 +50,11 @@ const Header = () => {
 
   const toggleMenu =()=>{
     setDropDown(!dropDown)
-  }
+  } 
 
   return (
     <div>
-      
+      <Toaster toastOptions={{duration:1000}}/>
       <div
         className={`navbar bg-hero bg-cover z-10 fixed transition-transform duration-300 ${
           visible ? "" : "transform -translate-y-full "
@@ -130,7 +142,7 @@ const Header = () => {
 
           <button
             className="btn btn-ghost btn-circle"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={handleCart}
           >
             <div className="indicator">
               <FaShoppingCart className="text-2xl text-yellow-400" />

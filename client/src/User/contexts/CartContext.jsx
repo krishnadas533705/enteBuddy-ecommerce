@@ -3,7 +3,7 @@ import { userContext } from "./UserContext";
 
 export const CartContext = createContext();
 const CartProvider = ({ children }) => {
-  const { userId } = useContext(userContext);
+  const { userId ,setUserId } = useContext(userContext);
   const [cart, setCart] = useState(null);
 
   useEffect(() => {
@@ -54,7 +54,8 @@ const CartProvider = ({ children }) => {
   };
   //  add to cart
   const addToCart = async (product) => {
-    try {
+    try { 
+       console.log(userId )
       const response = await fetch(`/api/user/addToCart/${userId}`, {
         method: "POST",
         headers: {
@@ -65,7 +66,9 @@ const CartProvider = ({ children }) => {
       });
       if (response.ok) {
         console.log("Cart updated");
+        
         fetchCart(userId);
+        
       } else {
         console.log("failed to update cart");
       }
