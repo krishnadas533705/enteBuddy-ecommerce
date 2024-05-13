@@ -172,11 +172,154 @@ export const getProducts = async (req, res, next) => {
 //create new order
 export const createOrder = async (req, res, next) => {
   try {
-    let newOrder = new order(req.body);
-    await newOrder.save();
+    const currentDate = new Date();
+
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    const hours = String(currentDate.getHours()).padStart(2, "0");
+    const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+    const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+
+    // Construct the formatted current date string
+    const formattedCurrentDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    console.log("shipping body : ", req.body);
+    const orderDetails = {
+      orderDate: formattedCurrentDate,
+      billing_customer_name: req.body.name,
+      billing_city: req.body.city,
+      billing_pincode: req.body.pincode,
+      billing_state: req.body.state,
+      billing_email: req.body.email,
+      billing_phone: req.body.mobile,
+      billing_address: req.body.billing_address,
+      paymentId: req.body.paymentId,
+      products: req.body.products,
+      sellingPrice: req.body.sellingPrice / 100,
+      discount: req.body.discount,
+    };
+
+    //pushing the order to database
+    let existingOrder = await order.findOne({ userId: req.user._id });
+    if (existingOrder) {
+      console.log("existing user true");
+      existingOrder.orders.push(orderDetails);
+      await existingOrder.save();
+    } else {
+      console.log("Creating new order");
+      const newOrder = new order({
+        userId: req.user._id,
+        orders: [orderDetails],
+      });
+      await newOrder.save();
+    }
+
+    ///pushing order to shiprocket
+    //getting authtoken of shiprocket
+    const credentials = {
+      email: process.env.SHIPROCKET_EMAIL,
+      password: process.env.SHIPROCKET_PASSWORD,
+    };
+    let loginResponse = await fetch(
+      "https://apiv2.shiprocket.in/v1/external/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      }
+    );
+    loginResponse = await loginResponse.json();
+    const authToken = loginResponse.token;
+
+    const orders = req.body.products.map((item) => ({
+      name: item.productName,
+      units: item.quantity,
+      sku: item._id,
+      selling_price: item.price,
+    }));
+
+    ///get channel id
+    let channelId = await fetch(
+      "https://apiv2.shiprocket.in/v1/external/channels",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+
+    if (channelId.ok) {
+      const channelData = await channelId.json();
+      channelId = channelData.data[0].id;
+    }
+    console.log("channel id : ", channelId);
+    let newOrder = await order.findOne({ userId: req.user._id });
+    newOrder = newOrder.orders[newOrder.orders.length - 1];
+    const shipingData = {
+      order_id: newOrder._id,
+      order_date: newOrder.orderDate,
+      pickup_location: "Primary",
+      channel_id: channelId,
+      company_name: "EnteBuddy",
+      billing_customer_name: newOrder.billing_customer_name,
+      billing_last_name: " ",
+      billing_city: newOrder.billing_city,
+      billing_pincode: newOrder.billing_pincode,
+      billing_state: newOrder.billing_state,
+      billing_country: "india",
+      billing_email: newOrder.billing_email,
+      billing_phone: newOrder.billing_phone,
+      billing_address: newOrder.billing_address,
+      shipping_is_billing: true,
+      order_items: orders,
+      payment_method: "Prepaid",
+      sub_total: newOrder.sellingPrice,
+      length: "5",
+      breadth: "5",
+      height: "5",
+      weight: "10",
+    };
+
+    console.log("Pushing to shiprocket....");
+    console.log(shipingData);
+    ///posting to shiprocket
+    try {
+      let shipingResponse = await fetch(
+        "https://apiv2.shiprocket.in/v1/external/orders/create/adhoc",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(shipingData),
+        }
+      );
+      if (shipingResponse.ok) {
+        console.log("shiping success");
+        shipingResponse = await shipingResponse.json();
+        console.log("order placed to shiprocket");
+        await order.updateOne(
+          { userId: req.user._id },
+          {
+            $set: {
+              "orders.$[element].shipRocketOrderId": shipingResponse.order_id,
+            },
+          },
+          { arrayFilters: [{ "element._id": newOrder._id }] }
+        );
+        res.status(200).send("order placed successfully");
+      } else {
+        res.status(500).send("failed to ship order")
+        console.log("Failed to ship order : ", await shipingResponse.json());
+      }
+    } catch (err) {
+      console.log("error in pushing to shiprocket : ", err);
+    }
   } catch (err) {
     next(err);
   }
 };
-
-

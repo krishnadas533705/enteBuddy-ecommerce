@@ -1,6 +1,6 @@
 import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import OtpInput from "otp-input-react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -8,6 +8,7 @@ import { auth } from "../utils/firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { toast, Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import { userContext } from "../contexts/UserContext";
 
 const App = () => {
   const [otp, setOtp] = useState("");
@@ -15,11 +16,13 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [user, setUser] = useState(null);
+  const { userId, setUserId } = useContext(userContext);
   const navigate = useNavigate(); // Initialize the navigate function
 
   function onCaptchVerify() {
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth,
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
         "recaptcha-container",
         {
           size: "invisible",
@@ -86,6 +89,7 @@ const App = () => {
         const userData = await response.json();
         localStorage.setItem("enteBuddyUser", userData._id);
         setUser(userData._id);
+        setUserId(userData._id);
         // await fetchCart(userData._id);
         navigate("/"); // Navigate to the home page after successful sign-in
       } else {

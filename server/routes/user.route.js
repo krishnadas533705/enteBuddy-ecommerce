@@ -3,6 +3,7 @@ import {
   addAddress,
   addToCart,
   cartMinus,
+  createOrder,
   getAddresses,
   getCartItems,
   getProducts,
@@ -45,7 +46,7 @@ router.delete("/removeAddress/:userId", verifyUser, removeAddress);
 router.get("/getProducts", getProducts);
 
 ///order management
-router.post("/newOrder/:userId", verifyUser);
+router.post("/newOrder/:userId", verifyUser,createOrder);
 
 //razorpay key
 router.get("/getRazorpayKey/:userId", verifyUser, (req, res) => {
