@@ -15,6 +15,8 @@ import SidebarProvider from "./User/contexts/SidebarContext";
 import Signin from "./User/pages/Signin";
 import UserProvider from "./User/contexts/UserContext";
 import Checkout from "./User/pages/Checkout";
+import ProfileDetails from "./User/pages/ProfileDetails";
+import ProductData from "./User/pages/ProductData";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -60,6 +62,14 @@ const router = createBrowserRouter([
   {
     path : "/checkout",
     Component : Checkout,
+  },
+  {
+    path: "/profileUpdate",
+    Component : ProfileDetails,
+  } ,
+  {
+    path : "/product/:id",
+    Component: ProductData,
   }
 ]);
 

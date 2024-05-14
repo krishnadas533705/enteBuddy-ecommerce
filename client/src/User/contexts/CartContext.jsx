@@ -44,8 +44,8 @@ const CartProvider = ({ children }) => {
         const localCart = JSON.stringify(cartData);
         localStorage.setItem("enteBuddyCart", localCart);
         setCart(cartData);  
-      } else {
-        console.log("failed to update cart");
+        } else {
+          console.log("failed to update cart");
       }
       return;
     } catch (err) {

@@ -15,6 +15,17 @@ const storage = multer.diskStorage({
     } else {
       cb(new Error("Unexpected field"));
     }
+    // hi kd bro ,mattumbo ith mattale :)
+    // if (file.fieldname == "primaryImage") {
+    //   cb(null,"C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/primaryImages");
+    // } else if (file.fieldname == "secondaryImages") {
+    //   cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/secondaryImages");
+    // } else if (file.fieldname == "bannerImage") {
+    //   cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/bannerImages");
+      
+    // } else {
+    //   cb(new Error("Unexpected field"));
+    // }
   },
   filename: (req, file, cb) => {
     cb(

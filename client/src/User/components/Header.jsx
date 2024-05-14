@@ -7,9 +7,9 @@ import LoginModel from "./LoginModel";
 import peakpx from '../img/peakpx.jpg'
 import logo from '../img/logo.png';
 import { userContext } from "../contexts/UserContext";
-import { Toaster,toast } from "react-hot-toast";
+import { Toaster,toast } from "react-hot-toast";  
 
-const Header = () => {
+const Header = (cookies) => {
   const { itemAmount } = useContext(CartContext);
   const { isOpen, setIsOpen } = useContext(SidebarContext);
   const [prevScrollPos, setPrevScrollPos] = useState(window.scrollYt);
@@ -17,7 +17,7 @@ const Header = () => {
   const [showModal,setShowModal] = useState(false) 
   const [dropDown, setDropDown] = useState(false)
   const {userId} = useContext(userContext) 
-  
+   
 
  const handleCart=()=>{
   if(userId){
@@ -88,13 +88,13 @@ const Header = () => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
              
-              <li className="border-b border-gray-300">
+              <li >
                 <Link>Contact us</Link>
               </li>
-              <li className="border-b border-gray-300">
+              <li className="">
                 <Link>About us</Link>
               </li>
-              <li className="border-b border-gray-300">
+              <li className="">
                 <Link>Track your order</Link>
               </li>
             </ul>
@@ -132,7 +132,7 @@ const Header = () => {
               <li>
             
               </li>
-              <li>  {userId ? <button>Log out</button>: <button onClick={()=>{setShowModal(true) ; setDropDown(!dropDown)}}>login</button> }
+              <li>  {userId ? <button >Log out</button>: <button onClick={()=>{setShowModal(true) ; setDropDown(!dropDown)}}>login</button> }
                
                
 
