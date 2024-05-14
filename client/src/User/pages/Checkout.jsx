@@ -24,14 +24,12 @@ import { userContext } from "../contexts/UserContext";
 import { makePayment } from "../utils/payment";
 
 const Checkout = () => {
-  const { cart, totalPrice } = useContext(CartContext);
-  const [subTotalPrice, setSubTotal] = useState(0);
-  console.log("Totalprice and subtotal : ", totalPrice, subTotalPrice);
+  const { cart, totalPrice, couponId, discountPrice } = useContext(CartContext);
   const [stateid, setstateid] = useState(0);
   const [cityid, setcityid] = useState(0);
   const [nameError, setNameError] = useState(null);
   const [emailError, setEmailError] = useState(null);
-  const [pinCodeError, setPinCodeError] = useState(null);
+  const [pinCodeError, setPinCodeError] = useState({ msg: null, error: false });
   const [phoneNumberError, setPhoneNumberError] = useState(null);
   const [orderDetails, setOrderDetails] = useState({
     name: "",
@@ -45,15 +43,15 @@ const Checkout = () => {
     paymentId: "",
     products: cart ? cart : "",
     billing_address: "",
+    couponId: couponId ? couponId : "",
   });
-
+  console.log("coupon id : ",localStorage.getItem('enteBuddyCouponId'))
   useEffect(() => {
     setOrderDetails((prev) => ({
       ...prev,
       products: cart,
     }));
   }, [cart]);
-  console.log("order details : ", orderDetails.products);
 
   const { userId } = useContext(userContext);
 
@@ -102,7 +100,7 @@ const Checkout = () => {
       validateName(orderDetails.name) &&
       validateEmail(orderDetails.email) &&
       validatePhoneNumber(orderDetails.mobile) &&
-      validatePinCode(orderDetails.pincode) &&
+      !pinCodeError.error &&
       cityid !== 0 &&
       stateid !== 0
     ) {
@@ -113,15 +111,13 @@ const Checkout = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: subTotalPrice > 0 ? subTotalPrice : totalPrice,
+          amount: discountPrice > 0 ? discountPrice : totalPrice,
         }),
         credentials: "include",
       });
 
       if (response.ok) {
-        alert("payment created");
         const paymentOrder = await response.json();
-        console.log("razorpay order : ", paymentOrder.order);
         makePayment(
           paymentOrder.key_id,
           paymentOrder.order,
@@ -463,36 +459,24 @@ const Checkout = () => {
                     value={orderDetails.pincode}
                     className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Pin code"
-                    onChange={(e) =>
-                      handleOrderDetails(e.target.name, e.target.value)
-                    }
-                    onBlur={() => {
-                      if (!validatePinCode(orderDetails.pincode)) {
-                        setPinCodeError("Please provide valid pin code");
-                      } else {
-                        setPinCodeError(null);
-                      }
+                    onChange={(e) => {
+                      handleOrderDetails(e.target.name, e.target.value);
                     }}
+                    onInput={(e) =>
+                      validatePinCode(e.target.value, setPinCodeError, userId)
+                    }
                   />
                 </div>
-                {pinCodeError && (
-                  <p className="text-red-500 text-center text-sm">
-                    please provide valid pincode
+                {console.log("isError : ", pinCodeError.error)}
+                {pinCodeError.msg && (
+                  <p
+                    className={`text-center text-sm ${
+                      !pinCodeError.error ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    {pinCodeError.msg}
                   </p>
                 )}
-              </div>
-
-              {/* coupon code  */}
-              <div className="flex flex-col my-4 bg-gray-200 rounded-md font-poppins border  ">
-                <label className="flex justify-center items-center py-2">
-                  Coupon code
-                </label>
-                <input
-                  className=" border border-gray-100 px-4 py-1"
-                  type="text"
-                  name="coupon-code"
-                  placeholder="Disc30"
-                />
               </div>
 
               {/* <!-- Total --> */}
@@ -500,11 +484,12 @@ const Checkout = () => {
               <div className="mt-6 flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900">Total</p>
                 <p className="text-2xl font-semibold text-gray-900">
-                  ₹{subTotalPrice > 0 ? subTotalPrice : totalPrice}
+                  ₹{discountPrice > 0 ? discountPrice : totalPrice}
                 </p>
               </div>
             </div>
             <button
+              type="button"
               onClick={handleSubmit}
               className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
             >

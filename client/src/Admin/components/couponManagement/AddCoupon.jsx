@@ -137,7 +137,8 @@ const AddCoupon = ({ couponForm, showCouponForm, setFetchCoupons }) => {
                     id="couponCode"
                     className="h-8 border rounded px-4 bg-gray-50 focus:outline-sky-500"
                     value={couponData.couponCode ? couponData.couponCode : ""}
-                    disabled
+                    placeholder="Enter custome code or generate code."
+                    onChange={updateCouponData}
                   />
 
                   <button

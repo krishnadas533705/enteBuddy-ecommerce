@@ -5,7 +5,6 @@ import product from "../models/product.model.js";
 import { banner } from "../models/banner.model.js";
 import User from "../models/user.model.js";
 import coupon from "../models/coupons.model.js";
-import offers from "../models/offers.model.js";
 
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -258,52 +257,6 @@ export const deleteCoupon = async (req, res, next) => {
     const couponId = req.params.couponId;
     await coupon.deleteOne({ _id: couponId });
     res.status(200).json("coupon removed");
-  } catch (err) {
-    next(err);
-  }
-};
-
-///offers management
-export const createOffer = async (req, res, next) => {
-  try {
-    const newOffer = new offers(req.body);
-    newOffer.save();
-    res.status(200).json("New offer created");
-  } catch (err) {
-    next(err);
-  }
-};
-
-//update offer status
-export const updateOffer = async (req, res, next) => {
-  try {
-    const offerStatus = req.body.orderStatus;
-    const offerId = req.body.offerId;
-    await offers.updateOne(
-      { _id: offerId },
-      { $set: { isActive: offerStatus } }
-    );
-    res.status(200).json("Offer updated");
-  } catch (err) {
-    next(err);
-  }
-};
-
-// remove offer
-export const removeOffer = async (req, res, next) => {
-  try {
-    const offerId = req.params.offerId;
-    await offers.deleteOne({ _id: offerId });
-    res.status(200).json("Offer removed");
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getAllOffers = async (req, res, next) => {
-  try {
-    const allOffers = await offers.find({});
-    res.status(200).json(allOffers);
   } catch (err) {
     next(err);
   }

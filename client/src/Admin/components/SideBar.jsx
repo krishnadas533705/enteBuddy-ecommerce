@@ -1,34 +1,42 @@
 import React, { useContext, useState } from "react";
 import AdminContext from "../context/AdminContext";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartLine, faDashboard, faSignOut, faStore, faStoreAlt, faStoreSlash, faTicket, faTruckFast, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartLine,
+  faDashboard,
+  faPercent,
+  faPercentage,
+  faSignOut,
+  faStore,
+  faStoreAlt,
+  faStoreSlash,
+  faTicket,
+  faTruckFast,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { faProductHunt } from "@fortawesome/free-brands-svg-icons";
 import { faImage, faUser } from "@fortawesome/free-regular-svg-icons";
 
 const SideBar = () => {
   let { sideBarOpen } = useContext(AdminContext);
   const { adminId, setAdmin } = useContext(AdminContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const logoutAdmin = async () => {
     try {
-      console.log("loggin out...")
-      const reponse = await fetch(
-        `/api/admin/signout/${adminId}`,
-        {
-          method:'post',
-          credentials:'include'
-        }
-      );
-      console.log("logout response : ",reponse)
+      console.log("loggin out...");
+      const reponse = await fetch(`/api/admin/signout/${adminId}`, {
+        method: "post",
+        credentials: "include",
+      });
+      console.log("logout response : ", reponse);
       if (reponse.ok) {
         localStorage.setItem("adminId", null);
         setAdmin(null);
-        navigate('/admin/signin')
-      }
-      else {
-        console.log("logout failed")
+        navigate("/admin/signin");
+      } else {
+        console.log("logout failed");
       }
     } catch (err) {
       console.log(err);
@@ -50,7 +58,8 @@ const SideBar = () => {
                 to="/admin/dashboard"
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 focus:text-blue-600 focus:bg-gray-100 hover:bg-gray-100  group"
               >
-               <FontAwesomeIcon icon={faChartLine} /> <span className="ms-3">Dashboard</span>
+                <FontAwesomeIcon icon={faChartLine} />{" "}
+                <span className="ms-3">Dashboard</span>
               </Link>
             </li>
 
@@ -59,7 +68,8 @@ const SideBar = () => {
                 to="/admin/products"
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 hover:bg-gray-100  group"
               >
-                <FontAwesomeIcon icon={faStore} /> <span className="flex-1 ms-3 whitespace-nowrap">Products</span>
+                <FontAwesomeIcon icon={faStore} />{" "}
+                <span className="flex-1 ms-3 whitespace-nowrap">Products</span>
               </Link>
             </li>
             <li>
@@ -67,45 +77,46 @@ const SideBar = () => {
                 to="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 hover:bg-gray-100 group"
               >
-                <FontAwesomeIcon icon={faTruckFast} /> <span className="flex-1 ms-3 whitespace-nowrap">Orders</span>
+                <FontAwesomeIcon icon={faTruckFast} />{" "}
+                <span className="flex-1 ms-3 whitespace-nowrap">Orders</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/Users"
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600  hover:bg-gray-100 group"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 hover:bg-gray-100 group"
               >
-                <FontAwesomeIcon icon={faUsers} /> <span className="ms-3">Users</span>
+                <FontAwesomeIcon icon={faUsers} />{" "}
+                <span className="ms-3">Users</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/coupons"
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600  hover:bg-gray-100 group"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 hover:bg-gray-100 group"
               >
-                <FontAwesomeIcon icon={faTicket} /><span className="flex-1 ms-3 whitespace-nowrap">Coupons</span>
+                <FontAwesomeIcon icon={faTicket} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Coupons</span>
               </Link>
             </li>
+            
             <li>
               <Link
                 to="/admin/banners"
                 className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600  hover:bg-gray-100 group"
               >
-                <FontAwesomeIcon icon={faImage} /><span className="flex-1 ms-3 whitespace-nowrap">Banners</span>
+                <FontAwesomeIcon icon={faImage} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Banners</span>
               </Link>
             </li>
             <li>
               <a
                 href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600  hover:bg-gray-100 group"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 hover:bg-gray-100 group"
                 onClick={logoutAdmin}
               >
-               <FontAwesomeIcon icon={faSignOut} /> <span
-                  className="flex-1 ms-3 whitespace-nowrap"
-                  
-                >
-                  Sign Out
-                </span>
+                <FontAwesomeIcon icon={faSignOut} />{" "}
+                <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
               </a>
             </li>
           </ul>
