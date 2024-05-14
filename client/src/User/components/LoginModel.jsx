@@ -8,7 +8,7 @@ import { useState, useContext } from "react";
 import OtpInput from "otp-input-react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-
+import { LogContext } from "../contexts/LogContext";
 import { auth } from "../utils/firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { Toaster, toast } from "react-hot-toast";
@@ -17,7 +17,8 @@ import peakpx from "../img/peakpx.jpg";
 import { userContext } from "../contexts/UserContext";
 import { CartContext } from "../contexts/CartContext";
 
-const LoginModel = ({ onClose }) => {
+const LoginModel = () => { 
+
   const [otp, setOtp] = useState("");
   const [ph, setPh] = useState("");
   const [loading, setLoading] = useState("");
@@ -25,6 +26,7 @@ const LoginModel = ({ onClose }) => {
   const [user, setUser] = useState(null);
   const { userId, setUserId } = useContext(userContext);
   const { setCart, fetchCart } = useContext(CartContext);
+  const { onClose } = useContext(LogContext);
 
   const navigate = useNavigate(); //intialize the navigate function
 

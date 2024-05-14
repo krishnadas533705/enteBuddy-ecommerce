@@ -1,8 +1,14 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { userContext } from "./UserContext";
+import {toast } from 'react-hot-toast'
+import { SidebarContext } from "./SidebarContext";
+import { LogContext } from "./LogContext";
+
 
 export const CartContext = createContext();
 const CartProvider = ({ children }) => {
+  const {setIsOpen }=useContext(SidebarContext)
+  const {setShowModal} = useContext(LogContext)
   const { userId ,setUserId } = useContext(userContext);
   const [cart, setCart] = useState(null);
 
@@ -66,6 +72,7 @@ const CartProvider = ({ children }) => {
       });
       if (response.ok) {
         console.log("Cart updated");
+        toast.success("product added to cart")
         
         fetchCart(userId);
         
@@ -160,7 +167,19 @@ const CartProvider = ({ children }) => {
       setItemAmount(amount); 
       
     }
-  }, [cart]);
+  }, [cart]); 
+
+  const handleCart=()=>{
+    if(userId){
+      setIsOpen((prev)=>!prev)
+    }
+      else 
+      { 
+        toast.error("Please log in to order")
+        setShowModal(true)
+      }
+    
+   }
   
 
   return (
@@ -174,6 +193,7 @@ const CartProvider = ({ children }) => {
         itemAmount,
         totalPrice,
         fetchCart,
+        handleCart
       }}
     >
       {children}

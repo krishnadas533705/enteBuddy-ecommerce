@@ -8,28 +8,23 @@ import peakpx from '../img/peakpx.jpg'
 import logo from '../img/logo.png';
 import { userContext } from "../contexts/UserContext";
 import { Toaster,toast } from "react-hot-toast";  
+import AboutUs from "./AboutUs";
+import ContactUs from "./ContactUs";
+import { LogContext } from "../contexts/LogContext";
 
 const Header = (cookies) => {
-  const { itemAmount } = useContext(CartContext);
+  const { itemAmount,handleCart } = useContext(CartContext);
   const { isOpen, setIsOpen } = useContext(SidebarContext);
+  const {showModal,setShowModal}=useContext(LogContext)
   const [prevScrollPos, setPrevScrollPos] = useState(window.scrollYt);
   const [visible, setVisible] = useState(true);
-  const [showModal,setShowModal] = useState(false) 
   const [dropDown, setDropDown] = useState(false)
   const {userId} = useContext(userContext) 
-   
+  const [aboutModal,setAboutModal] = useState(false)
+  const [contactModal,setContactModal] = useState(false)
+  const [leftDropdown,setLeftDropdown]= useState(false)   
 
- const handleCart=()=>{
-  if(userId){
-    setIsOpen((prev)=>!prev)
-  }
-    else 
-    { 
-      toast.error("Please log in to order")
-      setShowModal(true)
-    }
-  
- }
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +46,9 @@ const Header = (cookies) => {
   const toggleMenu =()=>{
     setDropDown(!dropDown)
   } 
-
+  const toggleLeftMenu=()=>{
+    setLeftDropdown((prev)=>!prev)
+  }
   return (
     <div>
       <Toaster toastOptions={{duration:1000}}/>
@@ -67,7 +64,7 @@ const Header = (cookies) => {
               role="button"
               className=" btn btn-ghost btn-circle"
             >
-              <svg
+              <svg onClick={toggleLeftMenu}
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 text-yellow-400"
                 fill="none"
@@ -85,17 +82,18 @@ const Header = (cookies) => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 font-poppins " 
+              style= {{ display : leftDropdown ?  'block' :'none'}}
             >
              
               <li >
-                <Link>Contact us</Link>
+                <Link onClick={()=>{setAboutModal(!aboutModal);setLeftDropdown(!leftDropdown)}}>About us</Link>
               </li>
               <li className="">
-                <Link>About us</Link>
+                <Link onClick={()=>{setContactModal(!contactModal);setLeftDropdown(!leftDropdown)}}>Contact us</Link>
               </li>
               <li className="">
-                <Link>Track your order</Link>
+                <Link onClick={toggleLeftMenu}>Track your order</Link>
               </li>
             </ul>
           </div>
@@ -113,25 +111,16 @@ const Header = (cookies) => {
               className="btn btn-ghost btn-circle relative"
             >
               <div className="w-8 rounded-full ">
-                <FaUser  onClick={()=>{toggleMenu()}} className="ml-2 text-xl text-yellow-400"/> 
-                {userId && (<div className="bg-green-500  w-3 h-3 rounded-full absolute top-2 right-2"></div>)}
+                <FaUser  onClick={()=>{toggleMenu()}} className="ml-2 text-xl text-primary"/> 
+                {userId && (<div className="bg-secondary  w-3 h-3 rounded-full absolute top-2 right-2"></div>)}
               </div>
             </div>
             <ul
               tabIndex={0}
-              className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 transition-transform duration-300`} 
+              className={`menu menu-sm dropdown-content mt-1 z-[1]  shadow bg-base-100 rounded-box w-32  transition-transform duration-300`} 
               style = {{display :dropDown ? 'block' : 'none' }}
             > 
-           
-               <li>
-                <Link className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </Link>
-              </li>
-              <li>
-            
-              </li>
+
               <li>  {userId ? <button >Log out</button>: <button onClick={()=>{setShowModal(true) ; setDropDown(!dropDown)}}>login</button> }
                
                
@@ -160,7 +149,11 @@ const Header = (cookies) => {
       }}>
         
       </div> */} 
-        { showModal && <LoginModel onClose={()=>{setShowModal(false)}}/> } 
+        { showModal && <LoginModel /> } 
+
+        { aboutModal && <AboutUs onClose={()=>{setAboutModal(false)}}/> } 
+
+        { contactModal && <ContactUs onClose={()=>{setContactModal(false)}}/> } 
 
     </div> 
 

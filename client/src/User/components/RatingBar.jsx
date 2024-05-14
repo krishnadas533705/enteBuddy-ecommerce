@@ -4,12 +4,13 @@ const RatingBar = () => {
   const ratings = [5, 4, 3, 2, 1]; // Array of possible ratings
 
   return (
-    <div className="bg-[#ede9e7] py-5 flex flex-col px-1 ">
+    <>
+        <div className='text-center text-3xl text-black font-poppins mb-7'>Customer reviews</div>
       {ratings.map((rating) => (
         <div key={rating} className="flex items-center mt-4">
           <a
             href="#"
-            className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            className="text-sm font-normal text-black dark:text-blue-500 hover:underline"
           >
             {rating} star
           </a>
@@ -19,12 +20,12 @@ const RatingBar = () => {
               style={{ width: `${(rating / 5) * 100}%` }} // Dynamic width based on rating
             />
           </div>
-          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400 ml-6 ">
             {(rating / 5) * 100}%
           </span>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

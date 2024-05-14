@@ -125,7 +125,7 @@ const Sidebar = () => {
                                     onChange={handleCheckboxChange}
                                     className="w-5 h-5 ml-6 my-5 "
                                 />
-                              
+
 
                              </div>
 

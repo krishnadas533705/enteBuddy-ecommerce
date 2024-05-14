@@ -52,7 +52,7 @@ const CartItem = ({ item }) => {
                 <IoMdRemove />
               </div>
               {/* quantity */}
-              <div className="px-3 flex h-full  items-center">
+              <div className="px-2 flex h-full  items-center">
                 {" "}
                 <span>{quantity}</span>
               </div>
