@@ -4,6 +4,7 @@ import { CartContext } from "../contexts/CartContext";
 import { Link, useParams } from "react-router-dom";
 import { SidebarContext } from "../contexts/SidebarContext";
 import Rating from "../components/Rating";
+import RatingBar from "../components/RatingBar";
 
 const ProductData = () => {
     const { id } = useParams();
@@ -83,93 +84,7 @@ const ProductData = () => {
                             Add to cart
                         </div>
                     </div>
-                    <div className="bg-[#ede9e7] py-5 flex flex-col px-5 ">
-                        <div className="flex items-center mt-4">
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                            >
-                                5 star
-                            </a>
-                            <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                <div
-                                    className="h-5 bg-yellow-300 rounded"
-                                    style={{ width: "70%" }}
-                                ></div>
-                            </div>
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                70%
-                            </span>
-                        </div>
-                        <div className="flex items-center mt-4">
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                            >
-                                4 star
-                            </a>
-                            <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                <div
-                                    className="h-5 bg-yellow-300 rounded"
-                                    style={{ width: "17%" }}
-                                ></div>
-                            </div>
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                17%
-                            </span>
-                        </div>
-                        <div className="flex items-center mt-4">
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                            >
-                                3 star
-                            </a>
-                            <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                <div
-                                    className="h-5 bg-yellow-300 rounded"
-                                    style={{ width: "8%" }}
-                                ></div>
-                            </div>
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                8%
-                            </span>
-                        </div>
-                        <div className="flex items-center mt-4">
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                            >
-                                2 star
-                            </a>
-                            <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                <div
-                                    className="h-5 bg-yellow-300 rounded"
-                                    style={{ width: "4%" }}
-                                ></div>
-                            </div>
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                4%
-                            </span>
-                        </div>
-                        <div className="flex items-center mt-4">
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                            >
-                                1 star
-                            </a>
-                            <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                <div
-                                    className="h-5 bg-yellow-300 rounded"
-                                    style={{ width: "1%" }}
-                                ></div>
-                            </div>
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                1%
-                            </span>
-                        </div>
-                    </div>
+                   <RatingBar/>
                 </div>
 
                 {/* customer review section */}
