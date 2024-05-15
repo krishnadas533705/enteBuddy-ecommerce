@@ -1,21 +1,20 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { userContext } from "./UserContext";
-import {toast } from 'react-hot-toast'
+import { toast } from "react-hot-toast";
 import { SidebarContext } from "./SidebarContext";
 import { LogContext } from "./LogContext";
 
-
 export const CartContext = createContext();
 const CartProvider = ({ children }) => {
-  const {setIsOpen }=useContext(SidebarContext)
-  const {setShowModal} = useContext(LogContext)
-  const { userId ,setUserId } = useContext(userContext);
+  const { setIsOpen } = useContext(SidebarContext);
+  const { setShowModal } = useContext(LogContext);
+  const { userId, setUserId } = useContext(userContext);
   const [cart, setCart] = useState(null);
-  const [couponId, setCouponId] = useState(()=>{
-    return localStorage.getItem("enteBuddyCouponId") || ''
+  const [couponId, setCouponId] = useState(() => {
+    return localStorage.getItem("enteBuddyCouponId") || "";
   });
-  const [discountPrice, setDiscountPrice] = useState(()=>{
-    return localStorage.getItem("enteBuddyCartPrice") || 0
+  const [discountPrice, setDiscountPrice] = useState(() => {
+    return localStorage.getItem("enteBuddyCartPrice") || 0;
   });
 
   useEffect(() => {
@@ -52,9 +51,14 @@ const CartProvider = ({ children }) => {
         console.log("cartData : ", cartData);
         const localCart = JSON.stringify(cartData);
         localStorage.setItem("enteBuddyCart", localCart);
-        setCart(cartData);  
-        } else {
-          console.log("failed to update cart");
+        setCart(cartData);
+        localStorage.setItem("enteBuddyCartPrice", 0);
+        setDiscountPrice(0);
+        localStorage.setItem("enteBuddyCouponId", "");
+        setCouponId("");
+        setCart(cartData);
+      } else {
+        console.log("failed to update cart");
       }
       return;
     } catch (err) {
@@ -63,8 +67,8 @@ const CartProvider = ({ children }) => {
   };
   //  add to cart
   const addToCart = async (product) => {
-    try { 
-       console.log(userId )
+    try {
+      console.log(userId);
       const response = await fetch(`/api/user/addToCart/${userId}`, {
         method: "POST",
         headers: {
@@ -75,10 +79,9 @@ const CartProvider = ({ children }) => {
       });
       if (response.ok) {
         console.log("Cart updated");
-        toast.success("product added to cart")
-        
+        toast.success("product added to cart");
+
         fetchCart(userId);
-        
       } else {
         console.log("failed to update cart");
       }
@@ -165,20 +168,16 @@ const CartProvider = ({ children }) => {
       }, 0);
       setItemAmount(amount);
     }
-=======
-  }, [cart]); 
+  }, [cart]);
 
-  const handleCart=()=>{
-    if(userId){
-      setIsOpen((prev)=>!prev)
+  const handleCart = () => {
+    if (userId) {
+      setIsOpen((prev) => !prev);
+    } else {
+      toast.error("Please log in to order");
+      setShowModal(true);
     }
-      else 
-      { 
-        toast.error("Please log in to order")
-        setShowModal(true)
-      }
-    
-   }
+  };
 
   return (
     <CartContext.Provider
@@ -192,8 +191,10 @@ const CartProvider = ({ children }) => {
         totalPrice,
         fetchCart,
         couponId,
-        handleCart
-
+        handleCart,
+        discountPrice,
+        setDiscountPrice,
+        setCouponId
       }}
     >
       {children}
