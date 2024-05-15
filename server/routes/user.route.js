@@ -1,16 +1,17 @@
 import { Router } from "express";
 import {
-  addAddress,
+  addReview,
   addToCart,
   cartMinus,
+  checkCoupon,
+  checkPincode,
   createOrder,
-  getAddresses,
+  fetchOrders,
+  fetchReviews,
   getCartItems,
   getProducts,
-  removeAddress,
   removeAllFromCart,
   removeFromCart,
-  updateAddress,
 } from "../controllers/user.controller.js";
 import { verifyUser } from "../utils/authorisation.js";
 
@@ -30,18 +31,6 @@ router.delete("/removeAllFromCart/:userId", verifyUser, removeAllFromCart);
 //deacrease product quantity in cart
 router.put("/cartMinus/:userId/:productId", verifyUser, cartMinus);
 
-//add new address
-router.post("/addAddress/:userId", verifyUser, addAddress);
-
-//list all address
-router.get("/getAddresses/:userId", verifyUser, getAddresses);
-
-//updateADdress
-router.put("/updateAddress/:userId", verifyUser, updateAddress);
-
-//remove address
-router.delete("/removeAddress/:userId", verifyUser, removeAddress);
-
 //get all products
 router.get("/getProducts", getProducts);
 
@@ -52,5 +41,25 @@ router.post("/newOrder/:userId", verifyUser,createOrder);
 router.get("/getRazorpayKey/:userId", verifyUser, (req, res) => {
   res.status(200).json({ key: process.env.RAZORPAY_ID });
 });
+
+
+///check courier service availabilty
+router.get(`/checkPostCode/:userId/:pincode`,verifyUser,checkPincode)
+
+
+///fetch all offers
+router.get(`/fetchOffers/:userId`,verifyUser)
+
+///check coupon status and apply
+router.get(`/checkCoupon/:userId/:couponCode`,verifyUser,checkCoupon)
+
+
+//get order details
+router.get(`/fetchOrders/:userId`,verifyUser,fetchOrders)
+
+///add and fetch reviews
+router.get(`/fetchReviews/:productId`,fetchReviews)
+
+router.post(`/addReview/:userId/`,verifyUser,addReview)
 
 export default router;

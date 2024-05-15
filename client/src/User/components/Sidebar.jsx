@@ -1,9 +1,11 @@
+
 import React, { useContext, useEffect,useState } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { IoMdArrowForward, IoMdTrash } from "react-icons/io";
 import { CartContext } from "../contexts/CartContext";
 import CartItem from "./CartItem";
 import { FiTrash2 } from "react-icons/fi";
+import { userContext } from "../contexts/UserContext";
 
 const Sidebar = () => {
     const { isOpen, handleClose } = useContext(SidebarContext);
@@ -40,6 +42,7 @@ const Sidebar = () => {
                     onClick={handleClose} // Close sidebar when clicking on the background
                 ></div>
             )}
+
 
             <div
                 className={`${

@@ -22,7 +22,7 @@ export const userAuth = async (req, res, next) => {
     }
     const token = jwt.sign({ userInfo }, process.env.JWT_SECRET);
     res
-      .cookie("access_token", token, {
+      .cookie("enteBuddy_access_token", token, {
         httpOnly: true,
         secure: true,
         expires: new Date(Date.now() + 24 * 60 * 60 * 10000),
@@ -50,13 +50,25 @@ export const googleAuth = async (req, res, next) => {
     const userInfo = { userName, _id: userId, email };
     const token = jwt.sign({ userInfo }, process.env.JWT_SECRET);
     res
-      .cookie("access_token", token, {
+      .cookie("enteBuddy_access_token", token, {
         httpOnly: true,
         secure: true,
         expires: new Date(Date.now() + 24 * 60 * 60 * 100),
       })
       .status(200)
       .json(userInfo);
+  } catch (err) {
+    next(err);
+  }
+};
+
+///logout user
+export const logoutUser = async (req, res, next) => {
+  try {
+    res
+      .clearCookie("enteBuddy_access_token")
+      .status(200)
+      .send("Logout out successfully");
   } catch (err) {
     next(err);
   }

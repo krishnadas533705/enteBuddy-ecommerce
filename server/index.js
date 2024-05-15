@@ -19,6 +19,7 @@ export const instance = new Razorpay({
 });
 
 
+
 mongoose
   .connect("mongodb://127.0.0.1:27017/enteBuddy")
   .then(() => console.log("Database connected"))
@@ -43,6 +44,9 @@ app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/admin", adminRoute);
 app.use('/api/payment',paymentRoute)
+
+
+
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "internal server error";

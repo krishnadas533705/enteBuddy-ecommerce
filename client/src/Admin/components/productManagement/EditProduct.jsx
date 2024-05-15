@@ -73,8 +73,7 @@ const EditProduct = ({
       }
 
       const response = await fetch(
-        `/api/admin/updateProduct/${adminId}/${(productId =
-          editingProduct._id)}`,
+        `/api/admin/updateProduct/${adminId}/${editingProduct._id}`,
         {
           method: "put",
           body: formData,

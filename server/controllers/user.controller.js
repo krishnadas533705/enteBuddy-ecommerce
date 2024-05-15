@@ -1,8 +1,12 @@
-import userAddress from "../models/address.model.js";
 import cart from "../models/cart.model.js";
+import coupon from "../models/coupons.model.js";
 import order from "../models/order.model.js";
 import product from "../models/product.model.js";
+import reviews from "../models/review.model.js";
 import { errorHandler } from "../utils/error.js";
+import generateShiprocketToken from "../utils/shiprocketToken.js";
+
+let shipRocketAuthToken = null;
 
 /// add a new item to the product
 export const addToCart = async (req, res, next) => {
@@ -97,68 +101,6 @@ export const removeAllFromCart = async (req, res, next) => {
   }
 };
 
-///add new address
-export const addAddress = async (req, res, next) => {
-  try {
-    const address = await userAddress.findOne({ userId: req.user._id });
-    if (address == null) {
-      const addressData = {
-        userId: req.user._id,
-        addresses: [req.body],
-      };
-      const newAddress = new userAddress(addressData);
-      await newAddress.save();
-    } else {
-      await address.pushAddress(req.body);
-      address.save();
-    }
-    res.status(200).json("Address added to database");
-  } catch (err) {
-    next(err);
-  }
-};
-
-///get all addresses
-
-export const getAddresses = async (req, res, next) => {
-  try {
-    const addresses = await userAddress.find({ userId: req.user._id });
-    if (addresses == null) {
-      res.status(400).json("No addresses");
-    }
-    res.status(200).json(addresses);
-  } catch (err) {
-    next(err);
-  }
-};
-
-///remove address
-export const removeAddress = async (req, res, next) => {
-  try {
-    const addressId = req.body.addressId;
-    const address = await userAddress.findOne({ userId: req.user._id });
-    address.removeAddress(addressId);
-    address.save();
-    res.status(200).json("Address removed");
-  } catch (err) {
-    next(err);
-  }
-};
-
-///updateAddress
-export const updateAddress = async (req, res, next) => {
-  try {
-    const addressId = req.body.addressId;
-    const updateData = req.body;
-    const address = await userAddress.findOne({ userId: req.user._id });
-    address.updateAddress(addressId, updateData);
-    address.save();
-    res.status(200).json("Address updated");
-  } catch (err) {
-    next(err);
-  }
-};
-
 //get product list
 export const getProducts = async (req, res, next) => {
   try {
@@ -198,6 +140,7 @@ export const createOrder = async (req, res, next) => {
       products: req.body.products,
       sellingPrice: req.body.sellingPrice / 100,
       discount: req.body.discount,
+      couponId: req.body.couponId,
     };
 
     //pushing the order to database
@@ -217,22 +160,8 @@ export const createOrder = async (req, res, next) => {
 
     ///pushing order to shiprocket
     //getting authtoken of shiprocket
-    const credentials = {
-      email: process.env.SHIPROCKET_EMAIL,
-      password: process.env.SHIPROCKET_PASSWORD,
-    };
-    let loginResponse = await fetch(
-      "https://apiv2.shiprocket.in/v1/external/auth/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      }
-    );
-    loginResponse = await loginResponse.json();
-    const authToken = loginResponse.token;
+
+    const authToken = await generateShiprocketToken();
 
     const orders = req.body.products.map((item) => ({
       name: item.productName,
@@ -302,7 +231,7 @@ export const createOrder = async (req, res, next) => {
       if (shipingResponse.ok) {
         console.log("shiping success");
         shipingResponse = await shipingResponse.json();
-        console.log("order placed to shiprocket");
+        //update shiprocketId in order collection
         await order.updateOne(
           { userId: req.user._id },
           {
@@ -312,14 +241,150 @@ export const createOrder = async (req, res, next) => {
           },
           { arrayFilters: [{ "element._id": newOrder._id }] }
         );
+
+        //update used coupon
+        await coupon.updateOne(
+          { _id: req.body.couponId },
+          { $push: { usedBy: req.user._id } }
+        );
+
+        //send response to client
         res.status(200).send("order placed successfully");
       } else {
-        res.status(500).send("failed to ship order")
+        res.status(500).send("failed to ship order");
         console.log("Failed to ship order : ", await shipingResponse.json());
       }
     } catch (err) {
       console.log("error in pushing to shiprocket : ", err);
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+///check courirer service availability
+export const checkPincode = async (req, res, next) => {
+  try {
+    console.log("checking pincode....");
+    console.log("postcode : ", req.params.pincode);
+    const authToken = await generateShiprocketToken();
+    console.log("Authtoken : ", authToken);
+    const pincode = req.params.pincode;
+    const pickup = 680681;
+    const response = await fetch(
+      `https://apiv2.shiprocket.in/v1/external/courier/serviceability/?delivery_postcode=${pincode}&pickup_postcode=${pickup}&weight=5&cod=0`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const result = await response.json();
+    console.log("Result : ", result);
+    let isAvailable = false;
+    if (result.data && result.data.available_courier_companies.length > 0) {
+      isAvailable = true;
+    }
+    res.status(200).json({ isAvailable });
+  } catch (err) {
+    next(err);
+  }
+};
+
+///fetch all offers
+export const fetchOffers = async (req, res, next) => {
+  try {
+  } catch (err) {
+    next(err);
+  }
+};
+
+///check coupon status and apply coupon
+export const checkCoupon = async (req, res, next) => {
+  try {
+    const couponCode = req.params.couponCode;
+    const couponStatus = await coupon.findOne({ couponCode: couponCode });
+    let couponResponse;
+    if (couponStatus) {
+      let isUsed = couponStatus.usedBy.find((doc) => doc == req.user._id);
+      console.log("isUsed : ", isUsed);
+      if (!isUsed) {
+        let startDate = new Date(couponStatus.startDate).toLocaleDateString();
+        let endDate = new Date(couponStatus.endDate).toLocaleDateString();
+        let today = new Date(Date.now()).toLocaleDateString();
+
+        if (endDate > today && startDate <= today) {
+          couponResponse = {
+            isAvailable: true,
+            discount: couponStatus.discount,
+            couponId: couponStatus._id,
+          };
+        } else {
+          couponResponse = { isAvailable: false, msg: "Coupon expired" };
+        }
+      } else {
+        couponResponse = { isAvailable: false, msg: "Coupon not available" };
+      }
+    } else {
+      couponResponse = { isAvailable: false, msg: "Invalid coupon" };
+    }
+    res.status(200).json(couponResponse);
+  } catch (err) {
+    next(err);
+  }
+};
+
+///fetch all order details
+export const fetchOrders = async (req, res, next) => {
+  try {
+    const allOrders = await order.findOne({ userId: req.user._id });
+    if (allOrders) {
+      console.log("Orders : ", allOrders);
+      res.status(200).json({ orders: allOrders.orders });
+    } else {
+      res.status(200).json({ orders: null, msg: "No orders yet" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+///review section
+//add review
+export const addReview = async (req, res, next) => {
+  try {
+    const productId = req.body.productId;
+    const reviewData = {
+      ...req.body,
+      date: Date.now(),
+      userId: req.user._id,
+    };
+
+    const productReview = await reviews.findOne({ productId: productId });
+    if (productReview) {
+      productReview.reviews.push(reviewData);
+    } else {
+      const productReview = { productId: productId, reviews: [reviewData] };
+      const newReview = new reviews(productReview);
+      await newReview.save();
+    }
+    res.status(200).json("New review added");
+  } catch (err) {
+    next(err);
+  }
+};
+
+///fetch reviews
+export const fetchReviews = async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    const reviewData = await reviews.findOne({ productId: productId });
+    let response = "No reviews yet.";
+    if (reviewData) {
+      response = { reviews: reviewData.reviews };
+    }
+    res.status(200).json(response);
   } catch (err) {
     next(err);
   }

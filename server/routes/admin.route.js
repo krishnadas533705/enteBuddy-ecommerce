@@ -7,15 +7,12 @@ import {
   deleteBanner,
   deleteCoupon,
   deleteProduct,
-  getAllOffers,
   getBanners,
   getCoupons,
   getProduct,
   getUserDetails,
-  removeOffer,
   updateBanner,
   updateCoupon,
-  updateOffer,
   updateProduct,
   uploadProduct,
 } from "../controllers/admin.controller.js";
@@ -72,12 +69,6 @@ router.put("/updateCoupon/:adminId/:couponId", verifyAdmin, updateCoupon);
 
 router.delete("/deleteCoupon/:adminId/:couponId", verifyAdmin, deleteCoupon);
 
-///offer management
-router.get("/getOffers/:adminId", verifyAdmin, getAllOffers);
-
-router.post("/updateOffer/:adminId", verifyAdmin, updateOffer);
-
-router.delete("/removeCoupon/:adminId/:offerId", verifyAdmin, removeOffer);
 
 ///logout
 router.post("/signout/:adminId", verifyAdmin, adminLogout);

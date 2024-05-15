@@ -80,17 +80,17 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required: false,
       },
-      refundId:{
-        type:String,
-        requried:false
-      }
+      refundId: {
+        type: String,
+        requried: false,
+      },
+      couponId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "coupons",
+      },
     },
   ],
-
-  totalPurchase: {
-    type: Number,
-    default: 0,
-  },
+  
 });
 
 orderSchema.methods.newOrder = function (orderDetails) {
