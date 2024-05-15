@@ -1,7 +1,7 @@
 import React from "react";
 import SignIn from "./Admin/components/auth/SignIn";
 import AdminContextProvider from "./Admin/context/AdminContextProvider";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter ,Outlet } from "react-router-dom";
 import DashBoard from "./Admin/components/DashBoard";
 import ProductsList from "./Admin/components/productManagement/ProductsList";
 import AddProduct from "./Admin/components/productManagement/AddProduct";
@@ -15,10 +15,40 @@ import SidebarProvider from "./User/contexts/SidebarContext";
 import Signin from "./User/pages/Signin";
 import UserProvider from "./User/contexts/UserContext";
 import Checkout from "./User/pages/Checkout";
+import ProductData from "./User/pages/ProductData";
+import Header from "./User/components/Header";
+import Error from "./User/components/Error";
+import SideBar from './User/components/Sidebar';
+import LogProvider, { LogContext } from "./User/contexts/LogContext";
+
+const AppLayout =()=>{ 
+  return (
+    <div>
+    <Header/>
+    <SideBar/>
+    <Outlet/>
+  </div> 
+  )
+}
+  
+  
+
+
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: Home,
+    element : <AppLayout/>,
+    errorElement : <Error/>,
+    children : [ 
+      {
+        path : '/',
+        element : <Home/>
+      },
+      {
+        path : '/product/:id',
+        element : <ProductData/>
+      }
+    ]
   },
   {
     path: "/signin",
@@ -60,12 +90,15 @@ const router = createBrowserRouter([
   {
     path : "/checkout",
     Component : Checkout,
-  }
+  },
+ ,
+
 ]);
 
 const App = () => {
   return (
     <AdminContextProvider>
+      <LogProvider>
       <UserProvider>
         <SidebarProvider>
           <CartProvider>
@@ -75,6 +108,7 @@ const App = () => {
           </CartProvider>
         </SidebarProvider>
       </UserProvider>
+      </LogProvider>
     </AdminContextProvider>
   );
 };

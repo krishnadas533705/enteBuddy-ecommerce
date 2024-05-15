@@ -17,7 +17,9 @@ const AddProduct = ({
   const { adminId } = useContext(AdminContext);
   const navigate = useNavigate();
 
-  const handleProductData = (e) => {
+  const handleProductData = (e) => { 
+    console.log(e.target)
+    console.log(productData)
     const { name, value } = e.target;
     if (name == "primaryImage") {
       setProductData((previous) => ({
@@ -120,7 +122,7 @@ const AddProduct = ({
                 )}
 
                 <div className="lg:col-span-2">
-                  <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                  <div className= "grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                     <div className="md:col-span-5">
                       <label htmlFor="title">Product Title</label>
                       {productError.title && (

@@ -6,6 +6,11 @@ export default {
   ],
   theme: {
     extend: { 
+      colors: {
+        primary: "#FDD100", 
+        secondary: "#00DD9C", 
+      
+      },
       fontFamily : { 
        poppins : ['Poppins'],
         figtree : ['Figtree'], 
@@ -13,8 +18,9 @@ export default {
       },
       backgroundImage:{
         hero : "url('./src/User/img/peakpx.jpg')", 
+        hero2 : "url('./src/User/img/logo2.png')",
       } 
-     
+      
     },
   },
   plugins: [require('daisyui')],

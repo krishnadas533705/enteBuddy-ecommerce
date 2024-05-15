@@ -26,15 +26,15 @@ const Home = () => {
   
   return (
     <>
-      <Header />
-      <Sidebar />
+      
+     
       <section className="bg-white pt-16">
         <Banner />
         <div className="container mx-auto"> 
         {/* category */}
         <div className="flex mx-2 font-poppins">
             {categories.map((category, index) => (
-              <button key={index} className={` px-5 py-2 rounded-3xl flex justify-center items-center m-1 ${selectedCategory === category ? 'bg-green-500 text-yellow-300' : 'bg-gray-200'}`} onClick={() => handleCategoryChange(category)}>{category}</button>
+              <button key={index} className={` px-5 py-2 rounded-3xl flex justify-center items-center m-1 ${selectedCategory === category ? 'bg-[#00DD9C] text-[#FDD100]' : 'bg-gray-200'}`} onClick={() => handleCategoryChange(category)}>{category}</button>
             ))}
           </div>  
           <div className="grid grid-cols-2 p-2 lg:p-8 lg:grid-cols-4 gap-3 lg:gap-7 mx-auto ">

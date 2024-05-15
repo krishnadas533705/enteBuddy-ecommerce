@@ -6,15 +6,26 @@ let __dirname = path.dirname(new URL(import.meta.url).pathname);
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname == "primaryImage") {
-      cb(null, path.join(__dirname, "../Public/uploads/primaryImages"));
+      cb(null,"C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/primaryImages");
     } else if (file.fieldname == "secondaryImages") {
-      cb(null, path.join(__dirname, "../Public/uploads/secondaryImages"));
+      cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/secondaryImages");
     } else if (file.fieldname == "bannerImage") {
-      cb(null,path.join( __dirname,"../Public/uploads/bannerImages"));
+      cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/bannerImages");
       
     } else {
       cb(new Error("Unexpected field"));
     }
+    // hi kd bro ,mattumbo ith mattale :)
+    // if (file.fieldname == "primaryImage") {
+    //   cb(null,"C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/primaryImages");
+    // } else if (file.fieldname == "secondaryImages") {
+    //   cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/secondaryImages");
+    // } else if (file.fieldname == "bannerImage") {
+    //   cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/bannerImages");
+      
+    // } else {
+    //   cb(new Error("Unexpected field"));
+    // }
   },
   filename: (req, file, cb) => {
     cb(
