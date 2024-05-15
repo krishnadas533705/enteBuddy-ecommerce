@@ -10,7 +10,8 @@ const Rating = () => {
         key={i} // Add a unique key for each star
         type="radio"
         name={`rating-${i}`}
-        className="mask mask-star-2 bg-orange-400 w-5 h-5"
+        className="mask mask-star-2 bg-yellow-400 w-5 h-5"
+        disabled  
       />
     );
   }

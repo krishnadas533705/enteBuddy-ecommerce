@@ -20,6 +20,7 @@ import Header from "./User/components/Header";
 import Error from "./User/components/Error";
 import SideBar from './User/components/Sidebar';
 import LogProvider, { LogContext } from "./User/contexts/LogContext";
+import ReviewFormProvider from "./User/contexts/ReviewFormContext";
 
 const AppLayout =()=>{ 
   return (
@@ -103,7 +104,9 @@ const App = () => {
         <SidebarProvider>
           <CartProvider>
             <ProductProvider>
+              <ReviewFormProvider>
               <RouterProvider router={router} />
+              </ReviewFormProvider>
             </ProductProvider>
           </CartProvider>
         </SidebarProvider>

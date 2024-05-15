@@ -165,7 +165,7 @@ const CartProvider = ({ children }) => {
       }, 0);
       setItemAmount(amount);
     }
-=======
+
   }, [cart]); 
 
   const handleCart=()=>{
