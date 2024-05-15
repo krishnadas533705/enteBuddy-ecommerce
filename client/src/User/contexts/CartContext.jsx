@@ -168,7 +168,8 @@ const CartProvider = ({ children }) => {
       }, 0);
       setItemAmount(amount);
     }
-  }, [cart]);
+
+  }, [cart]); 
 
   const handleCart = () => {
     if (userId) {

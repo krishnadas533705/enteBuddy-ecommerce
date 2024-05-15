@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 import { SidebarContext } from "../contexts/SidebarContext";
 import Rating from "../components/Rating";
 import RatingBar from "../components/RatingBar";
-import Header from "../components/Header";
 import Reviews from "../components/Reviews";
 
 const ProductData = () => {
@@ -115,9 +114,10 @@ const ProductData = () => {
 
                 
             </div>
-            <div className="bg-[#ede9e7] py-5 flex flex-col px-5 pb-40  md:h-screen">
+            <div className="bg-[#ede9e7]  flex flex-col px-5 pb-40  md:h-screen">
                 <RatingBar/> 
                 <Reviews/>
+                
                 </div>
         </div>
     );
