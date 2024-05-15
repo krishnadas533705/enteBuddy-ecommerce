@@ -9,7 +9,18 @@ import { userContext } from "../contexts/UserContext";
 
 const Sidebar = () => {
     const { isOpen, handleClose } = useContext(SidebarContext);
-    const { cart, clearCart, itemAmount, totalPrice } = useContext(CartContext);
+    const {
+      cart,
+      clearCart,
+      itemAmount,
+      totalPrice,
+      setDiscountPrice,
+      discountPrice,
+      setCouponId,
+    } = useContext(CartContext);
+  
+    const { userId } = useContext(userContext);
+  
     const [isChecked,setIsChecked] =useState(false)
     // useEffect(() => {
     //     const handleBodyScroll = () => {
@@ -34,6 +45,58 @@ const Sidebar = () => {
     const handleCheckboxChange =()=>{
       setIsChecked(!isChecked);
     }
+
+
+    ////applying coupon
+  const [couponCode, setCouponCode] = useState("");
+  const [couponError, setCouponError] = useState(null);
+  const applyCoupon = async () => {
+    console.log("Apply coupon function working...");
+    if (couponCode) {
+      console.log("Coupon checking....");
+      const response = await fetch(
+        `/api/user/checkCoupon/${userId}/${couponCode}`,
+        {
+          credentials: "include",
+        }
+      );
+
+      const result = await response.json();
+      if (result.isAvailable) {
+        const discount = result.discount;
+        if (discount == 100) {
+          let quantity = cart.reduce(
+            (quantity, item) => item.quantity + quantity,
+            0
+          );
+          quantity = Math.floor(quantity / 2);
+          const allPrices = cart
+            .map((item) => item.price)
+            .sort((a, b) => a - b)
+            .slice(0, quantity);
+          const discountPrice = allPrices.reduce(
+            (acc, price) => price + acc,
+            0
+          );
+          const newPrice = totalPrice - discountPrice;
+          setDiscountPrice(newPrice);
+          localStorage.setItem("enteBuddyCartPrice", newPrice);
+        } else {
+          const price = (totalPrice * discount) / 100;
+          setDiscountPrice(price);
+          localStorage.setItem("enteBuddyCartPrice", price);
+        }
+        setCouponId(result.couponId);
+        localStorage.setItem("enteBuddyCouponId",result.couponId)
+      } else {
+        setCouponError(result.msg);
+      }
+    } else {
+      setCouponError("Please enter coupon code.");
+    }
+  };
+
+
     return (
         <div>
             {isOpen && (
@@ -110,7 +173,7 @@ const Sidebar = () => {
                                 </div>
 
                                 <div className="font-medium">
-                                    ₹{parseFloat(totalPrice).toFixed(2)}
+                                    ₹{discountPrice > 0 ? discountPrice : totalPrice}
                                 </div>
                             </div>
                           
