@@ -105,7 +105,7 @@ const Header = (cookies) => {
           </Link>
         </div>
         <div className="navbar-end">
-          <div class  Name="dropdown dropdown-end">
+          <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
