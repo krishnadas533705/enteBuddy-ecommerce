@@ -1,4 +1,5 @@
-// validation.js
+import { useContext } from "react";
+import { userContext } from "../contexts/UserContext";
 
 // Validate name
 export const validateName = (name) => {
@@ -22,9 +23,11 @@ export const validatePhoneNumber = (phoneNumber) => {
 };
 
 // Validate pin code
-export const validatePinCode = async (pinCode, setError, userId) => {
+export const validatePinCode = async (pinCode, setError, userId) => { 
+  
   // Regular expression for pin code validation (assuming 6 digits)
-  try {
+  try { 
+    const {userId} = useContext(userContext)
     console.log("checking pincode...");
     const pinCodeRegex = /^\d{6}$/;
     if (!pinCodeRegex.test(pinCode)) {

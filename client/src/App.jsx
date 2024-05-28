@@ -21,13 +21,17 @@ import Error from "./User/components/Error";
 import SideBar from './User/components/Sidebar';
 import LogProvider, { LogContext } from "./User/contexts/LogContext";
 import ReviewFormProvider from "./User/contexts/ReviewFormContext";
-
+import Footer from "./User/components/Footer";
+import PrivacyPolicy from "./User/pages/PrivacyPolicy";
+import Terms from "./User/pages/Terms";
+import AgeVerificationProvider from "./User/contexts/AgeVerificationContext";
 const AppLayout =()=>{ 
   return (
     <div>
     <Header/>
     <SideBar/>
     <Outlet/>
+    <Footer/>
   </div> 
   )
 }
@@ -48,7 +52,16 @@ const router = createBrowserRouter([
       {
         path : '/product/:id',
         element : <ProductData/>
+      },
+      {
+        path : '/privacypolicy',
+        element : <PrivacyPolicy />
+      },
+      {
+        path:'/termsandconditions',
+        element : <Terms/>
       }
+     
     ]
   },
   {
@@ -98,7 +111,8 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <AdminContextProvider>
+    <AdminContextProvider> 
+      <AgeVerificationProvider>
       <LogProvider>
       <UserProvider>
         <SidebarProvider>
@@ -112,6 +126,7 @@ const App = () => {
         </SidebarProvider>
       </UserProvider>
       </LogProvider>
+      </AgeVerificationProvider>
     </AdminContextProvider>
   );
 };

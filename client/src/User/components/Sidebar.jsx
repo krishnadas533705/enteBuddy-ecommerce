@@ -6,6 +6,7 @@ import { CartContext } from "../contexts/CartContext";
 import CartItem from "./CartItem";
 import { FiTrash2 } from "react-icons/fi";
 import { userContext } from "../contexts/UserContext";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
     const { isOpen, handleClose } = useContext(SidebarContext);
@@ -195,8 +196,9 @@ const Sidebar = () => {
 
                              </div>
 
-                          
-                                <button className={`w-full ${isChecked ? "bg-blue-700":"bg-slate-400" } text-white py-3 rounded-full  font-poppins  `} disabled={!isChecked}>Checkout</button>
+                            <Link to="/checkout">
+                                <button className={`w-full ${isChecked ? "bg-secondary":"bg-slate-400" } text-white py-3 rounded-full  font-poppins  `} disabled={!isChecked}>Checkout</button>
+                            </Link>
                             </div>
                         </div>
                     </div>

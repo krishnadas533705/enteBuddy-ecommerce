@@ -125,7 +125,7 @@ const LoginModel = () => {
     <div
       ref={modalRef}
       onClick={closeModal}
-      className="z-10 text-white fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center"
+      className="z-10 text-white fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center "
     >
       <div className="flex flex-col ">
         <div id="recaptcha-container"></div>
@@ -134,9 +134,9 @@ const LoginModel = () => {
           <IoCloseCircleOutline />
         </button>
         <div
-          className={`border border-blue-100 py-10 px-10  bg-hero bg-cover rounded-xl flex flex-col gap-5 mx-3 `}
+          className={`border border-blue-100 py-10 px-10  bg-hero2 bg-tertiary bg-contain rounded-xl flex flex-col gap-5 mx-3 `}
         >
-          <h1 className="text-3xl font-jaro text-yellow-300  text-center ">
+          <h1 className="text-3xl  text-primary  text-center font-poppins ">
             Login through otp
           </h1>
 
@@ -178,7 +178,7 @@ const LoginModel = () => {
               </div>
               <label
                 htmlFor=""
-                className="font-bold text-xl text-[#54d8b5] text-center"
+                className="font-semibold text-xl text-secondary text-center font-poppins"
               >
                 Verify your phone number
               </label>
@@ -190,7 +190,7 @@ const LoginModel = () => {
               />
               <button
                 onClick={onSignup}
-                className="bg-[#54d8b5] w-full flex gap-1 items-center justify-center py-2.5 text-white font-figtree rounded"
+                className="bg-secondary w-full flex gap-1 items-center justify-center py-2.5 text-white font-poppins rounded"
               >
                 {loading && (
                   <CgSpinner size={20} className="mt-1 animate-spin" />

@@ -11,6 +11,7 @@ import { Toaster,toast } from "react-hot-toast";
 import AboutUs from "./AboutUs";
 import ContactUs from "./ContactUs";
 import { LogContext } from "../contexts/LogContext";
+import Logout from "./Logout";
 
 const Header = (cookies) => {
   const { itemAmount,handleCart } = useContext(CartContext);
@@ -53,7 +54,7 @@ const Header = (cookies) => {
     <div>
       <Toaster toastOptions={{duration:1000}}/>
       <div
-        className={`navbar bg-hero bg-cover z-10 fixed transition-transform duration-300 ${
+        className={`navbar bg-hero2 bg-tertiary bg-contain z-10 fixed transition-transform duration-300 ${
           visible ? "" : "transform -translate-y-full "
         } `} 
       >
@@ -93,18 +94,18 @@ const Header = (cookies) => {
                 <Link onClick={()=>{setContactModal(!contactModal);setLeftDropdown(!leftDropdown)}}>Contact us</Link>
               </li>
               <li className="">
-                <Link onClick={toggleLeftMenu}>Track your order</Link>
+                <Link onClick={toggleLeftMenu}>Orders</Link>
               </li>
             </ul>
           </div>
         </div>
         <div className="navbar-center">
-          <Link to="/" className="btn btn-ghost text-xl ">
+          <Link to="/" className="btn btn-ghost text-xl">
             <img src={logo} className="w-15 h-10"/>
           </Link>
         </div>
         <div className="navbar-end">
-          <div className="dropdown dropdown-end">
+          <div class  Name="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
@@ -121,7 +122,7 @@ const Header = (cookies) => {
               style = {{display :dropDown ? 'block' : 'none' }}
             > 
 
-              <li>  {userId ? <button >Log out</button>: <button onClick={()=>{setShowModal(true) ; setDropDown(!dropDown)}}>login</button> }
+              <li>  {userId ? <Logout/>: <button onClick={()=>{setShowModal(true) ; setDropDown(!dropDown)}}>login</button> }
                
                
 

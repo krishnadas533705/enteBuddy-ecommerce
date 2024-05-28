@@ -87,6 +87,7 @@ const orderSchema = mongoose.Schema({
       couponId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "coupons",
+        required:false ,
       },
     },
   ],

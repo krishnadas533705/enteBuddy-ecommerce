@@ -6,12 +6,28 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { userContext } from "../contexts/UserContext";
 import { CartContext } from "../contexts/CartContext";
+import Shimmer from "../components/Shimmer";
+import AgeVerification from "../components/AgeVerification";
+
+import { AgeVerificationContext } from "../contexts/AgeVerificationContext";
 
 const Home = () => {
   const { products } = useContext(ProductContext);
   const {userId} = useContext(userContext) 
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isVerified,setIsVerified]=useState(true);
+  
+ const {ageVerificationModal,setAgeverificationModal} = useContext(AgeVerificationContext)
 
+
+if(!products || products.length===0) {
+  return <Shimmer/>
+}
+
+
+// const onClose= ()=>{
+//   setAgeModal(false)
+// }
   // Function to handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -41,8 +57,12 @@ const Home = () => {
             {filteredProducts&&
               filteredProducts.map((item) => <Product product={item} key={item._id} />)}
           </div>
-        </div>
-      </section>
+        </div> 
+
+      </section> 
+     {ageVerificationModal ? <AgeVerification /> : ""  } 
+    
+      
     </>
   );
 };
