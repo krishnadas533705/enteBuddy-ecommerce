@@ -389,7 +389,7 @@ export const fetchOrders = async (req, res, next) => {
 //add review
 export const addReview = async (req, res, next) => {
   try {
-    const productId = req.body.productId;
+    const productId = req.params.productId;
     const reviewData = {
       ...req.body,
       date: Date.now(),
@@ -399,6 +399,7 @@ export const addReview = async (req, res, next) => {
     const productReview = await reviews.findOne({ productId: productId });
     if (productReview) {
       productReview.reviews.push(reviewData);
+      await productReview.save();
     } else {
       const productReview = { productId: productId, reviews: [reviewData] };
       const newReview = new reviews(productReview);

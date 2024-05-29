@@ -58,6 +58,6 @@ router.get(`/fetchOrders/:userId`, verifyUser, fetchOrders);
 ///add and fetch reviews
 router.get(`/fetchReviews/:productId`, fetchReviews);
 
-router.post(`/addReview/:userId/`, verifyUser, addReview);
+router.post(`/addReview/:userId/:productId`, verifyUser, addReview);
 
 export default router;
