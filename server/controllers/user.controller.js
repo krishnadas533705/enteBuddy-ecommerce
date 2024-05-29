@@ -4,7 +4,6 @@ import order from "../models/order.model.js";
 import product from "../models/product.model.js";
 import reviews from "../models/review.model.js";
 import { errorHandler } from "../utils/error.js";
-import generateShiprocketToken from "../utils/shiprocketToken.js";
 
 let shipRocketAuthToken = null;
 
@@ -59,11 +58,11 @@ export const cartMinus = async (req, res, next) => {
 
 ///query products in the cart
 export const getCartItems = async (req, res, next) => {
-  try { 
+  try {
     const cartItems = await cart
       .findOne({ userId: req.user._id })
       .populate("items._id");
-      console.log("2",cartItems)
+    console.log("2", cartItems);
     const cartProducts = cartItems.items.map((item) => ({
       _id: item._id._id,
       primaryImage: item._id.primaryImage,
@@ -76,7 +75,7 @@ export const getCartItems = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};  
+};
 
 ///remove item from cart
 export const removeFromCart = async (req, res, next) => {
@@ -140,7 +139,7 @@ export const createOrder = async (req, res, next) => {
       products: req.body.products,
       sellingPrice: req.body.sellingPrice / 100,
       discount: req.body.discount,
-      couponId: req.body.couponId,
+      couponId: req.body.couponId ? req.body.couponId : undefined,
     };
 
     //pushing the order to database
@@ -236,17 +235,19 @@ export const createOrder = async (req, res, next) => {
           { userId: req.user._id },
           {
             $set: {
-              "orders.$[element].shipRocketOrderId": shipingResponse.order_id,
+              "orders.$[element].shipRocketOrderId": shipingResponse.id,
             },
           },
           { arrayFilters: [{ "element._id": newOrder._id }] }
         );
 
         //update used coupon
-        await coupon.updateOne(
-          { _id: req.body.couponId },
-          { $push: { usedBy: req.user._id } }
-        );
+        if (req.body.couponId) {
+          await coupon.updateOne(
+            { _id: req.body.couponId },
+            { $push: { usedBy: req.user._id } }
+          );
+        }
 
         //send response to client
         res.status(200).send("order placed successfully");
@@ -287,6 +288,40 @@ export const checkPincode = async (req, res, next) => {
       isAvailable = true;
     }
     res.status(200).json({ isAvailable });
+  } catch (err) {
+    next(err);
+  }
+};
+
+///get order tracking details
+export const getTrackingDetails = async (req, res, next) => {
+  try {
+    const authToken = await generateShiprocketToken();
+
+    const orderId = req.params.orderId;
+    let trackingDetails = await fetch(
+      `https://apiv2.shiprocket.in/v1/external/courier/track?order_id=${orderId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    trackingDetails = await trackingDetails.json();
+    let trackingData;
+    if (trackingDetails.length > 0) {
+      trackingData = {
+        ...trackingDetails,
+        shipped: true,
+      };
+    } else {
+      trackingData = {
+        shipped: false,
+      };
+    }
+    console.log("Tracking datails : ", trackingDetails);
+    res.status(200).json(trackingData);
   } catch (err) {
     next(err);
   }
@@ -354,7 +389,7 @@ export const fetchOrders = async (req, res, next) => {
 //add review
 export const addReview = async (req, res, next) => {
   try {
-    const productId = req.body.productId;
+    const productId = req.params.productId;
     const reviewData = {
       ...req.body,
       date: Date.now(),
@@ -364,6 +399,7 @@ export const addReview = async (req, res, next) => {
     const productReview = await reviews.findOne({ productId: productId });
     if (productReview) {
       productReview.reviews.push(reviewData);
+      await productReview.save();
     } else {
       const productReview = { productId: productId, reviews: [reviewData] };
       const newReview = new reviews(productReview);
@@ -387,5 +423,44 @@ export const fetchReviews = async (req, res, next) => {
     res.status(200).json(response);
   } catch (err) {
     next(err);
+  }
+};
+
+///fetch shiprocket token
+
+const generateShiprocketToken = async () => {
+  try {
+    console.log("fetching token");
+    if (
+      !shipRocketAuthToken ||
+      Date.now() - shipRocketAuthToken.timeStamp > 5 * 24 * 60 * 60 * 1000
+    ) {
+      const credentials = {
+        email: process.env.SHIPROCKET_EMAIL,
+        password: process.env.SHIPROCKET_PASSWORD,
+      };
+      let loginResponse = await fetch(
+        "https://apiv2.shiprocket.in/v1/external/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        }
+      );
+      loginResponse = await loginResponse.json();
+      shipRocketAuthToken = {
+        token: loginResponse.token,
+        timeStamp: new Date(Date.now()),
+      };
+      console.log("New shiprocket token : ", shipRocketAuthToken);
+    } else {
+      console.log("old token is valid");
+    }
+
+    return shipRocketAuthToken.token;
+  } catch (err) {
+    console.log("Error in generating shiprocket token : ", err);
   }
 };

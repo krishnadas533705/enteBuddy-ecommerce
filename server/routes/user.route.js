@@ -10,6 +10,7 @@ import {
   fetchReviews,
   getCartItems,
   getProducts,
+  getTrackingDetails,
   removeAllFromCart,
   removeFromCart,
 } from "../controllers/user.controller.js";
@@ -35,31 +36,28 @@ router.put("/cartMinus/:userId/:productId", verifyUser, cartMinus);
 router.get("/getProducts", getProducts);
 
 ///order management
-router.post("/newOrder/:userId", verifyUser,createOrder);
+router.post("/newOrder/:userId", verifyUser, createOrder);
+
+//get order tracking details
+router.get("/getTrackingData/:userId/:orderId", verifyUser, getTrackingDetails);
 
 //razorpay key
 router.get("/getRazorpayKey/:userId", verifyUser, (req, res) => {
   res.status(200).json({ key: process.env.RAZORPAY_ID });
 });
 
-
 ///check courier service availabilty
-router.get(`/checkPostCode/:userId/:pincode`,verifyUser,checkPincode)
-
-
-///fetch all offers
-router.get(`/fetchOffers/:userId`,verifyUser)
+router.get(`/checkPostCode/:userId/:pincode`, verifyUser, checkPincode);
 
 ///check coupon status and apply
-router.get(`/checkCoupon/:userId/:couponCode`,verifyUser,checkCoupon)
-
+router.get(`/checkCoupon/:userId/:couponCode`, verifyUser, checkCoupon);
 
 //get order details
-router.get(`/fetchOrders/:userId`,verifyUser,fetchOrders)
+router.get(`/fetchOrders/:userId`, verifyUser, fetchOrders);
 
 ///add and fetch reviews
-router.get(`/fetchReviews/:productId`,fetchReviews)
+router.get(`/fetchReviews/:productId`, fetchReviews);
 
-router.post(`/addReview/:userId/`,verifyUser,addReview)
+router.post(`/addReview/:userId/:productId`, verifyUser, addReview);
 
 export default router;
