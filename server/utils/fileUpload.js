@@ -1,16 +1,16 @@
 import multer from "multer";
 import path from "path";
-
-let __dirname = path.dirname(new URL(import.meta.url).pathname);
+import { __dirname } from "../index.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname == "primaryImage") {
-      cb(null,"C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/primaryImages");
+      cb(null, path.join(__dirname, "/Public/uploads/primaryImages"));
     } else if (file.fieldname == "secondaryImages") {
-      cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/secondaryImages");
+      cb(null, path.join(__dirname, "/Public/uploads/secondaryImages"));
     } else if (file.fieldname == "bannerImage") {
-      cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/bannerImages");
+      cb(null,path.join( __dirname,"/Public/uploads/bannerImages"));
+      
       
     } else {
       cb(new Error("Unexpected field"));
