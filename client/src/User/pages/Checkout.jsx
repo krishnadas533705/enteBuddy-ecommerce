@@ -22,8 +22,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../contexts/UserContext";
 import { makePayment } from "../utils/payment";
+import { Navigate } from "react-router-dom";
+import {toast,Toaster} from "react-hot-toast";
 
 const Checkout = () => {
+  
   const { cart, totalPrice, couponId, discountPrice } = useContext(CartContext);
   const [stateid, setstateid] = useState(0);
   const [cityid, setcityid] = useState(0);
@@ -93,7 +96,7 @@ const Checkout = () => {
     }
 
     if (cityid === 0 || stateid === 0) {
-      alert("please choose your city and state");
+      toast.error("Please choose your city and state")
     }
     // Additional logic for handling form submission
     if (
@@ -124,15 +127,18 @@ const Checkout = () => {
           userId,
           orderDetails
         );
+      
       } else {
         alert("payment failed");
       }
       console.log("Form submitted successfully");
+      navigate('/')
     }
   };
 
   return (
-    <div>
+    <div> 
+    <Toaster toastOptions={{duration:2000}}/>
       <div className="flex flex-col items-center border-b bg-white py-2 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <a
           href="#"
@@ -409,7 +415,7 @@ const Checkout = () => {
               >
                 Billing Address
               </label>
-              <div className="flex flex-col sm:flex-row">
+              <div className="">
                 <div className="relative flex-shrink-0 sm:w-7/12 ">
                   <input
                     type="text"
@@ -441,6 +447,7 @@ const Checkout = () => {
                 </div>
 
                 <div className="font-poppins text-sm font-medium my-2">
+                  <div></div>
                   <h2 className="mb-2">City</h2>
                   <CitySelect
                     countryid={101}

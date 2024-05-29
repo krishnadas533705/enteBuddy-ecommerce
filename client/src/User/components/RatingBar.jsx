@@ -2,6 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { ReviewFormContext } from "../contexts/ReviewFormContext";
 import ReviewForm from "./ReviewForm";
+import Test from "./Test";
 const RatingBar = () => { 
    const { reviewModal, setReviewModal, onClose } = useContext(ReviewFormContext)
     const reviews = [
@@ -83,7 +84,7 @@ const RatingBar = () => {
                     </button>
                 </div>
             </div>
-            {reviewModal && <ReviewForm/>}
+            {reviewModal && <Test/>}
         </div> 
        
     );
