@@ -115,8 +115,8 @@ const ProductData = () => {
                 
             </div>
             <div className="bg-[#ede9e7]  flex flex-col px-5 pb-40  md:h-screen">
-                <RatingBar/> 
-                <Reviews/>
+                <RatingBar productId={product._id}/> 
+                <Reviews productId={product._id}/>
                 
                 </div>
         </div>

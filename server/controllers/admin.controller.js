@@ -5,6 +5,7 @@ import product from "../models/product.model.js";
 import { banner } from "../models/banner.model.js";
 import User from "../models/user.model.js";
 import coupon from "../models/coupons.model.js";
+import order from "../models/order.model.js";
 
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -257,6 +258,35 @@ export const deleteCoupon = async (req, res, next) => {
     const couponId = req.params.couponId;
     await coupon.deleteOne({ _id: couponId });
     res.status(200).json("coupon removed");
+  } catch (err) {
+    next(err);
+  }
+};
+
+///get dashboard data
+export const dashboardData = async (req, res, next) => {
+  try {
+    let allOrders = await order.aggregate([
+      {
+        $project: {
+          orders: 1,
+          _id: 0,
+        },
+      },
+    ]);
+
+    allOrders = allOrders.reduce((acc, cur) => {
+      acc = acc.concat(cur.orders);
+      return acc;
+    }, []);
+    const totalSales = allOrders.reduce(
+      (sum, order) => sum + order.sellingPrice,
+      0
+    );
+    const totalOrders = allOrders.reduce((acc, cur) => acc + 1, 0);
+    const totalUsers = await User.countDocuments({});
+
+    res.status(200).json({ totalOrders, totalSales, totalUsers, allOrders });
   } catch (err) {
     next(err);
   }

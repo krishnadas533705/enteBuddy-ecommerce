@@ -4,6 +4,7 @@ import {
   adminLogout,
   adminSignin,
   createCoupon,
+  dashboardData,
   deleteBanner,
   deleteCoupon,
   deleteProduct,
@@ -68,6 +69,10 @@ router.post("/createCoupon/:adminId", verifyAdmin, createCoupon);
 router.put("/updateCoupon/:adminId/:couponId", verifyAdmin, updateCoupon);
 
 router.delete("/deleteCoupon/:adminId/:couponId", verifyAdmin, deleteCoupon);
+
+
+//dashboard
+router.get('/dashBoardData/:adminId',verifyAdmin,dashboardData)
 
 
 ///logout
