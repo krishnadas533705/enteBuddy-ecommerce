@@ -84,7 +84,7 @@ const RatingBar = () => {
                     </button>
                 </div>
             </div>
-            {reviewModal && <Test/>}
+            {reviewModal && <ReviewForm />}
         </div> 
        
     );
