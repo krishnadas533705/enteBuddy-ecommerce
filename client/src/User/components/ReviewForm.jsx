@@ -1,6 +1,6 @@
 
 import { ReviewFormContext } from "../contexts/ReviewFormContext";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
 
 const ReviewForm = () => {
@@ -13,7 +13,18 @@ const ReviewForm = () => {
     review: "",
     rating: 0,
   });
+ 
+  useEffect(()=>{
+    
+    const timer = setInterval(()=>{
+      console.log(helloo)
+    },2000)
+    return ()=>{ 
+        clearInterval(timer)
+        console.log("component unmounting and values are reset ")
+    }
 
+  })
   const [errors, setErrors] = useState({});
 
   const closeModal = (e) => {

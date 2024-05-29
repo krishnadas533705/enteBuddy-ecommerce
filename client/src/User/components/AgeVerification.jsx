@@ -20,7 +20,7 @@ const AgeVerification = ( ) => {
     };
   }, []);
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-25 bg-backdrop-blur-sm flex justify-center items-center'>
+    <div className='fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-20'>
         <div className='flex flex-col m-4   text-white p-5 bg-hero2 bg-contain bg-tertiary w-full md:w-1/4 h-2/4 rounded-3xl font-poppins'>
            <div className="text-2xl mt-20 mb-16 text-primary text-center">
              You are 21 years or elder ?
