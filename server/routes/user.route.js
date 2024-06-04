@@ -36,7 +36,10 @@ router.put("/cartMinus/:userId/:productId", verifyUser, cartMinus);
 router.get("/getProducts", getProducts);
 
 ///order management
-router.post("/newOrder/:userId", verifyUser, createOrder);
+
+router.get("/getOrders/:userId")
+router.post("/newOrder/:userId", verifyUser, createOrder); 
+
 
 //get order tracking details
 router.get("/getTrackingData/:userId/:orderId", verifyUser, getTrackingDetails);

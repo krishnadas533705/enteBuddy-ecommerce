@@ -197,7 +197,7 @@ const Sidebar = () => {
                              </div>
 
                             <Link to="/checkout">
-                                <button className={`w-full ${isChecked ? "bg-secondary":"bg-slate-400" } text-white py-3 rounded-full  font-poppins  `} disabled={!isChecked}>Checkout</button>
+                                <button className={`w-full ${isChecked ? "bg-tertiary bg-hero2 bg-contain text-[#FEE260]":"bg-slate-400 " } text-white py-3 rounded-full  font-poppins  `} disabled={!isChecked}>Checkout</button>
                             </Link>
                             </div>
                         </div>

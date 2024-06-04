@@ -24,6 +24,7 @@ import { userContext } from "../contexts/UserContext";
 import { makePayment } from "../utils/payment";
 import { Navigate } from "react-router-dom";
 import {toast,Toaster} from "react-hot-toast";
+import { SidebarContext } from "../contexts/SidebarContext";
 
 const Checkout = () => {
   
@@ -34,6 +35,8 @@ const Checkout = () => {
   const [emailError, setEmailError] = useState(null);
   const [pinCodeError, setPinCodeError] = useState({ msg: null, error: false });
   const [phoneNumberError, setPhoneNumberError] = useState(null);
+  const {clearCart}= useContext(CartContext)
+  const {handleClose}=useContext(SidebarContext)
   const [orderDetails, setOrderDetails] = useState({
     name: "",
     email: "",
@@ -63,7 +66,7 @@ const Checkout = () => {
       ...prev,
       [name]: value,
     }));
-  };
+  };  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -89,11 +92,8 @@ const Checkout = () => {
       setPhoneNumberError("");
     }
 
-    if (!validatePinCode(orderDetails.pincode)) {
-      setPinCodeError("Please enter a valid pin code");
-    } else {
-      setPinCodeError("");
-    }
+    validatePinCode(orderDetails.pincode ,setPinCodeError ,userId) ;
+   
 
     if (cityid === 0 || stateid === 0) {
       toast.error("Please choose your city and state")
@@ -121,18 +121,23 @@ const Checkout = () => {
 
       if (response.ok) {
         const paymentOrder = await response.json();
-        makePayment(
+         makePayment(
           paymentOrder.key_id,
           paymentOrder.order,
           userId,
-          orderDetails
+          orderDetails,
+          clearCart
         );
+       navigate('/')
+       clearCart() 
+       handleClose() // bro ee moonu function make payment work aayi kazhinje woek aakavu..epa athinu munne work avunind
       
       } else {
         alert("payment failed");
       }
-      console.log("Form submitted successfully");
-      navigate('/')
+      
+      
+      
     }
   };
 

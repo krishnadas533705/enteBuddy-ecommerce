@@ -118,9 +118,7 @@ const App = () => {
         <SidebarProvider>
           <CartProvider>
             <ProductProvider>
-              <ReviewFormProvider>
               <RouterProvider router={router} />
-              </ReviewFormProvider>
             </ProductProvider>
           </CartProvider>
         </SidebarProvider>

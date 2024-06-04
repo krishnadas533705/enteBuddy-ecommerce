@@ -6,7 +6,7 @@ import { SidebarContext } from "../contexts/SidebarContext";
 import Rating from "../components/Rating";
 import RatingBar from "../components/RatingBar";
 import Reviews from "../components/Reviews";
-
+import ReviewFormProvider from "../contexts/ReviewFormContext";
 const ProductData = () => {
     const { id } = useParams();
     const { products } = useContext(ProductContext);
@@ -114,13 +114,15 @@ const ProductData = () => {
 
                 
             </div>
-            <div className="bg-[#ede9e7]  flex flex-col px-5 pb-40  md:h-screen">
-                <RatingBar productId={product._id}/> 
-                <Reviews productId={product._id}/>
-                
+            <div className="bg-[#ede9e7]  flex flex-col px-5 pb-20  md:min-h-screen"> 
+            
+             <ReviewFormProvider productId={product._id} >
+                <RatingBar/> 
+                <Reviews/>
+             </ReviewFormProvider>
                 </div>
         </div>
-    );
+    ); 
 };
 
 export default ProductData;
