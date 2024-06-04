@@ -22,25 +22,18 @@ const Sidebar = () => {
   const { userId } = useContext(userContext);
 
   const [isChecked, setIsChecked] = useState(false);
-  // useEffect(() => {
-  //     const handleBodyScroll = () => {
-  //       console.log("working")
-  //         if (isOpen) {
-  //             document.body.style.overflow = "hidden"; // Disable scrolling on the body
-  //         } else {
-  //             document.body.style.overflow = ""; // Enable scrolling on the body
-  //         }
-
-  //     };
-
-  //     // Add event listener for body scroll
-  //     document.body.addEventListener("scroll", handleBodyScroll);
-
-  //     // Clean up function to remove event listener
-  //     return () => {
-  //         document.body.removeEventListener("scroll", handleBodyScroll);
-  //     };
-  // }, [isOpen]);
+  useEffect(() => { 
+    if(isOpen){
+    // Add class to body to disable scrolling
+    document.body.classList.add('overflow-hidden');
+    
+    }
+    // Clean up: Remove the class when the component unmounts
+    return () => {
+      document.body.classList.remove('overflow-hidden'); 
+     
+    };
+  }, [isOpen]);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -152,7 +145,10 @@ const Sidebar = () => {
 
                             </div> */}
         </div>
-        <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}>
+      
+        <div className="flex flex-cols h-60 mb-2 px-4 bg-[#faf9f6ca] overflow-y-auto">
+          <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}> 
+         
           <input
             type="text"
             className="w-full border-black border rounded-full py-3 px-4 mt-2 mb-2"
@@ -169,9 +165,7 @@ const Sidebar = () => {
           {couponError && (
             <p className={`text-center text-sm text-red-500`}>{couponError}</p>
           )}
-        </div>
-        <div className="flex flex-cols h-1/2 mb-2 px-4 bg-[#faf9f6ca]">
-          <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}>
+        
             {/* total */}
             <div className="text-center underline text-sm font-poppins py-2 text-gray-500">
               100 days warranty and discreet shipping{" "}
