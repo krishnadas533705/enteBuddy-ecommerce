@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { userContext } from "../contexts/UserContext";
+
 
 // Validate name
 export const validateName = (name) => {

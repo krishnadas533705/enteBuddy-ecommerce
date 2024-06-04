@@ -347,10 +347,12 @@ export const checkCoupon = async (req, res, next) => {
       let isUsed = couponStatus.usedBy.find((doc) => doc == req.user._id);
       console.log("isUsed : ", isUsed);
       if (!isUsed) {
-        let startDate = new Date(couponStatus.startDate).toLocaleDateString();
-        let endDate = new Date(couponStatus.endDate).toLocaleDateString();
-        let today = new Date(Date.now()).toLocaleDateString();
+        let startDate = new Date(couponStatus.startDate);
+        let endDate = new Date(couponStatus.endDate);
+        let today = new Date(Date.now());
 
+        console.log("start Date ",startDate)
+        console.log("end Date : ",endDate)
         if (endDate > today && startDate <= today) {
           couponResponse = {
             isAvailable: true,
