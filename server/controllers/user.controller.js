@@ -249,6 +249,9 @@ export const createOrder = async (req, res, next) => {
           );
         }
 
+        //empty cart
+        // await cart.updateOne({ userId: req.user._id }, { $set: { items: [] } });
+
         //send response to client
         res.status(200).send("order placed successfully");
       } else {

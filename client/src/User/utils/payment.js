@@ -77,8 +77,9 @@ const verifyPaymentAndPushOrder = async (
       });
       if (orderResponse.ok) {
         alert("order placed successfully");
-        localStorage.setItem('enteBuddyCartPrice',0)
-        localStorage.setItem('enteBuddyCouponId','')
+        localStorage.setItem("enteBuddyCartPrice", 0);
+        localStorage.setItem("enteBuddyCart", null);
+        localStorage.setItem("enteBuddyCouponId", "");
       } else {
         alert("shipping failed");
         const refundResponse = await fetch(
