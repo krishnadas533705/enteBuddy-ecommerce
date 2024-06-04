@@ -2,8 +2,11 @@ import React from "react";
 import { useContext } from "react";
 import { ReviewFormContext } from "../contexts/ReviewFormContext";
 import ReviewForm from "./ReviewForm";
-import Test from "./Test";
-const RatingBar = ({productId}) => { 
+import { userContext } from "../contexts/UserContext";
+import Test from "./Test"; 
+import LogContext from '../contexts/LogContext';
+
+const RatingBar = () => { 
    const { reviewModal, setReviewModal, onClose } = useContext(ReviewFormContext)
     const reviews = [
         { rating: 5, count: 56 },
@@ -12,7 +15,8 @@ const RatingBar = ({productId}) => {
         { rating: 2, count: 0 },
         { rating: 1, count: 5 },
     ];
-
+    const {userId}=useContext(userContext) 
+   
     const averageRating = 4.7; // Assume this is dynamically calculated
     const totalReviews = reviews.reduce((acc, curr) => acc + curr.count, 0);
 
@@ -21,7 +25,7 @@ const RatingBar = ({productId}) => {
             <div className="md:px-10 max-w-screen-lg px-2 pt-10 pb-5">
                 <div className="flex w-full flex-col">
                     <div className="flex flex-col sm:flex-row">
-                        <h1 className="max-w-sm text-2xl mb-5 font-bold text-blue-900 text-center font-poppins">
+                        <h1 className="max-w-sm text-2xl mb-5 font-bold text-tertiary text-center font-poppins">
                             Customer Reviews
                         </h1>
                         <div className="my-4 rounded-xl bg-white py-2 px-4 shadow sm:my-0 sm:ml-auto">
@@ -79,12 +83,12 @@ const RatingBar = ({productId}) => {
                             ))}
                         </ul>
                     </div>
-                    <button onClick={()=>{setReviewModal(true)}} className="w-36 rounded-full bg-blue-900 py-3 text-white font-medium">
+                    {userId  && (<button onClick={()=>{setReviewModal(true)}} className="w-36 rounded-full bg-tertiary text-[#FEEE9F] bg-hero2 bg-contain py-3  font-medium">
                         Write a review
-                    </button>
+                    </button> )  }  
                 </div>
             </div>
-            {reviewModal && <ReviewForm productId={productId} />}
+            {reviewModal && <ReviewForm />}
         </div> 
        
     );

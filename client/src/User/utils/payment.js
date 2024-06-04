@@ -1,4 +1,4 @@
-export const makePayment = (key, order, userId, orderDetails) => {
+export const makePayment = (key, order, userId, orderDetails,clearCart,handleClose,navigate) => {
   try {
     console.log("order amount : ", order.amount);
     var options = {
@@ -16,7 +16,7 @@ export const makePayment = (key, order, userId, orderDetails) => {
           response.razorpay_signature,
           userId,
           orderDetails,
-          order.amount
+          order.amount,clearCart,handleClose,navigate
         );
       },
       prefill: {
@@ -46,12 +46,12 @@ const verifyPaymentAndPushOrder = async (
   razorpay_signature,
   userId,
   orderDetails,
-  sellingPrice
-) => {
+  sellingPrice,clearCart,handleClose,navigate
+) => {  
   try {
     const response = await fetch(`/api/payment/verifyPayment/${userId}`, {
       method: "POST",
-      headers: {
+      headers: {  
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -75,11 +75,20 @@ const verifyPaymentAndPushOrder = async (
         }),
         credentials: "include",
       });
-      if (orderResponse.ok) {
+      if (orderResponse.ok) { 
+        console.log("clear cart : ",clearCart )
         alert("order placed successfully");
+<<<<<<< HEAD
         localStorage.setItem("enteBuddyCartPrice", 0);
         localStorage.setItem("enteBuddyCart", null);
         localStorage.setItem("enteBuddyCouponId", "");
+=======
+        localStorage.setItem('enteBuddyCartPrice',0)
+        localStorage.setCart('enteBuddyCart',null)
+        localStorage.setItem('enteBuddyCouponId','') 
+        
+        
+>>>>>>> origin/master
       } else {
         alert("shipping failed");
         const refundResponse = await fetch(

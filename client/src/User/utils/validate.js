@@ -27,6 +27,10 @@ export const validatePinCode = async (pinCode, setError, userId) => {
   
   // Regular expression for pin code validation (assuming 6 digits)
   try { 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> origin/master
     console.log("checking pincode...");
     const pinCodeRegex = /^\d{6}$/;
     if (!pinCodeRegex.test(pinCode)) {

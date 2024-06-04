@@ -3,8 +3,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { userContext } from "../contexts/UserContext";
 
-const ReviewForm = ({productId}) => {
-  const { onClose, onSubmit } = useContext(ReviewFormContext);
+const ReviewForm = ({productId}) => { 
+  
+  const { onClose, onSubmit,addReviews } = useContext(ReviewFormContext);
   const modalRef = useRef();
   const [hoverRating, setHoverRating] = useState(0);
 
@@ -15,15 +16,6 @@ const ReviewForm = ({productId}) => {
   });
 
   const { userId } = useContext(userContext);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      console.log("helloo");
-    }, 2000);
-    return () => {
-      clearInterval(timer);
-      console.log("component unmounting and values are reset ");
-    };
-  });
   const [errors, setErrors] = useState({});
 
   const closeModal = (e) => {
@@ -54,30 +46,9 @@ const ReviewForm = ({productId}) => {
 
     if (Object.keys(newErrors).length === 0) {
       // No errors, submit the review
-      console.log(userInput);
-      try {
-        const response = await fetch(`/api/user/addReview/${userId}/${productId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userInput),
-          credentials: "include",
-        });
-
-        if(response.ok){
-          /// review added 
-          /// notify the customer 
-          console.log("Review added to backend")
-        }
-        else{
-          ///add error logic
-        }
-      } catch (err) {
-        console.log("Review adding error : ", err);
-      }
+  
+      addReviews(userInput)
       onClose();
-      console.log("jioo");
     }
   };
 
