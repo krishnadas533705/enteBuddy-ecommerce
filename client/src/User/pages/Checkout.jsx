@@ -23,11 +23,10 @@ import { useNavigate } from "react-router-dom";
 import { userContext } from "../contexts/UserContext";
 import { makePayment } from "../utils/payment";
 import { Navigate } from "react-router-dom";
-import {toast,Toaster} from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import { SidebarContext } from "../contexts/SidebarContext";
 
 const Checkout = () => {
-  
   const { cart, totalPrice, couponId, discountPrice } = useContext(CartContext);
   const [stateid, setstateid] = useState(0);
   const [cityid, setcityid] = useState(0);
@@ -35,8 +34,8 @@ const Checkout = () => {
   const [emailError, setEmailError] = useState(null);
   const [pinCodeError, setPinCodeError] = useState({ msg: null, error: false });
   const [phoneNumberError, setPhoneNumberError] = useState(null);
-  const {clearCart}= useContext(CartContext)
-  const {handleClose}=useContext(SidebarContext)
+  const { clearCart } = useContext(CartContext);
+  const { handleClose } = useContext(SidebarContext);
   const [orderDetails, setOrderDetails] = useState({
     name: "",
     email: "",
@@ -51,7 +50,7 @@ const Checkout = () => {
     billing_address: "",
     couponId: couponId ? couponId : "",
   });
-  console.log("coupon id : ",localStorage.getItem('enteBuddyCouponId'))
+  console.log("coupon id : ", localStorage.getItem("enteBuddyCouponId"));
   useEffect(() => {
     setOrderDetails((prev) => ({
       ...prev,
@@ -66,7 +65,7 @@ const Checkout = () => {
       ...prev,
       [name]: value,
     }));
-  };  
+  };
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -92,11 +91,10 @@ const Checkout = () => {
       setPhoneNumberError("");
     }
 
-    validatePinCode(orderDetails.pincode ,setPinCodeError ,userId) ;
-   
+    validatePinCode(orderDetails.pincode, setPinCodeError, userId);
 
     if (cityid === 0 || stateid === 0) {
-      toast.error("Please choose your city and state")
+      toast.error("Please choose your city and state");
     }
     // Additional logic for handling form submission
     if (
@@ -121,29 +119,27 @@ const Checkout = () => {
 
       if (response.ok) {
         const paymentOrder = await response.json();
-         makePayment(
-          paymentOrder.key_id,
-          paymentOrder.order,
-          userId,
-          orderDetails,
-          clearCart
-        );
-       navigate('/')
-       clearCart() 
-       handleClose() // bro ee moonu function make payment work aayi kazhinje woek aakavu..epa athinu munne work avunind
-      
+        try {
+          await makePayment(
+            paymentOrder.key_id,
+            paymentOrder.order,
+            userId,
+            orderDetails
+          );
+          navigate("/");
+          clearCart();
+          handleClose();
+        } catch (err) {
+          alert("payment failed");
+        }
       } else {
-        alert("payment failed");
       }
-      
-      
-      
     }
   };
 
   return (
-    <div> 
-    <Toaster toastOptions={{duration:2000}}/>
+    <div>
+      <Toaster toastOptions={{ duration: 2000 }} />
       <div className="flex flex-col items-center border-b bg-white py-2 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <a
           href="#"

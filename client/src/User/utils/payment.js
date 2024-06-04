@@ -1,43 +1,48 @@
-export const makePayment = (key, order, userId, orderDetails,clearCart,handleClose,navigate) => {
-  try {
-    console.log("order amount : ", order.amount);
-    var options = {
-      key,
-      amount: order.amount,
-      currency: "INR",
-      name: "EnteBuddy",
-      description: "EnteBuddy products",
-      image: "",
-      order_id: order.id,
-      handler: async function (response) {
-        await verifyPaymentAndPushOrder(
-          response.razorpay_order_id,
-          response.razorpay_payment_id,
-          response.razorpay_signature,
-          userId,
-          orderDetails,
-          order.amount,clearCart,handleClose,navigate
-        );
-      },
-      prefill: {
-        name: "",
-        email: "",
-        contact: "",
-      },
-      notes: {},
-      theme: {
-        color: "#3399cc",
-      },
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.on("payment.failed", function (response) {
-      alert("Payment failed, Try again.");
-      console.log("Payment failed : ", response.error.description);
-    });
-    rzp1.open();
-  } catch (err) {
-    console.log("Razorpay error : ", err);
-  }
+export const makePayment = async (key, order, userId, orderDetails) => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log("order amount : ", order.amount);
+      var options = {
+        key,
+        amount: order.amount,
+        currency: "INR",
+        name: "EnteBuddy",
+        description: "EnteBuddy products",
+        image: "",
+        order_id: order.id,
+        handler: async function (response) {
+          await verifyPaymentAndPushOrder(
+            response.razorpay_order_id,
+            response.razorpay_payment_id,
+            response.razorpay_signature,
+            userId,
+            orderDetails,
+            order.amount
+          );
+
+          resolve()
+        },
+        prefill: {
+          name: "",
+          email: "",
+          contact: "",
+        },
+        notes: {},
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert("Payment failed, Try again.");
+        console.log("Payment failed : ", response.error.description);
+        reject()
+      });
+      rzp1.open();
+    } catch (err) {
+      console.log("Razorpay error : ", err);
+    }
+  });
 };
 
 const verifyPaymentAndPushOrder = async (
@@ -46,12 +51,12 @@ const verifyPaymentAndPushOrder = async (
   razorpay_signature,
   userId,
   orderDetails,
-  sellingPrice,clearCart,handleClose,navigate
-) => {  
+  sellingPrice
+) => {
   try {
     const response = await fetch(`/api/payment/verifyPayment/${userId}`, {
       method: "POST",
-      headers: {  
+      headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -75,20 +80,11 @@ const verifyPaymentAndPushOrder = async (
         }),
         credentials: "include",
       });
-      if (orderResponse.ok) { 
-        console.log("clear cart : ",clearCart )
+      if (orderResponse.ok) {
         alert("order placed successfully");
-<<<<<<< HEAD
         localStorage.setItem("enteBuddyCartPrice", 0);
-        localStorage.setItem("enteBuddyCart", null);
+        localStorage.setCart("enteBuddyCart", null);
         localStorage.setItem("enteBuddyCouponId", "");
-=======
-        localStorage.setItem('enteBuddyCartPrice',0)
-        localStorage.setCart('enteBuddyCart',null)
-        localStorage.setItem('enteBuddyCouponId','') 
-        
-        
->>>>>>> origin/master
       } else {
         alert("shipping failed");
         const refundResponse = await fetch(
