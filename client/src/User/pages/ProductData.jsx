@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useState } from "react";
 import { ProductContext } from "../contexts/ProductContext";
 import { CartContext } from "../contexts/CartContext";
 import { Link, useParams } from "react-router-dom";
@@ -6,40 +6,60 @@ import { SidebarContext } from "../contexts/SidebarContext";
 import Rating from "../components/Rating";
 import RatingBar from "../components/RatingBar";
 import Reviews from "../components/Reviews";
-import ReviewFormProvider from "../contexts/ReviewFormContext";
+import ReviewFormProvider from "../contexts/ReviewFormContext"; 
+import Shimmer from "../components/Shimmer";
+import {Swiper,SwiperSlide} from 'swiper/react';
+import {Navigation,Pagination} from 'swiper/modules'
+import 'swiper/css/pagination';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+
 const ProductData = () => {
     const { id } = useParams();
     const { products } = useContext(ProductContext);
     const { addToCart ,handleCart } = useContext(CartContext);
     const { setIsOpen, isOpen } = useContext(SidebarContext);
+    const [revCount,setRevCount] = useState(0)
+    
 
 
     const product = products.find((item) => {
         return item._id === id;
     });
   
-    if (!product) return null;
+    if (!product || product.length===0) return <Shimmer/>;
 
-    const { title, primaryImage, description, price, category , discount} = product; 
+    const handleReviewCount=(value)=>{
+        setRevCount(value)
+    }
+    const { title, primaryImage, description, price, category , discount,secondaryImages} = product; 
 
-    
+    console.log(product)
 
     return (
        
-        <div> 
-            
-            <div className="flex flex-col md:flex-row pt-20 md:w-screen md:h-screen items-center overflow-visible bg font">
-                <div className="w-full  md:w-1/2 flex justify-center p-5 ">
-                    <img
-                        src={
-                            "http://localhost:3000" +
-                            primaryImage.path.split("server")[1]
-                        }
-                        className=" sm:max-w-[320px] object-cover"
-                        alt="img"
-                    />
+        <div>  
+            <div className="flex flex-col md:flex-row pt-[65px] md:pb-1 md:w-screen md:h-screen  items-center overflow-visible bg font">
+                <div className="w-full  md:w-1/2 flex justify-center md:h-full">
+                <Swiper 
+                 modules={[Navigation, Pagination]} // Use pagination module
+                 pagination={{ 
+                    clickable: true
+                  }} 
+                className="mySwiper">
+            {[primaryImage, ...secondaryImages].map((image) => (
+              <SwiperSlide key={image.name}>
+                <img
+                  src={"http://localhost:3000" + image.path.split("server")[1]}
+                  className="object-fit w-full"
+                  alt="img"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
                 </div>
-                <div className=" flex flex-col flex-1 px-5 bg-gray-50 py-5"> 
+                <div className=" flex flex-col flex-1 px-5 md:px-20 bg-gray-50 py-5 h-full md:justify-center md:items-center"> 
              
                     <div className="font-medium font-poppins text-[30px] pt-2 md:text-[50px]">
                         {title}
@@ -56,13 +76,13 @@ const ProductData = () => {
                             <Rating />
                         </div>
                         <div className="text-gray-900 font-semibold ml-2 text-sm">
-                            | 30 reviews
+                            | {revCount} reviews
                         </div>
                     </div>
                 {/*  icons are added here */}
-                   <div className="flex justify-between items-center my-5">
+                   <div className=" w-full flex justify-between items-center my-5">
                     <div className="flex justify-center place-items-center">
-                    <div className="text-black text-2xl font-semibold">₹{price}</div>
+                    <div className="text-black text-2xl font-semibold">₹ {Math.floor( price - (discount/100 * price))}</div>
                     <div className="line-through mx-2 text-gray-500 text-[14px]">₹{price}</div>
                     <div className="px-2 py-0 bg-secondary text-black text-[13px] font-bold rounded-lg">{discount}%</div>
                     </div>
@@ -118,7 +138,7 @@ const ProductData = () => {
             
              <ReviewFormProvider productId={product._id} >
                 <RatingBar/> 
-                <Reviews/>
+                <Reviews handleReviewCount={handleReviewCount}/>
              </ReviewFormProvider>
                 </div>
         </div>

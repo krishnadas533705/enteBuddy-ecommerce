@@ -146,7 +146,7 @@ const Sidebar = () => {
                             </div> */}
         </div>
       
-        <div className="flex flex-cols h-60 mb-2 px-4 bg-[#faf9f6ca] overflow-y-auto">
+        <div className="flex flex-cols h-60 mb-2 px-4 py-3 bg-[#faf9f6ca] overflow-y-auto">
           <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}> 
          
           <input
@@ -157,7 +157,7 @@ const Sidebar = () => {
             onChange={(e) => setCouponCode(e.target.value)}
           />
           <button
-            className={`w-full bg-black px-4 text-white py-3 rounded-full  font-poppins  `}
+            className={`w-full bg-hero2 bg-contain bg-tertiary px-4 text-white py-3 rounded-full  font-poppins  `}
             onClick={applyCoupon}
           >
             Appply Coupon

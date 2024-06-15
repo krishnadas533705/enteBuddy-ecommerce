@@ -7,18 +7,33 @@ import Test from "./Test";
 import LogContext from '../contexts/LogContext';
 
 const RatingBar = () => { 
-   const { reviewModal, setReviewModal, onClose } = useContext(ReviewFormContext)
-    const reviews = [
-        { rating: 5, count: 56 },
-        { rating: 4, count: 12 },
-        { rating: 3, count: 4 },
-        { rating: 2, count: 0 },
-        { rating: 1, count: 5 },
-    ];
-    const {userId}=useContext(userContext) 
+   const { reviewModal, setReviewModal, onClose ,reviews} = useContext(ReviewFormContext)
+   const reviewsCount = {} 
+    
+   for(let rating=1 ;rating<=5 ;rating++){
+    reviewsCount[rating] = 0;
+
+   }
+    reviews.forEach(review=>{
+        reviewsCount[review.rating]++;
+    })
+
    
-    const averageRating = 4.7; // Assume this is dynamically calculated
-    const totalReviews = reviews.reduce((acc, curr) => acc + curr.count, 0);
+    const result = Object.keys(reviewsCount).map(rating=>({
+        rating : parseInt(rating,10),
+        count : reviewsCount[rating]
+
+    })) 
+
+    result.sort((a,b)=>b.rating -a.rating)
+
+
+    const {userId}=useContext(userContext) 
+   const averageRating = result.reduce((acc,curr)=>(
+    acc = acc+ (curr.rating*curr.count)/reviews.length
+   ),0).toFixed(1)
+ 
+    const totalReviews = result.reduce((acc, curr) => acc + curr.count, 0);
 
     return (
         <div className="w-full md:w-3/4">
@@ -50,7 +65,7 @@ const RatingBar = () => {
                     <div className="text-gray-700">
                         <p className="font-medium">Reviews</p>
                         <ul className="mb-6 mt-2 space-y-2">
-                            {reviews.map((review, index) => (
+                            {result.map((review, index) => (
                                 <li
                                     key={index}
                                     className="flex items-center text-sm font-medium"
@@ -83,7 +98,7 @@ const RatingBar = () => {
                             ))}
                         </ul>
                     </div>
-                    {userId  && (<button onClick={()=>{setReviewModal(true)}} className="w-36 rounded-full bg-tertiary text-[#FEEE9F] bg-hero2 bg-contain py-3  font-medium">
+                    {userId  && (<button onClick={()=>{setReviewModal(true);}} className="w-36 rounded-full bg-tertiary text-[#FEEE9F] bg-hero2 bg-contain py-3  font-medium">
                         Write a review
                     </button> )  }  
                 </div>

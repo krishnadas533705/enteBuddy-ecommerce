@@ -2,9 +2,13 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../contexts/CartContext";
 
-const Product = ({ product }) => {
+
+const Product = ({ product }) => { 
   const { _id, primaryImage, category, price, title, description ,discount} = product;
+  console.log(product)
   const { addToCart } = useContext(CartContext);
+ 
+ 
   return (
     <div className="w-full  md:h-[600px] bg-gradient-to-b from-[#FFF4BF] to-[#BFF6E6] rounded-2xl shadow-xl mb-4 flex flex-col justify-between">
       <div>
@@ -54,7 +58,7 @@ const Product = ({ product }) => {
                 className="mask mask-star-2 bg-[#DE5B9D] w-3 h-3"
               />
             </div>
-            <span  className="text-blaxk font-poppins  font-medium  ml-2 text-xs">(30 reviews)</span>
+            <span  className="text-blaxk font-poppins  font-medium  ml-2 text-[11px]">(30 reviews)</span>
           </div>
           <div
             className="h-[60px] text-[10px] overflow-hidden text-black font-poppins font-semibold text-center px-1 my-6"
@@ -69,7 +73,7 @@ const Product = ({ product }) => {
           </div>
           <div className="text-sm font-bold mt-2 text-center font-poppins my-3">
             <span className="text-gray-400 line-through mr-2 ">₹ {price}</span>{" "}
-            <span>₹ {price} </span>
+            <span>₹ {Math.floor( price - (discount/100 * price))}</span>
           </div>
 
           <Link to={`/product/${_id}`}>

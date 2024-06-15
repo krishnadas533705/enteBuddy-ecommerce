@@ -129,6 +129,7 @@ const Checkout = () => {
           navigate("/");
           clearCart();
           handleClose();
+          
         } catch (err) {
           alert("payment failed");
         }

@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import Rating from "./Rating";
 import { ReviewFormContext } from "../contexts/ReviewFormContext";
 
-const Reviews = ({ productId }) => {
+const Reviews = ({handleReviewCount }) => {
     
     const {reviews} =useContext(ReviewFormContext)
-    console.log(reviews)
-
+    useEffect(()=>{
+        handleReviewCount(reviews.length)    
+    },[reviews])
+      
     return (
         <div>
             <ul className="">

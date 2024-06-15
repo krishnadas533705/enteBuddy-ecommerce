@@ -13,7 +13,7 @@ const Terms = () => {
                 comply with the following terms and conditions. Address: Our
                 physical address is 1st Floor, 26/489/B, Sulaiman Sait Road,
                 Maradu, Ernakulam, Kerala. Contact Information: For any queries
-                or support, you can reach us at support@enteBuddy. Service
+                or support, you can reach us at support@enteBuddy.com . Service
                 Usage: Ente Buddy provides a platform for purchasing massagers
                 and related products. By using our website, you agree to adhere
                 to all applicable laws and regulations. Product Information: We

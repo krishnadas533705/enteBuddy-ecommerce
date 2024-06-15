@@ -25,6 +25,13 @@ import Footer from "./User/components/Footer";
 import PrivacyPolicy from "./User/pages/PrivacyPolicy";
 import Terms from "./User/pages/Terms";
 import AgeVerificationProvider from "./User/contexts/AgeVerificationContext";
+import Orders from "./User/pages/Orders";
+import OrderTracking from "./User/pages/OrderTracking";
+import OrderProvider from "./User/contexts/OrderContext";
+import RefundPolicy from "./User/pages/RefundPolicy";
+import ShippingPolicy from "./User/pages/ShppingPolicy";
+
+
 const AppLayout =()=>{ 
   return (
     <div>
@@ -60,8 +67,19 @@ const router = createBrowserRouter([
       {
         path:'/termsandconditions',
         element : <Terms/>
+      } ,
+      {
+        path : '/fetchOrders/:userId',
+        element : <Orders/>
       }
-     
+     ,{
+      path : '/refundPolicyAndCancellation',
+      element : <RefundPolicy/>  
+    } ,
+    {
+      path : '/shippingPolicy',
+      element : <ShippingPolicy/>
+    }
     ]
   },
   {
@@ -106,6 +124,10 @@ const router = createBrowserRouter([
     Component : Checkout,
   },
  ,
+ {
+  path : '/orderTracking/:orderId/:productId',
+  Component : OrderTracking
+ }
 
 ]);
 
@@ -117,8 +139,10 @@ const App = () => {
       <UserProvider>
         <SidebarProvider>
           <CartProvider>
-            <ProductProvider>
+            <ProductProvider> 
+              <OrderProvider>
               <RouterProvider router={router} />
+              </OrderProvider>
             </ProductProvider>
           </CartProvider>
         </SidebarProvider>

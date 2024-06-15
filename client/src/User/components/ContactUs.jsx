@@ -19,7 +19,7 @@ const ContactUs = ({onClose}) => {
 
                 <hr />
                 <p className='text-xl font-bold max-w-72 text-center text-secondary'>
-                support@enteBuddy
+                support@enteBuddy.com
                 </p>
                
             </div>
