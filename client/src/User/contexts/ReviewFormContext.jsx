@@ -1,89 +1,89 @@
-import React, { createContext ,useContext,useState ,useEffect} from 'react'
-import { userContext } from './UserContext' 
+    import React, { createContext ,useContext,useState ,useEffect} from 'react'
+    import { userContext } from './UserContext' 
 
-export const ReviewFormContext =createContext()
+    export const ReviewFormContext =createContext()
 
-const ReviewFormProvider = ({children,productId}) => {  
-   
-const [reviewModal ,setReviewModal]= useState(false)
-const [reviews,setReviews]= useState([])
-const [loading,setLoading]=useState(false)
-const [error,setError]=useState(null) 
-
-const {userId} = useContext(userContext) 
-
-
-useEffect (()=>{ 
-   
-  if(productId){ 
+    const ReviewFormProvider = ({children,productId}) => {  
     
-    const fetchReviews = async()=>{
-         
-        try { 
+    const [reviewModal ,setReviewModal]= useState(false)
+    const [reviews,setReviews]= useState([])
+    const [loading,setLoading]=useState(false)
+    const [error,setError]=useState(null) 
+
+    const {userId} = useContext(userContext) 
+
+
+    useEffect (()=>{ 
+    
+    if(productId){ 
+        
+        const fetchReviews = async()=>{
             
-            let productReviews = await fetch(`/api/user/fetchReviews/${productId}`) 
-           
-            if(productReviews.ok){ 
-                productReviews= await productReviews.json()
-                setReviews(productReviews.reviews) 
+            try { 
                 
-             
+                let productReviews = await fetch(`/api/user/fetchReviews/${productId}`) 
+            
+                if(productReviews.ok){ 
+                    productReviews= await productReviews.json()
+                    setReviews(productReviews.reviews) 
+                    
+                
+                }
+                else {
+                    throw new Error("Failed to fetch  reviews.")
+
+                }
+                
+            } catch(err){
+                console.log(err)
+                setError(err.message)
             }
-            else {
-                throw new Error("Failed to fetch  reviews.")
-
-            }
             
-        } catch(err){
-            console.log(err)
-            setError(err.message)
-        }
-        
-    } 
-    fetchReviews()
-}
-    
-},[productId])
-
-  const addReviews = async(userInput)=>{
-    try {
-        const response = await fetch(`/api/user/addReview/${userId}/${productId}`, {
-            method : 'POST',
-            headers : { 
-                'Content-Type': 'application/json'
-
-            },
-            credentials:'include',
-            body : JSON.stringify(userInput)
-            
-        })
-        
-        console.log(response)
-        if(response.ok) { 
-            const addedReview = await response.json();
-            
-            setReviews([...reviews,addedReview]);
-
-        } else {
-            throw new Error("failed to add review")
         } 
-    }catch(err){
-        console.error(err)
-        setError(err.message)  
+        fetchReviews()
     }
-  }
+        
+    },[productId])
 
+    const addReviews = async(userInput)=>{
+        try {
+            const response = await fetch(`/api/user/addReview/${userId}/${productId}`, {
+                method : 'POST',
+                headers : { 
+                    'Content-Type': 'application/json'
 
-    const onClose=()=>{
-        setReviewModal(false)
-    }
-    return (
-         <ReviewFormContext.Provider
-          value={{ reviewModal, setReviewModal, onClose ,addReviews,reviews }}>
-                {children}
-         </ReviewFormContext.Provider>
-        );
+                },
+                credentials:'include',
+                body : JSON.stringify(userInput)
+                
+            })
             
-}
+            console.log(response)
+            if(response.ok) { 
+                const addedReview = await response.json();
+                
+                setReviews([...reviews,addedReview]);
 
-export default ReviewFormProvider
+            } else {
+                throw new Error("failed to add review")
+            } 
+        }catch(err){
+            console.error(err)
+            setError(err.message)  
+        }
+    }
+
+
+        const onClose=()=>{
+            setReviewModal(false)
+        }
+        return (
+            <ReviewFormContext.Provider
+            value={{ reviewModal, setReviewModal, onClose ,addReviews,reviews }}>
+                    {children}
+            </ReviewFormContext.Provider>
+            );
+                
+    }
+
+    export default ReviewFormProvider

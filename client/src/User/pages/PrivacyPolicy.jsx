@@ -27,7 +27,7 @@ const PrivacyPolicy = () => {
                 updated periodically. Users will be notified of any changes.
                 Continued use of our site constitutes acceptance of the updated
                 Privacy Policy. Contact: If you have any questions or concerns
-                regarding our Privacy Policy, please contact us at <span className="font-medium">support@enteBuddy.</span> By using our massager ecommerce site,
+                regarding our Privacy Policy, please contact us at <span className="font-medium">support@enteBuddy.com .</span> By using our massager ecommerce site,
                 you agree to the terms outlined in this Privacy Policy. Thank
                 you for trusting us with your personal information
             </div>

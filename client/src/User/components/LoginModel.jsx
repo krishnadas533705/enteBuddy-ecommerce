@@ -1,7 +1,7 @@
   /* eslint-disable react/prop-types */
   // eslint-disable-next-line no-unused-vars
   import { IoCloseCircleOutline } from "react-icons/io5";
-  import { useRef } from "react";
+  import { useEffect, useRef } from "react";
   import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
   import { CgSpinner } from "react-icons/cg";
   import { useState, useContext } from "react";
@@ -13,7 +13,6 @@
   import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
   import { Toaster, toast } from "react-hot-toast";
   import { useNavigate } from "react-router-dom";
-  import peakpx from "../img/peakpx.jpg";
   import { userContext } from "../contexts/UserContext";
   import { CartContext } from "../contexts/CartContext";
 
@@ -28,6 +27,7 @@
       const { setCart, fetchCart } = useContext(CartContext);
       const { onClose } = useContext(LogContext);
       const [verifyLoading,setVerifyLoading]=useState(false)
+      const [timer,setTimer]= useState(0)
 
       const navigate = useNavigate(); //intialize the navigate function
       const cleanupRecaptcha = () => {
@@ -36,6 +36,17 @@
           window.RecaptchaVerifier = null;
         }
       };
+
+      useEffect(()=>{ 
+        let interval;
+        if(timer>0){
+            interval = setInterval(()=>{
+               setTimer(prev=>(prev-1))     
+            },1000)
+        }
+        
+        return ()=>clearInterval(interval)
+      },[timer])
 
       function onCaptchVerify() {
           if (!window.RecaptchaVerifier) {
@@ -56,7 +67,7 @@
           setLoading(true);
           await onCaptchVerify();
 
-          const appVerifier = window.RecaptchaVerifier;
+          const appVerifier = window.RecaptchaVerifier;     
           const formatPh = "+" + ph;
           signInWithPhoneNumber(auth, formatPh, appVerifier)
               .then((confirmationResult) => {
@@ -64,6 +75,7 @@
                   setLoading(false);
                   setShowOtp(true);
                   toast.success("otp sent successfully");
+                  setTimer(60)
               })
               .catch((err) => {
                   console.log(err);
@@ -186,7 +198,7 @@
 
                               <button
                                   onClick={onOTPVerify}
-                                  className="bg-[#54d8b5] w-full flex gap-1 items-center justify-center py-2.5 text-white font-figtree rounded"
+                                  className="bg-secondary w-full flex gap-1 items-center justify-center py-2.5 text-gray-800 font-figtree rounded"
                               >
                                   {verifyLoading && (
                                       <CgSpinner
@@ -198,7 +210,8 @@
                               </button>
                               <button
                                   onClick={resendOTP}
-                                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 w-full flex gap-1 items-center justify-center py-2.5 font-figtree rounded mt-2"
+                                 disabled={timer>0}
+                                  className={`${timer>0 ? 'bg-gray-400': ' bg-secondary'} hover:bg-gray-400  text-gray-800 w-full flex gap-1 items-center justify-center py-2.5 font-figtree rounded mt-2`}
                               > 
                               {
                                 loading && (
@@ -206,7 +219,7 @@
                                               className="mt-1 animate-spin" />
                                 )
                               }
-                                  Resend OTP
+                                  {timer > 0 ? `Resend OTP ( ${timer}s )`: 'Resend OTP' }
                               </button>
                           </>
                       ) : (

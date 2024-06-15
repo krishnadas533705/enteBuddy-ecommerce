@@ -18,8 +18,7 @@ export default {
         jaro : ['Jaro'],
       },
       backgroundImage:{
-        hero : "url('./src/User/img/peakpx.jpg')", 
-        hero2 : "url('./src/User/img/logo2.png')",
+        hero2 : "url('./src/User/img/doodle_finaldraft.png')",
       } 
       
     },

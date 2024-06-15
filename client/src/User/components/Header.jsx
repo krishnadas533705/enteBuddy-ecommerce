@@ -4,7 +4,6 @@ import { FaShoppingCart ,FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { CartContext } from "../contexts/CartContext";
 import LoginModel from "./LoginModel";
-import peakpx from '../img/peakpx.jpg'
 import logo from '../img/logo.png';
 import { userContext } from "../contexts/UserContext";
 import { Toaster,toast } from "react-hot-toast";  
@@ -50,6 +49,14 @@ const Header = (cookies) => {
   const toggleLeftMenu=()=>{
     setLeftDropdown((prev)=>!prev)
   }
+  const handleOrder=(e)=>{
+   toggleLeftMenu() ;
+   if(!userId){
+    e.preventDefault();
+    setShowModal(true);
+    toast.error("Please login to view your orders !!!")
+   }
+  }
   return (
     <div>
       <Toaster toastOptions={{duration:1000}}/>
@@ -94,7 +101,7 @@ const Header = (cookies) => {
                 <Link onClick={()=>{setContactModal(!contactModal);setLeftDropdown(!leftDropdown)}}>Contact us</Link>
               </li>
               <li className="">
-                <Link onClick={toggleLeftMenu}>Orders</Link>
+               <Link to={`/fetchOrders/${userId}`} onClick={handleOrder}>Orders</Link>
               </li>
             </ul>
           </div>

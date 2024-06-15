@@ -6,6 +6,7 @@ const UserProvider = ({ children }) => {
   const [userId, setUserId] = useState(() => {
     return localStorage.getItem("enteBuddyUser") || null;
   });
+  
 
   return (
     <userContext.Provider value={{ userId, setUserId }}>
