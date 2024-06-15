@@ -2,9 +2,9 @@
   "name": "entebuddy",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon ./server/index.js"
+    "start": "nodemon ./server/app.js"
   },
   "author": "",
   "license": "ISC",

@@ -13,6 +13,9 @@ import path from "path";
 dotenv.config();
 const app = express();
 
+
+const port = process.env.PORT || 3000
+
 export const instance = new Razorpay({
   key_id: process.env.RAZORPAY_ID,
   key_secret: process.env.RAZORPAY_SECRET_KEY,
@@ -21,7 +24,7 @@ export const instance = new Razorpay({
 
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/enteBuddy")
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("Database connected"))
   .catch((err) => console.log("Error in connecting database : ", err));
 
@@ -39,7 +42,7 @@ app.use(cookieParser());
 app.use("/Public", express.static("C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public"));
 // app.use("/Public", express.static(path.join(__dirname,'/Public'))); ith ubuntu remove cheyyaruth
 // app.use("/Public", express.static("C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public")); bro kd bro ,ithum mattale :)
-app.listen(3000, () => console.log("server started at port 3000"));
+app.listen(port, () => console.log("server started at port 3000"));
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
