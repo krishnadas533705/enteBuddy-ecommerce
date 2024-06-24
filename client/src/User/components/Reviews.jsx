@@ -4,9 +4,13 @@ import { ReviewFormContext } from "../contexts/ReviewFormContext";
 const Reviews = ({handleReviewCount }) => {
     
     const {reviews} =useContext(ReviewFormContext)
-    useEffect(()=>{
-        handleReviewCount(reviews.length)    
-    },[reviews])
+
+    if (reviews) {
+        useEffect(()=>{
+            handleReviewCount(reviews.length)    
+        },[reviews])
+    }
+    
       
     return (
         <div>
