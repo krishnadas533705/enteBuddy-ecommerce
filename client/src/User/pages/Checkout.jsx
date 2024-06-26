@@ -50,7 +50,7 @@ const Checkout = () => {
     billing_address: '',
     couponId: couponId ? couponId : '',
   });
-  const API = import.meta.env.API_URL;
+  const API = import.meta.env.VITE_API_URL;
 
   console.log('coupon id : ', localStorage.getItem('enteBuddyCouponId'));
   useEffect(() => {

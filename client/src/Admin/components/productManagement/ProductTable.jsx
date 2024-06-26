@@ -19,7 +19,7 @@ const ProductTable = ({
   );
   const [totalPages, setTotalPages] = useState(null);
   const [currentProducts, setCurrentProducts] = useState(null);
-  const API = import.meta.env.API_URL
+  const API = import.meta.env.VITE_API_URL
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {

@@ -7,7 +7,7 @@ const Product = ({ product }) => {
   const { _id, primaryImage, category, price, title, description ,discount,reviews} = product;
   console.log(product)
   const { addToCart } = useContext(CartContext);
-const API = import.meta.env.API_URL
+const API = import.meta.env.VITE_API_URL
   return (
     <div className="w-full  md:h-[600px] bg-gradient-to-b from-[#FFF4BF] to-[#BFF6E6] rounded-2xl shadow-xl mb-4 flex flex-col justify-between">
       <div>

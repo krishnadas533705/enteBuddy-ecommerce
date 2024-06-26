@@ -12,7 +12,7 @@ const EditProduct = ({
   const [imageUrl, setImageUrl] = useState(null);
   const [updateData, setUpdateData] = useState({});
   const { adminId } = useContext(AdminContext);
-  const API = import.meta.env.API_URL
+  const API = import.meta.env.VITE_API_URL
   useEffect(() => {
     if (editingProduct) {
       const url = API + editingProduct.primaryImage.path.split('server')[1];

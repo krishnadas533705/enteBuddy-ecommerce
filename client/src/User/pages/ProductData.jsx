@@ -20,7 +20,7 @@ const ProductData = () => {
   const { addToCart, handleCart } = useContext(CartContext);
   const { setIsOpen, isOpen } = useContext(SidebarContext);
   const [revCount, setRevCount] = useState(0);
-  const API = import.meta.env.API_URL
+  const API = import.meta.env.VITE_API_URL
   const product = products.find((item) => {
     return item._id === id;
   });

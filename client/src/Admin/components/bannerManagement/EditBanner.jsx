@@ -2,7 +2,6 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useState } from "react";
 import AdminContext from "../../context/AdminContext";
-import API from "razorpay/dist/types/api";
 
 const EditBanner = ({
   bannerEditForm,
@@ -13,7 +12,7 @@ const EditBanner = ({
   const [updateData, setUpdateData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const { adminId } = useContext(AdminContext);
-  const API = import.meta.env.API_URL
+  const API = import.meta.env.VITE_API_URL
   useEffect(() => {
     if (editingBanner) {
       const url =

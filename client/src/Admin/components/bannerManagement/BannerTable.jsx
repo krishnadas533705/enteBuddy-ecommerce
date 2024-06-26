@@ -7,7 +7,7 @@ import DeleteBanner from './DeleteBanner';
 const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
   const [bannerForm, showBannerForm] = useState(false);
   const [bannerEditForm, showBannerEditForm] = useState(false);
-  const API = import.meta.env.API_URL
+  const API = import.meta.env.VITE_API_URL
 
   const [currentPage, setCurrentPage] = useState(
     localStorage.getItem('currentBannerPage') || 1
