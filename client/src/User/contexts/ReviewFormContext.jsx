@@ -58,11 +58,16 @@
                 
             })
             
-            console.log(response)
+        
             if(response.ok) { 
                 const addedReview = await response.json();
-                
-                setReviews([...reviews,addedReview]);
+                console.log("new review ",addedReview)
+                if (reviews) {
+                    setReviews([...reviews,addedReview]);
+                }
+                else{
+                    setReviews(addedReview);
+                }
 
             } else {
                 throw new Error("failed to add review")

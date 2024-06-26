@@ -1,7 +1,7 @@
-import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useState } from "react";
-import AdminContext from "../../context/AdminContext.js";
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useContext, useEffect, useState } from 'react';
+import AdminContext from '../../context/AdminContext.js';
 
 const EditProduct = ({
   editForm,
@@ -12,19 +12,18 @@ const EditProduct = ({
   const [imageUrl, setImageUrl] = useState(null);
   const [updateData, setUpdateData] = useState({});
   const { adminId } = useContext(AdminContext);
+  const API = import.meta.env.API_URL
   useEffect(() => {
     if (editingProduct) {
-      const url =
-        "http://localhost:3000" +
-        editingProduct.primaryImage.path.split("server")[1];
+      const url = API + editingProduct.primaryImage.path.split('server')[1];
       setImageUrl(url);
     }
   }, [editingProduct]);
   const handleProductData = (e) => {
     const { name, value } = e.target;
 
-    if (name == "primaryImage") {
-      console.log("Primary image changed");
+    if (name == 'primaryImage') {
+      console.log('Primary image changed');
       setUpdateData((prev) => ({
         ...prev,
         [name]: e.target.files[0],
@@ -32,7 +31,7 @@ const EditProduct = ({
 
       const imgUrl = URL.createObjectURL(e.target.files[0]);
       setImageUrl(imgUrl);
-    } else if (name == "secondaryImages") {
+    } else if (name == 'secondaryImages') {
       setUpdateData((prev) => ({
         ...prev,
         [name]: e.target.files,
@@ -50,34 +49,34 @@ const EditProduct = ({
       const formData = new FormData();
       // Define keys that need to be appended
       const keys = [
-        "title",
-        "description",
-        "color",
-        "price",
-        "quantity",
-        "discount",
-        "primaryImage",
+        'title',
+        'description',
+        'color',
+        'price',
+        'quantity',
+        'discount',
+        'primaryImage',
       ];
       // Append keys to FormData object
       keys.forEach((key) => {
         const value = updateData[key];
-        if (value !== undefined && value !== null && value !== "") {
+        if (value !== undefined && value !== null && value !== '') {
           formData.append(key, value);
         }
       });
       if (updateData.secondaryImages) {
         for (let i = 0; i < updateData.secondaryImages.length; i++) {
           const imageFile = updateData.secondaryImages[i];
-          formData.append("secondaryImages", imageFile);
+          formData.append('secondaryImages', imageFile);
         }
       }
 
       const response = await fetch(
         `/api/admin/updateProduct/${adminId}/${editingProduct._id}`,
         {
-          method: "put",
+          method: 'put',
           body: formData,
-          credentials: "include",
+          credentials: 'include',
         }
       );
       if (response.ok) {
@@ -86,13 +85,13 @@ const EditProduct = ({
         showEditForm(false);
       }
     } catch (err) {
-      console.log("Error in updating : ", err);
+      console.log('Error in updating : ', err);
     }
   };
   return (
     <div
       className={`${
-        !editForm ? "hidden" : ""
+        !editForm ? 'hidden' : ''
       } fixed overflow-scroll inset-0 bg-black backdrop-blur-sm bg-opacity-30`}
     >
       <div className="min-h-screen p-6 flex items-center justify-center">
@@ -107,7 +106,7 @@ const EditProduct = ({
                   showEditForm(false);
                 }}
               >
-                <FontAwesomeIcon icon={faClose} size="2x" />{" "}
+                <FontAwesomeIcon icon={faClose} size="2x" />{' '}
               </button>
             </div>
             <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -131,7 +130,7 @@ const EditProduct = ({
                         id="title"
                         className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                         placeholder={editingProduct && editingProduct.title}
-                        value={updateData.title ? updateData.title : ""}
+                        value={updateData.title ? updateData.title : ''}
                         onChange={handleProductData}
                       />
                     </div>
@@ -143,7 +142,7 @@ const EditProduct = ({
                         id="category"
                         className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50"
                         onChange={handleProductData}
-                        value={updateData.category ? updateData.category : ""}
+                        value={updateData.category ? updateData.category : ''}
                       >
                         <option value="">Select</option>
                         <option value="Massagers">Massagers</option>
@@ -162,7 +161,7 @@ const EditProduct = ({
                           editingProduct && editingProduct.description
                         }
                         value={
-                          updateData.description ? updateData.description : ""
+                          updateData.description ? updateData.description : ''
                         }
                         onChange={handleProductData}
                       />
@@ -178,9 +177,9 @@ const EditProduct = ({
                         placeholder={
                           editingProduct && editingProduct.color
                             ? editingProduct.color
-                            : "color"
+                            : 'color'
                         }
-                        value={updateData.color ? updateData.color : ""}
+                        value={updateData.color ? updateData.color : ''}
                         onChange={handleProductData}
                       />
                     </div>
@@ -195,10 +194,10 @@ const EditProduct = ({
                         placeholder={
                           editingProduct && editingProduct.price
                             ? editingProduct.price
-                            : ""
+                            : ''
                         }
                         min={1}
-                        value={updateData.price ? updateData.price : ""}
+                        value={updateData.price ? updateData.price : ''}
                         onChange={handleProductData}
                       />
                     </div>
@@ -213,11 +212,11 @@ const EditProduct = ({
                           placeholder={
                             editingProduct && editingProduct.quantity
                               ? editingProduct.quantity
-                              : ""
+                              : ''
                           }
                           className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
                           min={1}
-                          value={updateData.quantity ? updateData.quantity : ""}
+                          value={updateData.quantity ? updateData.quantity : ''}
                           onChange={handleProductData}
                         />
                       </div>
@@ -233,11 +232,11 @@ const EditProduct = ({
                           placeholder={
                             editingProduct && editingProduct.discount
                               ? editingProduct.discount
-                              : "Discount"
+                              : 'Discount'
                           }
                           className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
                           min={0}
-                          value={updateData.discount ? updateData.discount : ""}
+                          value={updateData.discount ? updateData.discount : ''}
                           onChange={handleProductData}
                         />
                       </div>

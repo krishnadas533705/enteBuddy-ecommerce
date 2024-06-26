@@ -5,11 +5,11 @@ import { __dirname } from "../app.js";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname == "primaryImage") {
-      cb(null,"C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/primaryImages");
+      cb(null,"D:/Tutorial/js tutorial/kd/enteBuddy-ecommerce/server/Public/uploads/primaryImages");
     } else if (file.fieldname == "secondaryImages") {
-      cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/secondaryImages");
+      cb(null, "D:/Tutorial/js tutorial/kd/enteBuddy-ecommerce/server/Public/uploads/secondaryImages");
     } else if (file.fieldname == "bannerImage") {
-      cb(null, "C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/bannerImages");
+      cb(null, "D:/Tutorial/js tutorial/kd/enteBuddy-ecommerce/server/Public/uploads/banners");
       
     } else {
       cb(new Error("Unexpected field"));

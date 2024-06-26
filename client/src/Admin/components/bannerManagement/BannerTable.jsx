@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import AddBanner from "./AddBanner";
-import EditBanner from "./EditBanner";
-import Pagination from "@mui/material/Pagination";
-import DeleteBanner from "./DeleteBanner";
+import React, { useEffect, useState } from 'react';
+import AddBanner from './AddBanner';
+import EditBanner from './EditBanner';
+import Pagination from '@mui/material/Pagination';
+import DeleteBanner from './DeleteBanner';
 
 const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
   const [bannerForm, showBannerForm] = useState(false);
   const [bannerEditForm, showBannerEditForm] = useState(false);
+  const API = import.meta.env.API_URL
 
   const [currentPage, setCurrentPage] = useState(
-    localStorage.getItem("currentBannerPage") || 1
+    localStorage.getItem('currentBannerPage') || 1
   );
   const [totalPages, setTotalPages] = useState(null);
   const [currentBanners, setCurrentBanners] = useState(null);
@@ -30,7 +31,7 @@ const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
-    localStorage.setItem("currentBannerPage", page);
+    localStorage.setItem('currentBannerPage', page);
     const bannersList = banners.slice((page - 1) * 5, page * 5);
     setCurrentBanners(bannersList);
   };
@@ -54,19 +55,13 @@ const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
         <table className="w-4/5 px-3 text-xs md:text-sm shadow-md text-left rtl:text-right text-gray-500 ">
           <thead className="text-xs text-gray-700 uppercase ">
             <tr>
-              <th
-                scope="col"
-                className="px-6 bg-gray-50   py-3"
-              >
+              <th scope="col" className="px-6 bg-gray-50   py-3">
                 Banner
               </th>
               <th scope="col" className="px-6 py-3">
                 Title
               </th>
-              <th
-                scope="col"
-                className="px-6 bg-gray-50 py-3   "
-              >
+              <th scope="col" className="px-6 bg-gray-50 py-3   ">
                 Start Date
               </th>
               <th scope="col" className="px-6  py-3">
@@ -78,19 +73,14 @@ const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
             </tr>
           </thead>
           <tbody>
-            {console.log("current banners : ", currentBanners)}
+            {console.log('current banners : ', currentBanners)}
             {currentBanners &&
               currentBanners.map((item) => (
-                <tr
-                  className="border-b border-gray-200 "
-                  key={item._id}
-                >
+                <tr className="border-b border-gray-200 " key={item._id}>
                   <th scope="row" className="px-6 py-4 bg-gray-50">
                     <img
                       className="md:h-20"
-                      src={
-                        `http://localhost:3000` + item.path.split("server")[1]
-                      }
+                      src={API + item.path.split('server')[1]}
                       alt={item.title}
                     />
                   </th>
@@ -98,12 +88,12 @@ const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
                   <td className="px-6 py-4 bg-gray-50 ">
                     {item.startDate
                       ? new Date(item.startDate).toLocaleDateString()
-                      : ""}
+                      : ''}
                   </td>
                   <td className="px-6 py-4 ">
                     {item.endDate
                       ? new Date(item.endDate).toLocaleDateString()
-                      : ""}
+                      : ''}
                   </td>
                   <td className="px-6 py-4 bg-gray-50 ">
                     <button
@@ -148,7 +138,12 @@ const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
         setFetchBanners={setFetchBanners}
       />
 
-      <DeleteBanner showDeletePrompt={showDeletePrompt} deletePrompt={deletePrompt} bannerId={deleteId} setFetchBanners={setFetchBanners} />
+      <DeleteBanner
+        showDeletePrompt={showDeletePrompt}
+        deletePrompt={deletePrompt}
+        bannerId={deleteId}
+        setFetchBanners={setFetchBanners}
+      />
     </div>
   );
 };

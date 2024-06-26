@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import logo from "../img/logo.png";
-import shiprokcet from "../img/shiprocket.jpeg";
-import { CartContext } from "../contexts/CartContext";
-import { useContext, useState } from "react";
-import flag from "../img/flag.jpg";
+import React, { useEffect } from 'react';
+import logo from '../img/logo.png';
+import shiprokcet from '../img/shiprocket.jpeg';
+import { CartContext } from '../contexts/CartContext';
+import { useContext, useState } from 'react';
+import flag from '../img/flag.jpg';
 import {
   CitySelect,
   CountrySelect,
@@ -11,20 +11,20 @@ import {
   GetCountries,
   GetCity,
   GetState,
-} from "react-country-state-city";
-import "react-country-state-city/dist/react-country-state-city.css";
+} from 'react-country-state-city';
+import 'react-country-state-city/dist/react-country-state-city.css';
 import {
   validateName,
   validateEmail,
   validatePhoneNumber,
   validatePinCode,
-} from "../utils/validate";
-import { useNavigate } from "react-router-dom";
-import { userContext } from "../contexts/UserContext";
-import { makePayment } from "../utils/payment";
-import { Navigate } from "react-router-dom";
-import { toast, Toaster } from "react-hot-toast";
-import { SidebarContext } from "../contexts/SidebarContext";
+} from '../utils/validate';
+import { useNavigate } from 'react-router-dom';
+import { userContext } from '../contexts/UserContext';
+import { makePayment } from '../utils/payment';
+import { Navigate } from 'react-router-dom';
+import { toast, Toaster } from 'react-hot-toast';
+import { SidebarContext } from '../contexts/SidebarContext';
 
 const Checkout = () => {
   const { cart, totalPrice, couponId, discountPrice } = useContext(CartContext);
@@ -37,20 +37,22 @@ const Checkout = () => {
   const { clearCart } = useContext(CartContext);
   const { handleClose } = useContext(SidebarContext);
   const [orderDetails, setOrderDetails] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    city: "",
-    state: "",
-    pincode: "",
-    sellingPrice: "",
-    discount: "",
-    paymentId: "",
-    products: cart ? cart : "",
-    billing_address: "",
-    couponId: couponId ? couponId : "",
+    name: '',
+    email: '',
+    mobile: '',
+    city: '',
+    state: '',
+    pincode: '',
+    sellingPrice: '',
+    discount: '',
+    paymentId: '',
+    products: cart ? cart : '',
+    billing_address: '',
+    couponId: couponId ? couponId : '',
   });
-  console.log("coupon id : ", localStorage.getItem("enteBuddyCouponId"));
+  const API = import.meta.env.API_URL;
+
+  console.log('coupon id : ', localStorage.getItem('enteBuddyCouponId'));
   useEffect(() => {
     setOrderDetails((prev) => ({
       ...prev,
@@ -73,28 +75,28 @@ const Checkout = () => {
 
     // Perform validation
     if (!validateName(orderDetails.name)) {
-      console.log("working");
-      setNameError("Please enter your name");
+      console.log('working');
+      setNameError('Please enter your name');
     } else {
-      setNameError("");
+      setNameError('');
     }
 
     if (!validateEmail(orderDetails.email)) {
-      setEmailError("Please enter a valid email address");
+      setEmailError('Please enter a valid email address');
     } else {
-      setEmailError("");
+      setEmailError('');
     }
 
     if (!validatePhoneNumber(orderDetails.mobile)) {
-      setPhoneNumberError("Please enter a valid phone number");
+      setPhoneNumberError('Please enter a valid phone number');
     } else {
-      setPhoneNumberError("");
+      setPhoneNumberError('');
     }
 
     validatePinCode(orderDetails.pincode, setPinCodeError, userId);
 
     if (cityid === 0 || stateid === 0) {
-      toast.error("Please choose your city and state");
+      toast.error('Please choose your city and state');
     }
     // Additional logic for handling form submission
     if (
@@ -107,14 +109,14 @@ const Checkout = () => {
     ) {
       // Form submission logic here
       const response = await fetch(`/api/payment/createPayment/${userId}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           amount: discountPrice > 0 ? discountPrice : totalPrice,
         }),
-        credentials: "include",
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -126,12 +128,11 @@ const Checkout = () => {
             userId,
             orderDetails
           );
-          navigate("/");
+          navigate('/');
           clearCart();
           handleClose();
-          
         } catch (err) {
-          alert("payment failed");
+          alert('payment failed');
         }
       } else {
       }
@@ -238,10 +239,7 @@ const Checkout = () => {
                 >
                   <img
                     className="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                    src={
-                      "http://localhost:3000" +
-                      item.primaryImage.path.split("server")[1]
-                    }
+                    src={API + item.primaryImage.path.split('server')[1]}
                     alt=""
                   />
 
@@ -311,7 +309,7 @@ const Checkout = () => {
                   name="name"
                   value={orderDetails.name}
                   className={`w-full rounded-md border ${
-                    nameError ? "border-red-500" : "border-gray-200"
+                    nameError ? 'border-red-500' : 'border-gray-200'
                   }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                   placeholder="your name"
                   required={true}
@@ -320,7 +318,7 @@ const Checkout = () => {
                   }
                   onBlur={() => {
                     if (!validateName(orderDetails.name)) {
-                      setNameError("Please provide your name");
+                      setNameError('Please provide your name');
                     } else {
                       setNameError(null);
                     }
@@ -342,7 +340,7 @@ const Checkout = () => {
                   id="email"
                   name="email"
                   className={`w-full rounded-md border ${
-                    emailError ? "border-red-500" : "border-gray-200   "
+                    emailError ? 'border-red-500' : 'border-gray-200   '
                   } px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                   placeholder="Your.email@gmail.com"
                   value={orderDetails.email}
@@ -352,9 +350,9 @@ const Checkout = () => {
                   }
                   onBlur={() => {
                     if (!validateEmail(orderDetails.email)) {
-                      setEmailError("Please provide a valid email address");
+                      setEmailError('Please provide a valid email address');
                     } else {
-                      setEmailError("");
+                      setEmailError('');
                     }
                   }}
                 />
@@ -392,7 +390,7 @@ const Checkout = () => {
                   name="mobile"
                   value={orderDetails.mobile}
                   className={`w-full rounded-md border ${
-                    phoneNumberError ? "border-red-500" : "border-gray-200"
+                    phoneNumberError ? 'border-red-500' : 'border-gray-200'
                   }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                   placeholder="Your phone number"
                   required
@@ -401,9 +399,9 @@ const Checkout = () => {
                   }
                   onBlur={() => {
                     if (!validatePhoneNumber(orderDetails.mobile)) {
-                      setPhoneNumberError("Please enter a valid Phone number");
+                      setPhoneNumberError('Please enter a valid Phone number');
                     } else {
-                      setPhoneNumberError("");
+                      setPhoneNumberError('');
                     }
                   }}
                 />
@@ -441,7 +439,7 @@ const Checkout = () => {
                     countryid={101}
                     onChange={(e) => {
                       setstateid(e.id);
-                      handleOrderDetails("state", e.name);
+                      handleOrderDetails('state', e.name);
                     }}
                     placeHolder="Select State"
                     required
@@ -456,7 +454,7 @@ const Checkout = () => {
                     stateid={stateid}
                     onChange={(e) => {
                       setcityid(e.id);
-                      handleOrderDetails("city", e.name);
+                      handleOrderDetails('city', e.name);
                     }}
                     placeHolder="Select city"
                     required
@@ -476,11 +474,11 @@ const Checkout = () => {
                     }
                   />
                 </div>
-                {console.log("isError : ", pinCodeError.error)}
+                {console.log('isError : ', pinCodeError.error)}
                 {pinCodeError.msg && (
                   <p
                     className={`text-center text-sm ${
-                      !pinCodeError.error ? "text-green-500" : "text-red-500"
+                      !pinCodeError.error ? 'text-green-500' : 'text-red-500'
                     }`}
                   >
                     {pinCodeError.msg}
