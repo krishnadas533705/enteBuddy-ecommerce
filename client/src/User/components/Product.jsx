@@ -4,7 +4,7 @@ import { CartContext } from "../contexts/CartContext";
 
 
 const Product = ({ product }) => { 
-  const { _id, primaryImage, category, price, title, description ,discount} = product;
+  const { _id, primaryImage, category, price, title, description ,discount,reviews} = product;
   console.log(product)
   const { addToCart } = useContext(CartContext);
  
@@ -58,7 +58,7 @@ const Product = ({ product }) => {
                 className="mask mask-star-2 bg-[#DE5B9D] w-3 h-3"
               />
             </div>
-            <span  className="text-blaxk font-poppins  font-medium  ml-2 text-[11px]">(30 reviews)</span>
+            <span  className="text-blaxk font-poppins  font-medium  ml-2 text-[11px]">({reviews.length} reviews)</span>
           </div>
           <div
             className="h-[60px] text-[10px] overflow-hidden text-black font-poppins font-semibold text-center px-1 my-6"
