@@ -42,7 +42,7 @@ app.use(cookieParser());
 app.use("/Public", express.static(path.join(__dirname,'/Public'))); 
 // app.use("/Public", express.static(path.join(__dirname,'/Public'))); ith ubuntu remove cheyyaruth
 // app.use("/Public", express.static("C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public")); bro kd bro ,ithum mattale :)
-app.listen(port, () => console.log("server started at port 3000"));
+app.listen(port, () => console.log("server started at port : ",port));
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
