@@ -5,11 +5,11 @@ import { __dirname } from "../app.js";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname == "primaryImage") {
-      cb(null,path.join(__dirname,'/Public/primaryImages'));
+      cb(null,path.join(__dirname,'/Public/uploads/primaryImages'));
     } else if (file.fieldname == "secondaryImages") {
-      cb(null, path.join(__dirname,'/Public/secondaryImages'));
+      cb(null, path.join(__dirname,'/Public/uploads/secondaryImages'));
     } else if (file.fieldname == "bannerImage") {
-      cb(null, path.join(__dirname,'/Public/bannerImages'));
+      cb(null, path.join(__dirname,'/Public/uploads/bannerImages'));
       
     } else {
       cb(new Error("Unexpected field"));
