@@ -5,17 +5,16 @@ import { __dirname } from "../app.js";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname == "primaryImage") {
-      cb(null,"D:/Tutorial/js tutorial/kd/enteBuddy-ecommerce/server/Public/uploads/primaryImages");
+      cb(null,path.join(__dirname,'/Public/primaryImages'));
     } else if (file.fieldname == "secondaryImages") {
-      cb(null, "D:/Tutorial/js tutorial/kd/enteBuddy-ecommerce/server/Public/uploads/secondaryImages");
+      cb(null, path.join(__dirname,'/Public/secondaryImages'));
     } else if (file.fieldname == "bannerImage") {
-      cb(null, "D:/Tutorial/js tutorial/kd/enteBuddy-ecommerce/server/Public/uploads/banners");
+      cb(null, path.join(__dirname,'/Public/bannerImages'));
       
     } else {
       cb(new Error("Unexpected field"));
     }
   },
-    // hi kd bro ,mattumbo ith mattale :)
   //   if (file.fieldname == "primaryImage") {
   //     cb(null,"C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public/uploads/primaryImages");
   //   } else if (file.fieldname == "secondaryImages") {
