@@ -56,7 +56,7 @@ const ProductData = () => {
             {[primaryImage, ...secondaryImages].map((image) => (
               <SwiperSlide key={image.name}>
                 <img
-                  src={'http://localhost:3000' + image.path.split('server')[1]}
+                  src={API + image.path.split('server')[1]}
                   className="object-fit w-full"
                   alt="img"
                 />
