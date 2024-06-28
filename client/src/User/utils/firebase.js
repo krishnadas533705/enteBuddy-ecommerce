@@ -6,7 +6,7 @@ import { getAuth} from "firebase/auth"; // Import the Auth SDK and signInWithPho
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDPzAAVaLE0QcAZ8biyFF6ahxI8nu3lMuk",
-  authDomain: "entebuddy-1f191.firebaseapp.com",
+  authDomain: "www.entebuddy.com",
   projectId: "entebuddy-1f191",
   storageBucket: "entebuddy-1f191.appspot.com",
   messagingSenderId: "29717603090",
