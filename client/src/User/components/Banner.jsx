@@ -20,7 +20,7 @@ const Banner = () => {
     <div className="w-full p-4 lg:px-16 lg:pt-7  ">
       {bannerImage && (
         <img
-          src={API + bannerImage}
+          src={API + bannerImage.split('server')[1]}
           alt="img"
           className="rounded-3xl lg:max-h-[400px] w-full object-fit"
         />
