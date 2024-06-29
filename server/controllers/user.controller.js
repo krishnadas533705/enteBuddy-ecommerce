@@ -1,3 +1,4 @@
+import { banner } from "../models/banner.model.js";
 import cart from "../models/cart.model.js";
 import coupon from "../models/coupons.model.js";
 import order from "../models/order.model.js";
@@ -456,6 +457,19 @@ export const fetchReviews = async (req, res, next) => {
       response = { reviews: reviewData.reviews };
     }
     res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//get banner
+export const getBanners = async (req, res, next) => {
+  try {
+    const allBanners = await banner.find({});
+    const currentBanner = allBanners[allBanners.length -1]
+    console.log("allbanners : ",allBanners)
+    console.log("current banner : ",currentBanner)
+    res.status(200).json(currentBanner);
   } catch (err) {
     next(err);
   }
