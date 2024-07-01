@@ -1,3 +1,4 @@
+import { banner } from "../models/banner.model.js";
 import cart from "../models/cart.model.js";
 import coupon from "../models/coupons.model.js";
 import order from "../models/order.model.js";
@@ -104,6 +105,26 @@ export const removeAllFromCart = async (req, res, next) => {
 export const getProducts = async (req, res, next) => {
   try {
     let products = await product.find({});
+    let allReviews = await reviews.find({});
+    let productMap = new Map();
+    products.forEach((product) => {
+      productMap.set(product._id.toString(), { ...product._doc, reviews: [] });
+    });
+
+    allReviews.forEach((review) => {
+      let productIdStr = review.productId.toString();
+      if (productMap.has(productIdStr)) {
+        console.log("id matched ");
+        let productWithReviews = productMap.get(productIdStr);
+        console.log("reviews : ", review.reviews);
+        productWithReviews.reviews.push(...review.reviews)
+        console.log("productWith reviws : ",productWithReviews)
+      }
+    });
+
+    // If you need the products array updated with reviews
+    products = Array.from(productMap.values());
+    console.log("products : ", product);
     res.status(200).json(products);
   } catch (err) {
     next(err);
@@ -125,7 +146,7 @@ export const createOrder = async (req, res, next) => {
 
     // Construct the formatted current date string
     const formattedCurrentDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    console.log("shipping body : ", req.body);
+    console.log("shipping product : ", req.body.products);
     const orderDetails = {
       orderDate: formattedCurrentDate,
       billing_customer_name: req.body.name,
@@ -351,8 +372,8 @@ export const checkCoupon = async (req, res, next) => {
         let endDate = new Date(couponStatus.endDate);
         let today = new Date(Date.now());
 
-        console.log("start Date ",startDate)
-        console.log("end Date : ",endDate)
+        console.log("start Date ", startDate);
+        console.log("end Date : ", endDate);
         if (endDate > today && startDate <= today) {
           couponResponse = {
             isAvailable: true,
@@ -383,9 +404,11 @@ export const checkCoupon = async (req, res, next) => {
 ///fetch all order details
 export const fetchOrders = async (req, res, next) => {
   try {
-    const allOrders = await order.findOne({ userId: req.user._id });
+    const allOrders = await order
+      .findOne({ userId: req.user._id })
+      .populate({ path: "orders.products._id", model: "products" });
     if (allOrders) {
-      console.log("Orders : ", allOrders);
+      console.log("Orders : ", allOrders.orders[0].products);
       res.status(200).json({ orders: allOrders.orders });
     } else {
       res.status(200).json({ orders: null, msg: "No orders yet" });
@@ -434,6 +457,19 @@ export const fetchReviews = async (req, res, next) => {
       response = { reviews: reviewData.reviews };
     }
     res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//get banner
+export const getBanners = async (req, res, next) => {
+  try {
+    const allBanners = await banner.find({});
+    const currentBanner = allBanners[allBanners.length -1]
+    console.log("allbanners : ",allBanners)
+    console.log("current banner : ",currentBanner)
+    res.status(200).json(currentBanner);
   } catch (err) {
     next(err);
   }

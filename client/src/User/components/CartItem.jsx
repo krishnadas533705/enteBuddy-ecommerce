@@ -8,13 +8,14 @@ const CartItem = ({ item }) => {
   const { removeFromCart, addToCart, decreaseCart } = useContext(CartContext);
   // destructure item
   const { _id, primaryImage, productName, price, quantity } = item;
+  const API = import.meta.env.VITE_API_URL
   return (
     <div className="flex gap-x-4 py-2 lg:px-5 lg:py-3 items-center pr-3 pl-2">
       <div className="div1 min-h-[150px] w-full bg-gradient-to-b from-[#FFFFFF] to-[#FEEE9F] flex items-center gap-x-4 px-3 rounded-3xl font-poppins pt-8">
         <Link to={`/product/${_id}`}>
           {/* image */}
           <img
-            src={"http://localhost:3000" + primaryImage.path.split("server")[1]}
+            src={API + primaryImage.path.split("server")[1]}
             className="max-w-[75px] rounded-lg"
             alt=""
           />

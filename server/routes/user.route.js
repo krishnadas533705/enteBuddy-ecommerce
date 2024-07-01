@@ -13,6 +13,7 @@ import {
   getTrackingDetails,
   removeAllFromCart,
   removeFromCart,
+  getBanners
 } from "../controllers/user.controller.js";
 import { verifyUser } from "../utils/authorisation.js";
 
@@ -62,5 +63,7 @@ router.get(`/fetchOrders/:userId`, verifyUser, fetchOrders);
 router.get(`/fetchReviews/:productId`, fetchReviews);
 
 router.post(`/addReview/:userId/:productId`, verifyUser, addReview);
+
+router.get(`/fetchBanner`,getBanners)
 
 export default router;

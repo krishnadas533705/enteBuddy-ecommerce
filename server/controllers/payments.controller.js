@@ -1,5 +1,5 @@
 import product from "../models/product.model.js";
-import { instance } from "../index.js";
+import { instance } from "../app.js";
 import crypto from "crypto";
 import { errorHandler } from "../utils/error.js";
 import order from "../models/order.model.js";

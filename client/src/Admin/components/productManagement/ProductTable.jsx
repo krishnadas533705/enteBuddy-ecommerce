@@ -19,7 +19,7 @@ const ProductTable = ({
   );
   const [totalPages, setTotalPages] = useState(null);
   const [currentProducts, setCurrentProducts] = useState(null);
-
+  const API = import.meta.env.VITE_API_URL
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
@@ -101,7 +101,7 @@ const ProductTable = ({
                     <img
                       className="md:h-20"
                       src={
-                        `http://localhost:3000` +
+                        API +
                         item.primaryImage.path.split("server")[1]
                       }
                       alt={item.primaryImage.name}

@@ -10,8 +10,11 @@ import order from "../models/order.model.js";
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
+    console.log("body : ",req.body)
     const Admin = await admin.findOne({});
+    console.log("admin data found : ",Admin)
     if (Admin.name == email && Admin.password == password) {
+      console.log("admin true : ",Admin._id)
       const token = jwt.sign({ id: Admin._id }, process.env.JWT_SECRET);
 
       res
@@ -24,6 +27,7 @@ export const adminSignin = async (req, res, next) => {
         .status(200)
         .json({ adminId: Admin._id });
     } else {
+      console.log("admin false")
       return next(errorHandler(403, "Access denied"));
     }
   } catch (Err) {

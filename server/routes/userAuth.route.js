@@ -8,6 +8,6 @@ router.post('/userAuth',userAuth)
 router.post('/googleAuth',googleAuth)
 
 //logout
-router.post('/signout/:userId',verifyUser,logoutUser)
+router.post('/signout/:userId',logoutUser)
 
 export default router
