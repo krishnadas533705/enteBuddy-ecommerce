@@ -3,12 +3,12 @@ import React from 'react'
 const RefundPolicy = () => {
   return (
     <div className="min-h-screen font-poppins">
-    <div className="text-lg font-semibold font-poppins pt-24 pb-16 md:pt-40 md:text-3xl text-center text-black">
+    <div className="text-lg font-semibold font-poppins pt-24 pb-16 md:pt-40 md:text-3xl text-center text-black dark:text-white">
     EnteBuddy Refund & Cancellation Policy
 
 
     </div>
-    <div className="text-center px-5 pb-16">
+    <div className="text-center px-5 pb-16 dark:text-white">
     We want you to be completely satisfied with your purchase from EnteBuddy. If for any reason you need to cancel an order or return a massager for a refund, please follow these steps:
 
 Order Cancellation:

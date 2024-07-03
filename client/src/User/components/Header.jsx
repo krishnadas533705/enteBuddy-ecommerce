@@ -95,13 +95,13 @@ const Header = (cookies) => {
             >
              
               <li >
-                <Link onClick={()=>{setAboutModal(!aboutModal);setLeftDropdown(!leftDropdown)}}>About us</Link>
+                <Link  className="dark:text-white" onClick={()=>{setAboutModal(!aboutModal);setLeftDropdown(!leftDropdown)}}>About us</Link>
               </li>
               <li className="">
-                <Link onClick={()=>{setContactModal(!contactModal);setLeftDropdown(!leftDropdown)}}>Contact us</Link>
+                <Link  className="dark:text-white" onClick={()=>{setContactModal(!contactModal);setLeftDropdown(!leftDropdown)}}>Contact us</Link>
               </li>
               <li className="">
-               <Link to={`/fetchOrders/${userId}`} onClick={handleOrder}>Orders</Link>
+               <Link  className="dark:text-white" to={`/fetchOrders/${userId}`} onClick={handleOrder}>Orders</Link>
               </li>
             </ul>
           </div>

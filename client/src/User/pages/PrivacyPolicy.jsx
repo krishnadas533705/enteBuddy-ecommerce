@@ -3,11 +3,11 @@ import React from "react";
 const PrivacyPolicy = () => {
     return (
         <div className="min-h-screen font-poppins">
-            <div className="text-lg font-semibold font-poppins pt-24 pb-16 md:pt-40 md:text-3xl text-center text-black">
+            <div className="text-lg font-semibold font-poppins pt-24 pb-16 md:pt-40 md:text-3xl text-center text-black dark:text-white">
                 PLEASE READ THIS POLICY CAREFULLY BEFORE USING THE ENTE BUDDY
                 PLATFORM
             </div>
-            <div className="text-center px-5 pb-16">
+            <div className="text-center px-5 pb-16 dark:text-white">
                 Privacy Policy: Information Collection: We may collect personal
                 information such as name, address, email, and payment details
                 during the ordering process on our massager ecommerce site.

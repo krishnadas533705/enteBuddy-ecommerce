@@ -1,6 +1,6 @@
-import { IoCloseCircleOutline } from "react-icons/io5"
-import { useRef } from 'react';
 
+import { useRef } from 'react';
+import { FaWhatsapp } from "react-icons/fa6";
 const ContactUs = ({onClose}) => {
 
     const modalRef=useRef();
@@ -10,6 +10,7 @@ const ContactUs = ({onClose}) => {
         onClose();
      }
     }
+ 
   return (
     <div ref={modalRef} onClick= {closeModal} className="text-white z-10 fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
         <div className='flex flex-col'>
@@ -19,8 +20,19 @@ const ContactUs = ({onClose}) => {
 
                 <hr />
                 <p className='text-xl font-bold max-w-72 text-center text-secondary'>
-                support@enteBuddy.com
-                </p>
+                support@enteBuddy.com 
+                </p> 
+                
+            <div className="">
+              <p className="text-primary font-figtree text-center ">OR</p>
+             
+            </div>
+            
+            <a href="http://wa.me/6238075602" className="flex items-center justify-center text-lg font-bold text-secondary hover:text-green-500">
+           {/* Add WhatsApp icon */}
+              Chat with us
+              <FaWhatsapp  className="w-8 h-8 ml-2 text-primary" /> 
+            </a>
                
             </div>
     

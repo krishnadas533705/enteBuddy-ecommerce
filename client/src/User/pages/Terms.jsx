@@ -3,11 +3,11 @@ import React from "react";
 const Terms = () => {
     return (
         <div className="min-h-screen font-poppins">
-            <div className="text-lg font-semibold font-poppins pt-24 pb-12 md:pt-40 md:text-3xl px-3 text-center text-black">
+            <div className="text-lg font-semibold font-poppins pt-24 pb-12 md:pt-40 md:text-3xl px-3 text-center text-black dark:text-white">
                 PLEASE READ THIS POLICY CAREFULLY BEFORE USING THE ENTE BUDDY
                 PLATFORM
             </div>
-            <div className="text-center px-5 md:px-16 pb-16">
+            <div className="text-center px-5 md:px-16 pb-16 dark:text-white">
                 Terms and Conditions: Introduction: Welcome to Ente Buddy. By
                 accessing our website and using our services, you agree to
                 comply with the following terms and conditions. Address: Our

@@ -83,10 +83,6 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: "/signin",
-    Component: Signin,
-  },
-  {
     path: "/admin",
     Component: DashBoard,
     errorElement: <div>404 Not Found!!!</div>,

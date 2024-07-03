@@ -3,10 +3,10 @@ import React from 'react'
 const ShppingPolicy = () => {
   return (
     <div className="min-h-screen font-poppins">
-    <div className="text-lg font-semibold font-poppins pt-24 pb-16 md:pt-40 md:text-3xl text-center text-black">
+    <div className="text-lg font-semibold font-poppins pt-24 pb-16 md:pt-40 md:text-3xl text-center text-black dark:text-white">
     EnteBuddy Shipping & Delivery Policy
     </div>
-    <div className="text-center px-5 pb-16">
+    <div className="text-center px-5 pb-16 dark:text-white">
     We strive to get your EnteBuddy massagers to you as quickly as possible. Here's what you need to know about our shipping and delivery process:
 
 Shipping Partner:
