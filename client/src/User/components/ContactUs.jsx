@@ -28,7 +28,7 @@ const ContactUs = ({onClose}) => {
              
             </div>
             
-            <a href="http://wa.me/6238075602" className="flex items-center justify-center text-lg font-bold text-secondary hover:text-green-500">
+            <a href="http://wa.me/918891682217" className="flex items-center justify-center text-lg font-bold text-secondary hover:text-green-500">
            {/* Add WhatsApp icon */}
               Chat with us
               <FaWhatsapp  className="w-8 h-8 ml-2 text-primary" /> 
