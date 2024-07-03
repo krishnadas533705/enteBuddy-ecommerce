@@ -27,6 +27,8 @@ const AboutUs = ({ onClose }) => {
                     <hr />
                     <p className="text-md font-bold max-w-72 text-center text-secondary">
                     "Right for exploration couldn't be suppressed under misconceptions or taboos; regardless of gender. In our life, everyone needs at least that one connection, closer to a person to embrace and share their emotions. But before that, one has to completely understand "what do you really want", there comes ENTE BUDDY as your soulmate to unravel through your feats of love, fleeting and thereby leading to deeply comprehend your own self-pleasure!"
+                    You can find us at our physical address: <p className="font-medium">1st
+                    Floor, 26/489/B, Sulaiman Sait Road, Maradu, Ernakulam, Kerala</p>
                     </p>
                 </div>
             </div>
