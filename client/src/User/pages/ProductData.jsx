@@ -80,7 +80,7 @@ const ProductData = () => {
           <div className="py-1 font-poppins text-sm md:text-[16px] flex mt-3 mb-1 ">
             {productFeatures &&
               productFeatures.map((feature) => (
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center" key={feature.description}>
                   <img
                     src={API + feature.icon.split("server")[1]}
                     alt=""
@@ -124,7 +124,7 @@ const ProductData = () => {
               handleCart();
               addToCart(product, id);
             }}
-            className="bg-primary text-black font-bold font-poppins p-2  w-52 flex items-center justify-center  mx-auto  rounded-full text-lg "
+            className=" bg-blue-950 text-white hover:bg-primary hover:text-black focus:bg-primary focus:text-black font-medium font-poppins p-2  w-52 flex items-center justify-center  mx-auto  rounded-full text-lg "
           >
             Add to cart
           </button>
@@ -168,7 +168,7 @@ const ProductData = () => {
                 handleCart();
                 addToCart(product, id);
               }}
-              className="w-6/12 md:w-3/12  bg-yellow-300 text-black p-2 rounded-full text-lg font-medium flex items-center justify-center"
+              className="w-6/12 md:w-3/12  bg-primary text-black font-medium font-poppins p-2 rounded-full text-lg flex items-center justify-center"
             >
               Add to cart
             </div>

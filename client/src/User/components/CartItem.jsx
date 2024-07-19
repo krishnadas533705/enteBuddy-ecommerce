@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdAdd, IoMdClose, IoMdRemove } from "react-icons/io";
 import { CartContext } from "../contexts/CartContext";
@@ -8,6 +8,8 @@ const CartItem = ({ item }) => {
   const { removeFromCart, addToCart, decreaseCart } = useContext(CartContext);
   // destructure item
   const { _id, primaryImage, productName, price, quantity } = item;
+  let [discountPrice,setDiscountPrice] = useState(null)
+  
   const API = import.meta.env.VITE_API_URL
   return (
     <div className="flex gap-x-4 py-2 lg:px-5 lg:py-3 items-center pr-3 pl-2">

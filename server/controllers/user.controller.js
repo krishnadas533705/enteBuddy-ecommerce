@@ -12,11 +12,15 @@ let shipRocketAuthToken = null;
 export const addToCart = async (req, res, next) => {
   try {
     if (req.user) {
-      console.log("Adding to cart....");
+      console.log("Adding to cart....", req.body);
+      const discount = 0;
+      if (req.body.discount) {
+        const discount = (req.body.price * req.body.discount) / 100;
+      }
       const productData = {
         _id: req.body._id,
         productName: req.body.title,
-        price: req.body.price,
+        price: req.body.price - discount,
       };
       console.log("Product Data : ", productData);
       const userCart = await cart.findOne({ userId: req.user._id });
@@ -117,8 +121,8 @@ export const getProducts = async (req, res, next) => {
         console.log("id matched ");
         let productWithReviews = productMap.get(productIdStr);
         console.log("reviews : ", review.reviews);
-        productWithReviews.reviews.push(...review.reviews)
-        console.log("productWith reviws : ",productWithReviews)
+        productWithReviews.reviews.push(...review.reviews);
+        console.log("productWith reviws : ", productWithReviews);
       }
     });
 
@@ -466,9 +470,9 @@ export const fetchReviews = async (req, res, next) => {
 export const getBanners = async (req, res, next) => {
   try {
     const allBanners = await banner.find({});
-    const currentBanner = allBanners[allBanners.length -1]
-    console.log("allbanners : ",allBanners)
-    console.log("current banner : ",currentBanner)
+    const currentBanner = allBanners[allBanners.length - 1];
+    console.log("allbanners : ", allBanners);
+    console.log("current banner : ", currentBanner);
     res.status(200).json(currentBanner);
   } catch (err) {
     next(err);
@@ -493,7 +497,7 @@ const generateShiprocketToken = async () => {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json", 
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(credentials),
         }
