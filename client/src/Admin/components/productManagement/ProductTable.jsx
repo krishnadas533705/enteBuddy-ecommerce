@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddProduct from "./AddProduct";
 import Pagination from "@mui/material/Pagination";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
+import AdminContext from "../../context/AdminContext";
 
 const ProductTable = ({
   products,
@@ -19,7 +20,7 @@ const ProductTable = ({
   );
   const [totalPages, setTotalPages] = useState(null);
   const [currentProducts, setCurrentProducts] = useState(null);
-  const API = import.meta.env.VITE_API_URL
+  const API = import.meta.env.VITE_API_URL;
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
@@ -50,6 +51,44 @@ const ProductTable = ({
 
   const [deletePrompt, showDeletePrompt] = useState(false);
 
+  const {adminId} = useContext(AdminContext)
+
+  //icons
+  const [icons, setIcons] = useState(null);
+
+  const uploadIcons = async () => {
+    try {
+      console.log("icons : ", icons);
+      if (icons) {
+        const formData = new FormData();
+        
+        for(let i = 0 ; i < icons.length;i++){
+          console.log('icon of ',i , ' : ',icons[i])
+          const iconFile = icons[i]
+          formData.append('icons',iconFile)
+        }
+
+        console.log("formData : ",formData)
+
+        const response = await fetch(`/api/admin/addIcons/${adminId}`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+        if (response.ok) {
+          setIcons(null);
+          alert("Icons uploaded");
+        } else {
+          alert("Failed to upload icons.");
+        }
+      } else {
+        alert("Choose icons first.");
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
   return (
     <div className="mt-7 lg:ms-64">
       <div className="flex justify-end pe-8 md:pe-16">
@@ -57,7 +96,7 @@ const ProductTable = ({
           className="border py-1 px-2 md:py-2 md:px-4 hover:bg-blue-700 bg-blue-600 font-semibold text-white text-sm rounded mb-2"
           onClick={() => showProductForm(!productForm)}
         >
-          ADD NEW
+          ADD NEW PRODUCT
         </button>
       </div>
       <div className="relative overflow-x-auto sm:rounded-lg md:flex justify-center">
@@ -93,17 +132,11 @@ const ProductTable = ({
           <tbody>
             {currentProducts &&
               currentProducts.map((item) => (
-                <tr
-                  className="border-b border-gray-200 "
-                  key={item._id}
-                >
+                <tr className="border-b border-gray-200 " key={item._id}>
                   <th scope="row" className="px-6 py-4 bg-gray-50">
                     <img
                       className="md:h-20"
-                      src={
-                        API +
-                        item.primaryImage.path.split("server")[1]
-                      }
+                      src={API + item.primaryImage.path.split("server")[1]}
                       alt={item.primaryImage.name}
                     />
                   </th>
@@ -114,9 +147,7 @@ const ProductTable = ({
                   <td className="px-6 py-4">
                     {item.category ? item.category : ""}
                   </td>
-                  <td className="px-6 py-4 bg-gray-50 ">
-                    {item.price}
-                  </td>
+                  <td className="px-6 py-4 bg-gray-50 ">{item.price}</td>
                   <td className="px-6 py-4">{item.quantity}</td>
                   <td className="px-6 py-4 bg-gray-50 ">
                     {item.totalSaleAmount}
@@ -131,7 +162,7 @@ const ProductTable = ({
                     <button
                       className="underline text-red-700 hover:bg-red-500 hover:no-underline hover:text-white p-2 rounded-full"
                       onClick={() => {
-                        setDeleteId(item._id)
+                        setDeleteId(item._id);
                         showDeletePrompt(true);
                       }}
                     >
@@ -152,6 +183,29 @@ const ProductTable = ({
           onChange={handlePageChange}
         />
       </div>
+
+      <div className="md:ms-28 mt-10">
+        <label htmlFor="icon-input" className="text-xs">
+          Click here to add icons.
+        </label>
+        <br />
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          className="file-input file-input-bordered file-input-sm text-xs w-1/2 "
+          id="icon-input"
+          onChange={(e)=>setIcons(e.target.files)}
+        />
+
+        <button
+          onClick={uploadIcons}
+          className="px-2 py-1.5 bg-blue-700 text-white rounded text-sm ms-2 hover:bg-blue-600 focus:bg-blue-800 focus:border-slate-200 "
+        >
+          Submit
+        </button>
+      </div>
+
       <AddProduct
         productForm={productForm}
         showProductForm={showProductForm}

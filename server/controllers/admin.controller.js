@@ -6,6 +6,7 @@ import { banner } from "../models/banner.model.js";
 import User from "../models/user.model.js";
 import coupon from "../models/coupons.model.js";
 import order from "../models/order.model.js";
+import icons from "../models/productIcons.model.js";
 
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -35,6 +36,37 @@ export const adminSignin = async (req, res, next) => {
   }
 };
 
+//add icons
+export const uploadIcons = async(req,res,next)=>{
+  try{
+
+    console.log("req.files : ",req.files)
+    let productIcons = req.files
+    productIcons = productIcons.map((icon)=>({
+      path:icon.path
+    }))
+
+    await icons.insertMany(productIcons)
+    res.status(200).send("Success")
+  }
+  catch(err){
+    next(err)
+  }
+}
+
+//fetch icons
+export const fetchIcons = async(req,res,next)=>{
+  try{
+    console.log("fetching icons..")
+    let allIcons = await icons.find({})
+    res.status(200).json(allIcons)
+  }
+  catch(err){
+    next(err)
+  }
+}
+
+
 ///add new product
 export const uploadProduct = async (req, res, next) => {
   try {
@@ -55,7 +87,8 @@ export const uploadProduct = async (req, res, next) => {
     if (req.body.color) {
       colors = req.body.color.split(",");
     }
-
+    let productFeatures = JSON.parse(req.body.productFeatures)
+    let serviceFeatures = JSON.parse(req.body.serviceFeatures)
     const newProduct = new product({
       title: req.body.title,
       category: req.body.category,
@@ -67,6 +100,8 @@ export const uploadProduct = async (req, res, next) => {
       discount: req.body.discount,
       primaryImage: primaryImage,
       secondaryImages: secondaryImages,
+      productFeatures:productFeatures,
+      serviceFeatures:serviceFeatures
     });
     newProduct.save();
     res.status(200).json({ "New product added with id :": newProduct._id });

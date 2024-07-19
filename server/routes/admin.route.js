@@ -8,6 +8,7 @@ import {
   deleteBanner,
   deleteCoupon,
   deleteProduct,
+  fetchIcons,
   getBanners,
   getCoupons,
   getProduct,
@@ -15,9 +16,10 @@ import {
   updateBanner,
   updateCoupon,
   updateProduct,
+  uploadIcons,
   uploadProduct,
 } from "../controllers/admin.controller.js";
-import { bannerImageUpload, imageUpload } from "../utils/fileUpload.js";
+import { addIcons, bannerImageUpload, imageUpload } from "../utils/fileUpload.js";
 import { verifyAdmin } from "../utils/authorisation.js";
 const router = Router();
 
@@ -25,6 +27,12 @@ router.post("/signin", adminSignin);
 
 //add new product
 router.post("/addProduct/:adminId", verifyAdmin, imageUpload, uploadProduct);
+
+//add icons
+router.post("/addIcons/:adminId",verifyAdmin,addIcons,uploadIcons)
+
+//fetch all icons
+router.get("/fetchIcons/:adminId",verifyAdmin,fetchIcons)
 
 //get all products from database
 router.get("/getProducts/:adminId", verifyAdmin, getProduct);

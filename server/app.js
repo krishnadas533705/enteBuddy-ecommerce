@@ -30,7 +30,7 @@ mongoose
 
 app.use(
   cors({
-    origin: "https://entebuddy.com",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -39,7 +39,8 @@ export const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 app.use(express.json());
 app.use(cookieParser());
-app.use("/Public", express.static('/var/www/enteBuddy-ecommerce/server/Public')); 
+app.use("/Public",express.static('C:/Users/ASWIN/Documents/KD/enteBuddy-ecommerce/server/Public'))
+// app.use("/Public", express.static('/var/www/enteBuddy-ecommerce/server/Public')); 
 // app.use("/Public", express.static(path.join(__dirname,'/Public'))); ith ubuntu remove cheyyaruth
 // app.use("/Public", express.static("C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public")); bro kd bro ,ithum mattale :)
 app.listen(port, () => console.log("server started at port : ",port));

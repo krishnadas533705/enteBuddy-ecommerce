@@ -18,17 +18,15 @@ const ProductsList = () => {
     }
     (async function () {
       try {
-        const response = await fetch(
-          `/api/admin/getProducts/${adminId}`,
-          {
-            method: "get",
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`/api/admin/getProducts/${adminId}`, {
+          method: "get",
+          credentials: "include",
+        });
 
         console.log("response from getProducts : ", response);
         if (response.ok) {
-          const data = await response.json();``
+          const data = await response.json();
+          ``;
           setProducts(data);
         } else if (response.status == 401 || response.status == 403) {
           alert("Unauthorised");
@@ -47,13 +45,16 @@ const ProductsList = () => {
     );
     console.log("target value : ", e.target.value);
     if (e.target.value.trim() === "") {
-      console.log("target value empty")
+      console.log("target value empty");
       setSearchProducts(null);
     } else {
       console.log("Searchproducts :", searchProducts);
       setSearchProducts(searchProducts);
     }
   };
+
+
+ 
   return (
     <>
       <Navbar />
@@ -62,8 +63,8 @@ const ProductsList = () => {
 
         {/* search bar */}
         <div className="flex flex-col w-full">
-          <div className="mt-5 lg:ms-32 flex justify-center">
-            <form className="md:w-1/3 mx-auto">
+          <div className="mt-5 lg:ms-72 flex justify-center gap-0">
+            <form className="md:w-1/2 mx-auto">
               <label
                 htmlFor="default-search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only "
@@ -89,11 +90,13 @@ const ProductsList = () => {
               </div>
             </form>
           </div>
+
           <ProductTable
             products={searchProducts ? searchProducts : products}
             fetchProduct={fetchProduct}
             setFetchProduct={setFetchProduct}
             searching={searchProducts ? true : false}
+            
           />
         </div>
       </div>
