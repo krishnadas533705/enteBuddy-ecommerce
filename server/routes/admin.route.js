@@ -8,6 +8,7 @@ import {
   deleteBanner,
   deleteCoupon,
   deleteProduct,
+  fetchAllOrders,
   fetchIcons,
   getBanners,
   getCoupons,
@@ -15,6 +16,7 @@ import {
   getUserDetails,
   updateBanner,
   updateCoupon,
+  updateOrderStatus,
   updateProduct,
   uploadIcons,
   uploadProduct,
@@ -82,6 +84,10 @@ router.delete("/deleteCoupon/:adminId/:couponId", verifyAdmin, deleteCoupon);
 //dashboard
 router.get('/dashBoardData/:adminId',verifyAdmin,dashboardData)
 
+// fetch all dtdc orders
+router.get('/fetchOrderDetails/:adminId',verifyAdmin,fetchAllOrders)
+
+router.put('/updateOrderStatus/:adminId',verifyAdmin,updateOrderStatus)
 
 ///logout
 router.post("/signout/:adminId", verifyAdmin, adminLogout);

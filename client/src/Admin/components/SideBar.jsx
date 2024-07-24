@@ -74,8 +74,8 @@ const SideBar = () => {
             </li>
             <li>
               <Link
-                to="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 hover:bg-gray-100 group"
+                to="/admin/orders"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:text-blue-600 hover:bg-gray-100 group active:text-blue-600 active:bg-gray-100"
               >
                 <FontAwesomeIcon icon={faTruckFast} />{" "}
                 <span className="flex-1 ms-3 whitespace-nowrap">Orders</span>

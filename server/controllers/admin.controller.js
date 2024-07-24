@@ -11,11 +11,11 @@ import icons from "../models/productIcons.model.js";
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    console.log("body : ",req.body)
+    console.log("body : ", req.body);
     const Admin = await admin.findOne({});
-    console.log("admin data found : ",Admin)
+    console.log("admin data found : ", Admin);
     if (Admin.name == email && Admin.password == password) {
-      console.log("admin true : ",Admin._id)
+      console.log("admin true : ", Admin._id);
       const token = jwt.sign({ id: Admin._id }, process.env.JWT_SECRET);
 
       res
@@ -28,7 +28,7 @@ export const adminSignin = async (req, res, next) => {
         .status(200)
         .json({ adminId: Admin._id });
     } else {
-      console.log("admin false")
+      console.log("admin false");
       return next(errorHandler(403, "Access denied"));
     }
   } catch (Err) {
@@ -37,35 +37,31 @@ export const adminSignin = async (req, res, next) => {
 };
 
 //add icons
-export const uploadIcons = async(req,res,next)=>{
-  try{
+export const uploadIcons = async (req, res, next) => {
+  try {
+    console.log("req.files : ", req.files);
+    let productIcons = req.files;
+    productIcons = productIcons.map((icon) => ({
+      path: icon.path,
+    }));
 
-    console.log("req.files : ",req.files)
-    let productIcons = req.files
-    productIcons = productIcons.map((icon)=>({
-      path:icon.path
-    }))
-
-    await icons.insertMany(productIcons)
-    res.status(200).send("Success")
+    await icons.insertMany(productIcons);
+    res.status(200).send("Success");
+  } catch (err) {
+    next(err);
   }
-  catch(err){
-    next(err)
-  }
-}
+};
 
 //fetch icons
-export const fetchIcons = async(req,res,next)=>{
-  try{
-    console.log("fetching icons..")
-    let allIcons = await icons.find({})
-    res.status(200).json(allIcons)
+export const fetchIcons = async (req, res, next) => {
+  try {
+    console.log("fetching icons..");
+    let allIcons = await icons.find({});
+    res.status(200).json(allIcons);
+  } catch (err) {
+    next(err);
   }
-  catch(err){
-    next(err)
-  }
-}
-
+};
 
 ///add new product
 export const uploadProduct = async (req, res, next) => {
@@ -87,8 +83,8 @@ export const uploadProduct = async (req, res, next) => {
     if (req.body.color) {
       colors = req.body.color.split(",");
     }
-    let productFeatures = JSON.parse(req.body.productFeatures)
-    let serviceFeatures = JSON.parse(req.body.serviceFeatures)
+    let productFeatures = JSON.parse(req.body.productFeatures);
+    let serviceFeatures = JSON.parse(req.body.serviceFeatures);
     const newProduct = new product({
       title: req.body.title,
       category: req.body.category,
@@ -100,8 +96,8 @@ export const uploadProduct = async (req, res, next) => {
       discount: req.body.discount,
       primaryImage: primaryImage,
       secondaryImages: secondaryImages,
-      productFeatures:productFeatures,
-      serviceFeatures:serviceFeatures
+      productFeatures: productFeatures,
+      serviceFeatures: serviceFeatures,
     });
     newProduct.save();
     res.status(200).json({ "New product added with id :": newProduct._id });
@@ -326,6 +322,115 @@ export const dashboardData = async (req, res, next) => {
     const totalUsers = await User.countDocuments({});
 
     res.status(200).json({ totalOrders, totalSales, totalUsers, allOrders });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//fetch all dtdc orders
+export const fetchAllOrders = async (req, res, next) => {
+  try {
+    console.log("fetching orderssss....");
+    let allOrders = await order.aggregate([
+      {
+        $unwind: "$orders",
+      },
+      {
+        $match: { "orders.shippingMethod": "DTDC" },
+      },
+      {
+        $unwind: "$orders.products",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "orders.products._id",
+          foreignField: "_id",
+          pipeline: [{ $project: { primaryImage: 1 } }],
+          as: "productDetails",
+        },
+      },
+      {
+        $addFields: {
+          "orders.products.primaryImage": {
+            $arrayElemAt: ["$productDetails.primaryImage", 0],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$orders._id",
+          userId: { $first: "$userId" },
+          products: {
+            $push: {
+              _id: "$orders.products._id",
+              productName: "$orders.products.productName",
+              quantity: "$orders.products.quantity",
+              price: "$orders.products.price",
+              primaryImage: "$orders.products.primaryImage",
+            },
+          },
+          orderDate: { $first: "$orders.orderDate" },
+          orderStatus: { $first: "$orders.orderStatus" },
+          paymentMethod: { $first: "$orders.paymentMethod" },
+          paymentId: { $first: "$orders.paymentId" },
+          billing_customer_name: { $first: "$orders.billing_customer_name" },
+          billing_address: { $first: "$orders.billing_address" },
+          billing_city: { $first: "$orders.billing_city" },
+          billing_state: { $first: "$orders.billing_state" },
+          billing_pincode: { $first: "$orders.billing_pincode" },
+          billing_email: { $first: "$orders.billing_email" },
+          billing_phone: { $first: "$orders.billing_phone" },
+          shipRocketOrderId: { $first: "$orders.shipRocketOrderId" },
+          sellingPrice: { $first: "$orders.sellingPrice" },
+          discount: { $first: "$orders.discount" },
+          refundId: { $first: "$orders.refundId" },
+          couponId: { $first: "$orders.couponId" },
+          shippingMethod: { $first: "$orders.shippingMethod" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          products: 1,
+          orderDate: 1,
+          orderStatus: 1,
+          paymentMethod: 1,
+          paymentId: 1,
+          billing_customer_name: 1,
+          billing_address: 1,
+          billing_city: 1,
+          billing_state: 1,
+          billing_pincode: 1,
+          billing_email: 1,
+          billing_phone: 1,
+          shipRocketOrderId: 1,
+          sellingPrice: 1,
+          discount: 1,
+          refundId: 1,
+          couponId: 1,
+          shippingMethod: 1,
+        },
+      },
+    ]);
+
+    console.log("allOrders : ", allOrders);
+    res.status(200).json({ allOrders: allOrders });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateOrderStatus = async (req, res, next) => {
+  try {
+    const { userId, orderId, orderStatus } = req.body;
+
+    await order.updateOne(
+      { "orders._id": orderId },
+      { $set: { "orders.$.orderStatus": orderStatus } }
+    );
+    res.status(200).send("order update");
   } catch (err) {
     next(err);
   }

@@ -30,6 +30,8 @@ import OrderTracking from "./User/pages/OrderTracking";
 import OrderProvider from "./User/contexts/OrderContext";
 import RefundPolicy from "./User/pages/RefundPolicy";
 import ShippingPolicy from "./User/pages/ShppingPolicy";
+import OrdersList from "./Admin/components/orderManagement/OrdersList";
+import OrderDetails from "./Admin/components/orderManagement/OrderDetails";
 
 
 const AppLayout =()=>{ 
@@ -110,6 +112,13 @@ const router = createBrowserRouter([
   {
     path: "/admin/Users",
     Component: UsersList,
+  },
+  {
+    path: "/admin/orders",
+    Component: OrdersList,
+  },{
+    path:"/admin/orderDetails",
+    Component: OrderDetails
   },
   {
     path: "/admin/coupons",

@@ -13,9 +13,9 @@ export const addToCart = async (req, res, next) => {
   try {
     if (req.user) {
       console.log("Adding to cart....", req.body);
-      const discount = 0;
+      let discount = 0;
       if (req.body.discount) {
-        const discount = (req.body.price * req.body.discount) / 100;
+        discount = (req.body.price * req.body.discount) / 100;
       }
       const productData = {
         _id: req.body._id,
@@ -150,7 +150,7 @@ export const createOrder = async (req, res, next) => {
 
     // Construct the formatted current date string
     const formattedCurrentDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    console.log("shipping product : ", req.body.products);
+    const sellingPrice = req.body.paymentMethod == 'Prepaid' ? req.body.sellingPrice/100 : req.body.sellingPrice
     const orderDetails = {
       orderDate: formattedCurrentDate,
       billing_customer_name: req.body.name,
@@ -160,11 +160,13 @@ export const createOrder = async (req, res, next) => {
       billing_email: req.body.email,
       billing_phone: req.body.mobile,
       billing_address: req.body.billing_address,
+      paymentMethod:req.body.shippingMethod == 'DTDC' ? "Prepaid" : req.body.paymentMethod,
       paymentId: req.body.paymentId,
       products: req.body.products,
-      sellingPrice: req.body.sellingPrice / 100,
+      sellingPrice: sellingPrice,
       discount: req.body.discount,
       couponId: req.body.couponId ? req.body.couponId : undefined,
+      shippingMethod : req.body.shippingMethod
     };
 
     //pushing the order to database
@@ -182,109 +184,115 @@ export const createOrder = async (req, res, next) => {
       await newOrder.save();
     }
 
-    ///pushing order to shiprocket
+    ///pushing order to shiprocket if shipping method is shiprocket
     //getting authtoken of shiprocket
+    let responseText = "order placed"
+    let responseStatus = 200
+    if (req.body.shippingMethod == "shiprocket") {
+      const authToken = await generateShiprocketToken();
 
-    const authToken = await generateShiprocketToken();
+      const orders = req.body.products.map((item) => ({
+        name: item.productName,
+        units: item.quantity,
+        sku: item._id,
+        selling_price: item.price,
+      }));
 
-    const orders = req.body.products.map((item) => ({
-      name: item.productName,
-      units: item.quantity,
-      sku: item._id,
-      selling_price: item.price,
-    }));
-
-    ///get channel id
-    let channelId = await fetch(
-      "https://apiv2.shiprocket.in/v1/external/channels",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
-    console.log("Channel id : ", channelId);
-    if (channelId.ok) {
-      console.log("Channel id ok : ", channelId);
-
-      const channelData = await channelId.json();
-      channelId = channelData.data[0].id;
-    }
-    console.log("channel id : ", channelId);
-    let newOrder = await order.findOne({ userId: req.user._id });
-    newOrder = newOrder.orders[newOrder.orders.length - 1];
-    const shipingData = {
-      order_id: newOrder._id,
-      order_date: newOrder.orderDate,
-      pickup_location: "Primary",
-      channel_id: channelId,
-      company_name: "EnteBuddy",
-      billing_customer_name: newOrder.billing_customer_name,
-      billing_last_name: " ",
-      billing_city: newOrder.billing_city,
-      billing_pincode: newOrder.billing_pincode,
-      billing_state: newOrder.billing_state,
-      billing_country: "india",
-      billing_email: newOrder.billing_email,
-      billing_phone: newOrder.billing_phone,
-      billing_address: newOrder.billing_address,
-      shipping_is_billing: true,
-      order_items: orders,
-      payment_method: "Prepaid",
-      sub_total: newOrder.sellingPrice,
-      length: "5",
-      breadth: "5",
-      height: "5",
-      weight: "10",
-    };
-
-    console.log("Pushing to shiprocket....");
-    console.log(shipingData);
-    ///posting to shiprocket
-    try {
-      let shipingResponse = await fetch(
-        "https://apiv2.shiprocket.in/v1/external/orders/create/adhoc",
+      ///get channel id
+      let channelId = await fetch(
+        "https://apiv2.shiprocket.in/v1/external/channels",
         {
-          method: "POST",
+          method: "GET",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${authToken}`,
           },
-          body: JSON.stringify(shipingData),
         }
       );
-      if (shipingResponse.ok) {
-        console.log("shiping success");
-        shipingResponse = await shipingResponse.json();
-        //update shiprocketId in order collection
-        await order.updateOne(
-          { userId: req.user._id },
-          {
-            $set: {
-              "orders.$[element].shipRocketOrderId": shipingResponse.id,
-            },
-          },
-          { arrayFilters: [{ "element._id": newOrder._id }] }
-        );
+      console.log("Channel id : ", channelId);
+      if (channelId.ok) {
+        console.log("Channel id ok : ", channelId);
 
-        //update used coupon
-        if (req.body.couponId) {
-          await coupon.updateOne(
-            { _id: req.body.couponId },
-            { $push: { usedBy: req.user._id } }
-          );
-        }
-
-        //send response to client
-        res.status(200).send("order placed successfully");
-      } else {
-        res.status(500).send("failed to ship order");
-        console.log("Failed to ship order : ", await shipingResponse.json());
+        const channelData = await channelId.json();
+        channelId = channelData.data[0].id;
       }
-    } catch (err) {
-      console.log("error in pushing to shiprocket : ", err);
+      console.log("channel id : ", channelId);
+      let newOrder = await order.findOne({ userId: req.user._id });
+      newOrder = newOrder.orders[newOrder.orders.length - 1];
+      const shipingData = {
+        order_id: newOrder._id,
+        order_date: newOrder.orderDate,
+        pickup_location: "Primary",
+        channel_id: channelId,
+        company_name: "EnteBuddy",
+        billing_customer_name: newOrder.billing_customer_name,
+        billing_last_name: " ",
+        billing_city: newOrder.billing_city,
+        billing_pincode: newOrder.billing_pincode,
+        billing_state: newOrder.billing_state,
+        billing_country: "india",
+        billing_email: newOrder.billing_email,
+        billing_phone: newOrder.billing_phone,
+        billing_address: newOrder.billing_address,
+        shipping_is_billing: true,
+        order_items: orders,
+        payment_method: newOrder.paymentMethod,
+        sub_total: newOrder.sellingPrice,
+        length: "18",
+        breadth: "16",
+        height: "8",
+        weight: ".490",
+      };
+
+      console.log("Pushing to shiprocket....");
+      console.log(shipingData);
+      ///posting to shiprocket
+      try {
+        let shipingResponse = await fetch(
+          "https://apiv2.shiprocket.in/v1/external/orders/create/adhoc",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify(shipingData),
+          }
+        );
+        if (shipingResponse.ok) {
+          console.log("shiping success");
+          shipingResponse = await shipingResponse.json();
+          //update shiprocketId in order collection
+          await order.updateOne(
+            { userId: req.user._id },
+            {
+              $set: {
+                "orders.$[element].shipRocketOrderId": shipingResponse.id,
+              },
+            },
+            { arrayFilters: [{ "element._id": newOrder._id }] }
+          );
+
+          //update used coupon
+          if (req.body.couponId) {
+            await coupon.updateOne(
+              { _id: req.body.couponId },
+              { $push: { usedBy: req.user._id } }
+            );
+          }
+          //send response to client
+          responseStatus = 200
+          responseText = "order placed successfully"
+        } else {
+          responseStatus = 500
+          responseText = "failed to ship order"
+          console.log("Failed to ship order : ", await shipingResponse.json());
+        }
+      } catch (err) {
+        console.log("error in pushing to shiprocket : ", err);
+      }
     }
+
+    res.status(responseStatus).send(responseText)
   } catch (err) {
     next(err);
   }

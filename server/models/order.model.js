@@ -37,9 +37,13 @@ const orderSchema = mongoose.Schema({
         type: String,
         default: "Order placed",
       },
+      paymentMethod:{
+        type:String,
+        required:true
+      },
       paymentId: {
         type: String,
-        required: true,
+        required: false,
       },
       billing_customer_name: {
         type: String,
@@ -90,6 +94,10 @@ const orderSchema = mongoose.Schema({
         ref: "coupons",
         required: false,
       },
+      shippingMethod:{
+        type:String,
+        requried:true
+      }
     },
   ],
 });

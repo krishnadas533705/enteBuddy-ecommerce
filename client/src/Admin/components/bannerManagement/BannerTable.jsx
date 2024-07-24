@@ -73,7 +73,6 @@ const BannerTable = ({ banners, searching, fetchBanners, setFetchBanners }) => {
             </tr>
           </thead>
           <tbody>
-            {console.log('current banners : ', currentBanners)}
             {currentBanners &&
               currentBanners.map((item) => (
                 <tr className="border-b border-gray-200 " key={item._id}>

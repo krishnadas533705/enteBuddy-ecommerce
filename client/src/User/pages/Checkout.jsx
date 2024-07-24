@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import logo from '../img/logo.png';
-import shiprokcet from '../img/shiprocket.jpeg';
-import { CartContext } from '../contexts/CartContext';
-import { useContext, useState } from 'react';
-import flag from '../img/flag.jpg';
+import React, { useEffect } from "react";
+import logo from "../img/logo.png";
+import shiprokcet from "../img/shiprocket.jpeg";
+import { CartContext } from "../contexts/CartContext";
+import { useContext, useState } from "react";
+import flag from "../img/flag.jpg";
+import DTDC from "../img/DTDC.png";
 import {
   CitySelect,
   CountrySelect,
@@ -11,20 +12,20 @@ import {
   GetCountries,
   GetCity,
   GetState,
-} from 'react-country-state-city';
-import 'react-country-state-city/dist/react-country-state-city.css';
+} from "react-country-state-city";
+import "react-country-state-city/dist/react-country-state-city.css";
 import {
   validateName,
   validateEmail,
   validatePhoneNumber,
   validatePinCode,
-} from '../utils/validate';
-import { useNavigate } from 'react-router-dom';
-import { userContext } from '../contexts/UserContext';
-import { makePayment } from '../utils/payment';
-import { Navigate } from 'react-router-dom';
-import { toast, Toaster } from 'react-hot-toast';
-import { SidebarContext } from '../contexts/SidebarContext';
+} from "../utils/validate";
+import { useNavigate } from "react-router-dom";
+import { userContext } from "../contexts/UserContext";
+import { makePayment } from "../utils/payment";
+import { Navigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
+import { SidebarContext } from "../contexts/SidebarContext";
 
 const Checkout = () => {
   const { cart, totalPrice, couponId, discountPrice } = useContext(CartContext);
@@ -37,22 +38,26 @@ const Checkout = () => {
   const { clearCart } = useContext(CartContext);
   const { handleClose } = useContext(SidebarContext);
   const [orderDetails, setOrderDetails] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-    city: '',
-    state: '',
-    pincode: '',
-    sellingPrice: '',
-    discount: '',
-    paymentId: '',
-    products: cart ? cart : '',
-    billing_address: '',
-    couponId: couponId ? couponId : '',
+    name: "",
+    email: "",
+    mobile: "",
+    city: "",
+    state: "",
+    pincode: "",
+    sellingPrice: "",
+    discount: "",
+    paymentId: "",
+    products: cart ? cart : "",
+    billing_address: "",
+    couponId: couponId ? couponId : "",
+    shippingMethod: null,
+    paymentMethod: null,
   });
+  const [shipMethodError, setShipMethodError] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
 
-  console.log('coupon id : ', localStorage.getItem('enteBuddyCouponId'));
+  console.log("coupon id : ", localStorage.getItem("enteBuddyCouponId"));
   useEffect(() => {
     setOrderDetails((prev) => ({
       ...prev,
@@ -63,6 +68,7 @@ const Checkout = () => {
   const { userId } = useContext(userContext);
 
   const handleOrderDetails = (name, value) => {
+    console.log("name : ", name, ": value : ", value);
     setOrderDetails((prev) => ({
       ...prev,
       [name]: value,
@@ -72,31 +78,48 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("order details : ", orderDetails);
     // Perform validation
     if (!validateName(orderDetails.name)) {
-      console.log('working');
-      setNameError('Please enter your name');
+      console.log("working");
+      setNameError("Please enter your name");
     } else {
-      setNameError('');
+      setNameError("");
     }
 
     if (!validateEmail(orderDetails.email)) {
-      setEmailError('Please enter a valid email address');
+      setEmailError("Please enter a valid email address");
     } else {
-      setEmailError('');
+      setEmailError("");
     }
 
     if (!validatePhoneNumber(orderDetails.mobile)) {
-      setPhoneNumberError('Please enter a valid phone number');
+      setPhoneNumberError("Please enter a valid phone number");
     } else {
-      setPhoneNumberError('');
+      setPhoneNumberError("");
     }
 
+    if (
+      orderDetails.shippingMethod == null ||
+      orderDetails.shippingMethod == ""
+    ) {
+      setShipMethodError(true);
+    } else {
+      setShipMethodError(false);
+    }
+
+    if (
+      orderDetails.shippingMethod == "shiprocket" &&
+      orderDetails.paymentMethod == null
+    ) {
+      setPaymentError(true);
+    } else {
+      setPaymentError(false);
+    }
     validatePinCode(orderDetails.pincode, setPinCodeError, userId);
 
     if (cityid === 0 || stateid === 0) {
-      toast.error('Please choose your city and state');
+      toast.error("Please choose your city and state");
     }
     // Additional logic for handling form submission
     if (
@@ -105,36 +128,71 @@ const Checkout = () => {
       validatePhoneNumber(orderDetails.mobile) &&
       !pinCodeError.error &&
       cityid !== 0 &&
-      stateid !== 0
+      stateid !== 0 &&
+      shipMethodError == false &&
+      paymentError == false
     ) {
       // Form submission logic here
-      const response = await fetch(`/api/payment/createPayment/${userId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: discountPrice > 0 ? discountPrice : totalPrice,
-        }),
-        credentials: 'include',
-      });
+      console.log("pushing order to server");
+      if (
+        (orderDetails.shippingMethod == "shiprocket" &&
+          orderDetails.paymentMethod == "Prepaid") ||
+        orderDetails.shippingMethod == "DTDC"
+      ) {
+        const response = await fetch(`/api/payment/createPayment/${userId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: discountPrice > 0 ? discountPrice : totalPrice,
+          }),
+          credentials: "include",
+        });
 
-      if (response.ok) {
-        const paymentOrder = await response.json();
-        try {
-          await makePayment(
-            paymentOrder.key_id,
-            paymentOrder.order,
-            userId,
-            orderDetails
-          );
-          navigate('/');
-          clearCart();
-          handleClose();
-        } catch (err) {
-          alert('payment failed');
+        if (response.ok) {
+          const paymentOrder = await response.json();
+          try {
+            await makePayment(
+              paymentOrder.key_id,
+              paymentOrder.order,
+              userId,
+              orderDetails
+            );
+            navigate("/");
+            clearCart();
+            handleClose();
+          } catch (err) {
+            alert("payment failed");
+          }
+        } else {
+          console.log("errro in shipping ");
         }
       } else {
+        // cash on delivery for shiprocket
+        const response = await fetch(`/api/user/newOrder/${userId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...orderDetails,
+            sellingPrice: discountPrice > 0 ? discountPrice : totalPrice,
+          }),
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          alert("order placed successfully");
+          localStorage.setItem("enteBuddyCartPrice", 0);
+          localStorage.setItem("enteBuddyCart", null);
+          localStorage.setItem("enteBuddyCouponId", "");
+          navigate("/");
+          clearCart();
+          handleClose();
+        } else {
+          alert("Failed to place order, please try again.");
+        }
       }
     }
   };
@@ -239,7 +297,7 @@ const Checkout = () => {
                 >
                   <img
                     className="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                    src={API + item.primaryImage.path.split('server')[1]}
+                    src={API + item.primaryImage.path.split("server")[1]}
                     alt=""
                   />
 
@@ -257,14 +315,25 @@ const Checkout = () => {
           </div>
 
           <p className="mt-8 text-lg font-medium">Shipping Methods</p>
-          <form className="mt-5 grid gap-6">
+          <p className="text-sm text-gray-600">
+            Choose any one of the shipping methods.
+          </p>
+          {shipMethodError && (
+            <p className="text-red-500  my-1">
+              Select a shipping method before placing the order.
+            </p>
+          )}
+          <form className="mt-3 grid gap-6">
             <div className="relative">
               <input
                 className="peer hidden"
                 id="radio_1"
                 type="radio"
-                name="radio"
-                defaultChecked
+                name="shippingMethod"
+                value={"shiprocket"}
+                onClick={(e) =>
+                  handleOrderDetails(e.target.name, e.target.value)
+                }
               />
               <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
               <label
@@ -281,12 +350,97 @@ const Checkout = () => {
                     Shiprocket Delivery
                   </span>
                   <p className="text-slate-500 text-sm leading-6">
-                    Delivery: 2-4 Days
+                    Delivery: 2 to 4 Days
+                  </p>
+                </div>
+              </label>
+            </div>
+            <div className="relative">
+              <input
+                className="peer hidden"
+                id="dtdc"
+                type="radio"
+                name="shippingMethod"
+                value={"DTDC"}
+                onClick={(e) =>
+                  handleOrderDetails(e.target.name, e.target.value)
+                }
+              />
+              <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+              <label
+                className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
+                htmlFor="dtdc"
+              >
+                <img
+                  className="w-8 object-contain"
+                  src={DTDC}
+                  alt="shiprocket"
+                />
+                <div className="ml-5">
+                  <span className="mt-2 font-semibold">
+                    DTDC Courier Service
+                  </span>
+                  <p className="text-slate-500 text-sm leading-6">
+                    Delivery: 1 to 2 Days
                   </p>
                 </div>
               </label>
             </div>
           </form>
+          {/* payment method */}
+          {orderDetails.shippingMethod == "shiprocket" && (
+            <div className="mt-8">
+              <h1 className="font-medium text-xl">Payment Method</h1>
+              <p className="text-sm text-gray-600">
+                Choose payment method for shiprocket delivery.
+              </p>
+              {paymentError && (
+                <p className="text-red-500  my-1">
+                  Select payment method before placing the order.
+                </p>
+              )}
+              <div className="relative mt-3">
+                <input
+                  className="peer hidden"
+                  id="cod"
+                  type="radio"
+                  name="paymentMethod"
+                  value={"COD"}
+                  onClick={(e) =>
+                    handleOrderDetails(e.target.name, e.target.value)
+                  }
+                />
+                <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+                <label
+                  className="font-medium peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
+                  htmlFor="cod"
+                >
+                  Cash On Delivery
+                </label>
+              </div>
+
+              <div className="relative mt-3">
+                <input
+                  className="peer hidden"
+                  id="onlinePayment"
+                  type="radio"
+                  name="paymentMethod"
+                  value={"Prepaid"}
+                  onClick={(e) =>
+                    handleOrderDetails(e.target.name, e.target.value)
+                  }
+                />
+                <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+                <label
+                  className="font-medium peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
+                  htmlFor="onlinePayment"
+                >
+                  Pay Now
+                </label>
+              </div>
+            </div>
+          )}
+          {/* ///// */}
         </div>
         <form className="mt-5 grid gap-6">
           <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
@@ -309,7 +463,7 @@ const Checkout = () => {
                   name="name"
                   value={orderDetails.name}
                   className={`w-full rounded-md border ${
-                    nameError ? 'border-red-500' : 'border-gray-200'
+                    nameError ? "border-red-500" : "border-gray-200"
                   }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                   placeholder="your name"
                   required={true}
@@ -318,7 +472,7 @@ const Checkout = () => {
                   }
                   onBlur={() => {
                     if (!validateName(orderDetails.name)) {
-                      setNameError('Please provide your name');
+                      setNameError("Please provide your name");
                     } else {
                       setNameError(null);
                     }
@@ -340,7 +494,7 @@ const Checkout = () => {
                   id="email"
                   name="email"
                   className={`w-full rounded-md border ${
-                    emailError ? 'border-red-500' : 'border-gray-200   '
+                    emailError ? "border-red-500" : "border-gray-200   "
                   } px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                   placeholder="Your.email@gmail.com"
                   value={orderDetails.email}
@@ -350,9 +504,9 @@ const Checkout = () => {
                   }
                   onBlur={() => {
                     if (!validateEmail(orderDetails.email)) {
-                      setEmailError('Please provide a valid email address');
+                      setEmailError("Please provide a valid email address");
                     } else {
-                      setEmailError('');
+                      setEmailError("");
                     }
                   }}
                 />
@@ -390,7 +544,7 @@ const Checkout = () => {
                   name="mobile"
                   value={orderDetails.mobile}
                   className={`w-full rounded-md border ${
-                    phoneNumberError ? 'border-red-500' : 'border-gray-200'
+                    phoneNumberError ? "border-red-500" : "border-gray-200"
                   }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                   placeholder="Your phone number"
                   required
@@ -399,9 +553,9 @@ const Checkout = () => {
                   }
                   onBlur={() => {
                     if (!validatePhoneNumber(orderDetails.mobile)) {
-                      setPhoneNumberError('Please enter a valid Phone number');
+                      setPhoneNumberError("Please enter a valid Phone number");
                     } else {
-                      setPhoneNumberError('');
+                      setPhoneNumberError("");
                     }
                   }}
                 />
@@ -439,7 +593,7 @@ const Checkout = () => {
                     countryid={101}
                     onChange={(e) => {
                       setstateid(e.id);
-                      handleOrderDetails('state', e.name);
+                      handleOrderDetails("state", e.name);
                     }}
                     placeHolder="Select State"
                     required
@@ -454,7 +608,7 @@ const Checkout = () => {
                     stateid={stateid}
                     onChange={(e) => {
                       setcityid(e.id);
-                      handleOrderDetails('city', e.name);
+                      handleOrderDetails("city", e.name);
                     }}
                     placeHolder="Select city"
                     required
@@ -474,11 +628,11 @@ const Checkout = () => {
                     }
                   />
                 </div>
-                {console.log('isError : ', pinCodeError.error)}
+                {console.log("isError : ", pinCodeError.error)}
                 {pinCodeError.msg && (
                   <p
                     className={`text-center text-sm ${
-                      !pinCodeError.error ? 'text-green-500' : 'text-red-500'
+                      !pinCodeError.error ? "text-green-500" : "text-red-500"
                     }`}
                   >
                     {pinCodeError.msg}
