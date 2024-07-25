@@ -4,6 +4,7 @@ import {} from "@fortawesome/free-regular-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import AdminContext from "../context/AdminContext";
 import { useNavigate } from "react-router-dom";
+import logo from '../Public/Images/logo.png'
 
 const Navbar = () => {
   let { setSideBar, sideBarOpen, adminId } = useContext(AdminContext);
@@ -15,7 +16,7 @@ const Navbar = () => {
   }, [true]);
   return (
     <nav className="w-full items-center bg-slate-200 h-14 flex justify-between px-7">
-      <div className="hidden lg:block text-blue-500 font-bold text-2xl">
+      <div className="hidden lg:block text-blue-500 font-bold text-2xl w-1/3">
         Welcome Admin
       </div>
       <button
@@ -24,7 +25,7 @@ const Navbar = () => {
       >
         <FontAwesomeIcon icon={faBars} size="xl" />
       </button>
-      <div>Logo</div>
+      <div className="w-1/3"><img className="w-28" src={logo}></img> </div>
       <div>Logout</div>
     </nav>
   );

@@ -51,7 +51,9 @@ function OrderDetails() {
               className={`${
                 orderData.orderStatus == "Delivered"
                   ? "text-green-500"
-                  : "text-blue-600"
+                  : orderData.orderStatus == "Shipped"
+                  ? "text-blue-600"
+                  : "text-yellow-500"
               }`}
             >
               {orderData.orderStatus}
@@ -151,7 +153,6 @@ function OrderDetails() {
           <hr />
 
           <div>
-            
             <form className="max-w-sm mx-auto">
               <label
                 htmlFor="orderStatus"

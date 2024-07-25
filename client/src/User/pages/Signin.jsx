@@ -105,7 +105,7 @@ const App = () => {
       <div>
         <Toaster toastOptions={{ duration: 4000 }} />
         <div id="recaptcha-container"></div>
-        <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
+        <div className="w-80 flex flex-col gap-4 rounded-lg p-4 m-3">
           <h1 className="text-center leading-normal text-white font-medium text-3xl mb-6">
             Welcome to <br /> entebuddy
           </h1>

@@ -90,18 +90,18 @@ const Header = (cookies) => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 font-poppins " 
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 font-poppins bg-gradient-to-b from-[#FFFFFF] to-[#FEEE9F] " 
               style= {{ display : leftDropdown ?  'block' :'none'}}
             >
              
               <li >
-                <Link  className="dark:text-white" onClick={()=>{setAboutModal(!aboutModal);setLeftDropdown(!leftDropdown)}}>About us</Link>
+                <Link  className="text-black" onClick={()=>{setAboutModal(!aboutModal);setLeftDropdown(!leftDropdown)}}>About us</Link>
               </li>
               <li className="">
-                <Link  className="dark:text-white" onClick={()=>{setContactModal(!contactModal);setLeftDropdown(!leftDropdown)}}>Contact us</Link>
+                <Link  className="text-black" onClick={()=>{setContactModal(!contactModal);setLeftDropdown(!leftDropdown)}}>Contact us</Link>
               </li>
               <li className="">
-               <Link  className="dark:text-white" to={`/fetchOrders/${userId}`} onClick={handleOrder}>Orders</Link>
+               <Link  className="text-black" to={`/fetchOrders/${userId}`} onClick={handleOrder}>Orders</Link>
               </li>
             </ul>
           </div>

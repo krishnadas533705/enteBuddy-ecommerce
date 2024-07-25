@@ -12,7 +12,7 @@ const orderSchema = mongoose.Schema({
         {
           _id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref:'products',
+            ref: "products",
             required: true,
           },
           productName: {
@@ -37,9 +37,9 @@ const orderSchema = mongoose.Schema({
         type: String,
         default: "Order placed",
       },
-      paymentMethod:{
-        type:String,
-        required:true
+      paymentMethod: {
+        type: String,
+        required: true,
       },
       paymentId: {
         type: String,
@@ -94,9 +94,17 @@ const orderSchema = mongoose.Schema({
         ref: "coupons",
         required: false,
       },
-      shippingMethod:{
-        type:String,
-        requried:true
+      shippingMethod: { 
+        type: String,
+        requried: true,
+      },
+      shippedDate: {
+        type: Date,
+        required: false,
+      },
+      deliveredDate:{
+        type:Date,
+        required:false
       }
     },
   ],

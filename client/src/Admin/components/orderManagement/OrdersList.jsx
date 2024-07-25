@@ -27,7 +27,8 @@ function OrdersList() {
           setOrders(result.allOrders);
           let totalPages = Math.ceil(result.allOrders.length / 1);
           setTotalPages(totalPages);
-          let newOrders = result.allOrders.slice((1 - 1) * 1, 1 * 1);
+          let page = parseInt(currentPage)
+          let newOrders = result.allOrders.slice((page - 1) * 5 ,page * 5);
           setCurrentOrders(newOrders);
         }
       } catch (err) {
@@ -40,7 +41,7 @@ function OrdersList() {
   const filterByOrderStatus = (value) => {
     if (value == "ALL") {
       setFilterStatus(false);
-      let newOrders = orders.slice((1 - 1) * 1, 1 * 1);
+      let newOrders = orders.slice(0,5);
       setCurrentOrders(newOrders);
       setTotalPages(orders.length)
       setCurrentPage(1)
@@ -50,6 +51,7 @@ function OrdersList() {
       const result = orders.filter((order) => order.orderStatus == value);
       setTotalPages(result.length)
       setCurrentOrders(result);
+      setCurrentPage(1)
     }
   };
 
@@ -57,10 +59,10 @@ function OrdersList() {
     setCurrentPage(page);
     localStorage.setItem("adminOrderPage", page);
     if (filterOn) {
-      let newOrders = currentOrders.slice((page - 1) * 1, page * 1);
+      let newOrders = currentOrders.slice((page - 1) * 5, page * 5);
       setCurrentOrders(newOrders);
     } else {
-      let newOrders = orders.slice((page - 1) * 1, page * 1);
+      let newOrders = orders.slice((page - 1) * 5, page * 5);
       setCurrentOrders(newOrders);
     }
   };

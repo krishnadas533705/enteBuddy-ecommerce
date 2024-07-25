@@ -130,7 +130,7 @@ const router = createBrowserRouter([
   },
  ,
  {
-  path : '/orderTracking/:orderId/:productId',
+  path : '/orderTracking/:orderId',
   Component : OrderTracking
  }
 

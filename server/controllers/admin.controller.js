@@ -425,10 +425,16 @@ export const fetchAllOrders = async (req, res, next) => {
 export const updateOrderStatus = async (req, res, next) => {
   try {
     const { userId, orderId, orderStatus } = req.body;
+    let updateFields = { "orders.$.orderStatus": orderStatus };
 
+    if (orderStatus === "Shipped") {
+      updateFields["orders.$.shippedDate"] = new Date();
+    } else if (orderStatus === "Delivered") {
+      updateFields["orders.$.deliveredDate"] = new Date();
+    }
     await order.updateOne(
       { "orders._id": orderId },
-      { $set: { "orders.$.orderStatus": orderStatus } }
+      { $set: updateFields }
     );
     res.status(200).send("order update");
   } catch (err) {

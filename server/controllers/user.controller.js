@@ -420,7 +420,7 @@ export const fetchOrders = async (req, res, next) => {
       .findOne({ userId: req.user._id })
       .populate({ path: "orders.products._id", model: "products" });
     if (allOrders) {
-      console.log("Orders : ", allOrders.orders[0].products);
+      console.log("Orders : ", allOrders.orders);
       res.status(200).json({ orders: allOrders.orders });
     } else {
       res.status(200).json({ orders: null, msg: "No orders yet" });

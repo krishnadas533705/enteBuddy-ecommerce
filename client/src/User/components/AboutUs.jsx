@@ -13,7 +13,7 @@ const AboutUs = ({ onClose }) => {
         <div
             ref={modalRef}
             onClick={closeModal}
-            className="text-white z-10 fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center"
+            className="text-white z-10 fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center m-3"
         >
             <div className="flex flex-col">
                 <button onClick={onClose} className="place-self-end">

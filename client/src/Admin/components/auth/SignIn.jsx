@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { validateForm, verifyAdmin } from "./adminAuth";
 import AdminContext from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
+import logo from '../../Public/Images/logo.png'
 
 export default function SignIn() {
   let [errors, setErrors] = useState({});
@@ -40,8 +41,8 @@ export default function SignIn() {
           href="#"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900"
         >
-          <img className="w-8 h-8 mr-2" src="" alt="logo" />
-          Logo
+          <img className="w-36 mr-2" src={logo} alt="logo" />
+          
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
