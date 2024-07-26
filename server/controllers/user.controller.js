@@ -12,7 +12,6 @@ let shipRocketAuthToken = null;
 export const addToCart = async (req, res, next) => {
   try {
     if (req.user) {
-      console.log("Adding to cart....", req.body);
       let discount = 0;
       if (req.body.discount) {
         discount = (req.body.price * req.body.discount) / 100;
@@ -22,7 +21,6 @@ export const addToCart = async (req, res, next) => {
         productName: req.body.title,
         price: req.body.price - discount,
       };
-      console.log("Product Data : ", productData);
       const userCart = await cart.findOne({ userId: req.user._id });
       if (userCart) {
         userCart.addProduct(productData);
@@ -75,7 +73,6 @@ export const getCartItems = async (req, res, next) => {
       quantity: item.quantity,
       price: item.price,
     }));
-    console.log("cartitems : ", cartProducts);
     res.status(200).json(cartProducts);
   } catch (err) {
     next(err);
@@ -118,17 +115,13 @@ export const getProducts = async (req, res, next) => {
     allReviews.forEach((review) => {
       let productIdStr = review.productId.toString();
       if (productMap.has(productIdStr)) {
-        console.log("id matched ");
         let productWithReviews = productMap.get(productIdStr);
-        console.log("reviews : ", review.reviews);
         productWithReviews.reviews.push(...review.reviews);
-        console.log("productWith reviws : ", productWithReviews);
       }
     });
 
     // If you need the products array updated with reviews
     products = Array.from(productMap.values());
-    console.log("products : ", product);
     res.status(200).json(products);
   } catch (err) {
     next(err);
@@ -176,11 +169,9 @@ export const createOrder = async (req, res, next) => {
     //pushing the order to database
     let existingOrder = await order.findOne({ userId: req.user._id });
     if (existingOrder) {
-      console.log("existing user true");
       existingOrder.orders.push(orderDetails);
       await existingOrder.save();
     } else {
-      console.log("Creating new order");
       const newOrder = new order({
         userId: req.user._id,
         orders: [orderDetails],
@@ -212,14 +203,11 @@ export const createOrder = async (req, res, next) => {
           },
         }
       );
-      console.log("Channel id : ", channelId);
       if (channelId.ok) {
-        console.log("Channel id ok : ", channelId);
 
         const channelData = await channelId.json();
         channelId = channelData.data[0].id;
       }
-      console.log("channel id : ", channelId);
       let newOrder = await order.findOne({ userId: req.user._id });
       newOrder = newOrder.orders[newOrder.orders.length - 1];
       const shipingData = {
@@ -247,8 +235,6 @@ export const createOrder = async (req, res, next) => {
         weight: ".490",
       };
 
-      console.log("Pushing to shiprocket....");
-      console.log(shipingData);
       ///posting to shiprocket
       try {
         let shipingResponse = await fetch(
@@ -264,7 +250,6 @@ export const createOrder = async (req, res, next) => {
         );
         if (shipingResponse.ok) {
           shipingResponse = await shipingResponse.json();
-          console.log("shiping success : ", shipingResponse);
           //update shiprocketId in order collection
           await order.updateOne(
             { userId: req.user._id },
@@ -305,10 +290,8 @@ export const createOrder = async (req, res, next) => {
 ///check courirer service availability
 export const checkPincode = async (req, res, next) => {
   try {
-    console.log("checking pincode....");
-    console.log("postcode : ", req.params.pincode);
+    
     const authToken = await generateShiprocketToken();
-    console.log("Authtoken : ", authToken);
     const pincode = req.params.pincode;
     const pickup = 680681;
     const response = await fetch(
@@ -321,7 +304,6 @@ export const checkPincode = async (req, res, next) => {
       }
     );
     const result = await response.json();
-    console.log("Result : ", result);
     let isAvailable = false;
     if (result.data && result.data.available_courier_companies.length > 0) {
       isAvailable = true;
@@ -374,14 +356,12 @@ export const checkCoupon = async (req, res, next) => {
     let couponResponse;
     if (couponStatus) {
       let isUsed = couponStatus.usedBy.find((doc) => doc == req.user._id);
-      console.log("isUsed : ", isUsed);
       if (!isUsed) {
         let startDate = new Date(couponStatus.startDate);
         let endDate = new Date(couponStatus.endDate);
         let today = new Date(Date.now());
 
-        console.log("start Date ", startDate);
-        console.log("end Date : ", endDate);
+        
         if (endDate > today && startDate <= today) {
           couponResponse = {
             isAvailable: true,
@@ -416,7 +396,6 @@ export const fetchOrders = async (req, res, next) => {
       .findOne({ userId: req.user._id })
       .populate({ path: "orders.products._id", model: "products" });
     if (allOrders) {
-      console.log("Orders : ", allOrders.orders);
       res.status(200).json({ orders: allOrders.orders });
     } else {
       res.status(200).json({ orders: null, msg: "No orders yet" });
@@ -486,7 +465,6 @@ export const getBanners = async (req, res, next) => {
 
 const generateShiprocketToken = async () => {
   try {
-    console.log("fetching token");
     if (
       !shipRocketAuthToken ||
       Date.now() - shipRocketAuthToken.timeStamp > 5 * 24 * 60 * 60 * 1000
@@ -506,15 +484,11 @@ const generateShiprocketToken = async () => {
         }
       );
       loginResponse = await loginResponse.json();
-      console.log("login response : ", loginResponse);
       shipRocketAuthToken = {
         token: loginResponse.token,
         timeStamp: new Date(Date.now()),
       };
-      console.log("New shiprocket token : ", shipRocketAuthToken);
-    } else {
-      console.log("old token is valid");
-    }
+    } 
 
     return shipRocketAuthToken.token;
   } catch (err) {

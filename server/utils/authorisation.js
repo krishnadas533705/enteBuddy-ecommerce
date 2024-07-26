@@ -5,7 +5,6 @@ export const verifyAdmin = (req, res, next) => {
   const token = req.cookies.admin_token;
 
   if (!token) {
-    console.log("no token")
     return next(errorHandler(401, "Unauthorised"));
   }
 

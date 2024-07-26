@@ -7,7 +7,6 @@ import order from "../models/order.model.js";
 export const createPayment = async (req, res, next) => {
   try {
     const amount = req.body.amount;
-    console.log("Amount : ", amount);
     const options = {
       amount: amount * 100,
       currency: "INR",
@@ -15,7 +14,6 @@ export const createPayment = async (req, res, next) => {
     };
 
     const order = await instance.orders.create(options);
-    console.log("order razorpay : ", order);
     res.status(200).json({
       order,
       key_id: process.env.RAZORPAY_ID,
@@ -28,21 +26,17 @@ export const createPayment = async (req, res, next) => {
 
 export const verifyPayment = async (req, res, next) => {
   try {
-    console.log("payment verifying....");
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
-    console.log("razorpay body : ", req.body);
-    console.log("secret : ", process.env.RAZORPAY_SECRET_KEY);
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_SECRET_KEY)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest("hex");
     console.log(expectedSignature, " : ", razorpay_signature);
     if (expectedSignature == razorpay_signature) {
-      console.log("payment success");
       res.status(200).json("payment success");
     } else {
-      console.log("payment failed");
+      throw new Error("Payment not valid")
     }
   } catch (err) {
     next(err);
@@ -56,7 +50,6 @@ export const refundPayment = async (req, res, next) => {
     const response = await instance.payments.refund(paymentId, {
       speed: "optimum",
     });
-    console.log("response : ",response)
     if (response.id) {
       await order.updateOne(
         { _id: req.user._id },

@@ -11,11 +11,8 @@ import icons from "../models/productIcons.model.js";
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    console.log("body : ", req.body);
     const Admin = await admin.findOne({});
-    console.log("admin data found : ", Admin);
     if (Admin.name == email && Admin.password == password) {
-      console.log("admin true : ", Admin._id);
       const token = jwt.sign({ id: Admin._id }, process.env.JWT_SECRET);
 
       res
@@ -28,7 +25,6 @@ export const adminSignin = async (req, res, next) => {
         .status(200)
         .json({ adminId: Admin._id });
     } else {
-      console.log("admin false");
       return next(errorHandler(403, "Access denied"));
     }
   } catch (Err) {
@@ -39,7 +35,6 @@ export const adminSignin = async (req, res, next) => {
 //add icons
 export const uploadIcons = async (req, res, next) => {
   try {
-    console.log("req.files : ", req.files);
     let productIcons = req.files;
     productIcons = productIcons.map((icon) => ({
       path: icon.path,
@@ -55,7 +50,6 @@ export const uploadIcons = async (req, res, next) => {
 //fetch icons
 export const fetchIcons = async (req, res, next) => {
   try {
-    console.log("fetching icons..");
     let allIcons = await icons.find({});
     res.status(200).json(allIcons);
   } catch (err) {
@@ -66,7 +60,6 @@ export const fetchIcons = async (req, res, next) => {
 ///add new product
 export const uploadProduct = async (req, res, next) => {
   try {
-    console.log("req.body : ", req.body);
     const primaryImage = {
       name: req.files.primaryImage[0].filename,
       path: req.files.primaryImage[0].path,
@@ -78,7 +71,6 @@ export const uploadProduct = async (req, res, next) => {
         path: image.path,
       };
     });
-    console.log("secondaryImages : ", secondaryImages);
     let colors;
     if (req.body.color) {
       colors = req.body.color.split(",");
@@ -119,7 +111,6 @@ export const getProduct = async (req, res, next) => {
 export const updateProduct = async (req, res, next) => {
   const productId = req.params.productId;
   try {
-    console.log("req.body : ", req.body);
     let primaryImage;
 
     if (req.files.primaryImage) {
@@ -168,7 +159,6 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const productId = req.body.productId;
     await product.deleteOne({ _id: productId });
-    console.log("Product removed");
     res.status(200).json({ "product removed with id : ": productId });
   } catch (err) {
     next(err);
@@ -203,9 +193,7 @@ export const updateBanner = async (req, res, next) => {
       startDate: req.body.startDate ? new Date(req.body.startDate) : undefined,
       endDate: req.body.endDate ? new Date(req.body.endDate) : undefined,
     };
-    console.log("banner image : ", req.file);
     if (req.file) {
-      console.log("Bannder image true");
       bannerData.path = req.file.path;
     }
 
@@ -230,7 +218,6 @@ export const deleteBanner = async (req, res, next) => {
   try {
     const bannerId = req.body.bannerId;
     await banner.deleteOne({ _id: bannerId });
-    console.log("Banner removed");
     res.status(200).json({ "Banner removed with id : ": bannerId });
   } catch (err) {
     next(err);
@@ -241,7 +228,6 @@ export const deleteBanner = async (req, res, next) => {
 export const getUserDetails = async (req, res, next) => {
   try {
     const users = await User.find({});
-    console.log("Users found : ", users);
     res.status(200).json(users);
   } catch (err) {
     next(err);
@@ -263,7 +249,6 @@ export const getCoupons = async (req, res, next) => {
 //create new coupon
 export const createCoupon = async (req, res, next) => {
   try {
-    console.log("coupon data : ", req.body);
     const newCoupon = new coupon(req.body);
     newCoupon.save();
     res.status(200).json("new coupon created");
@@ -274,13 +259,9 @@ export const createCoupon = async (req, res, next) => {
 
 export const updateCoupon = async (req, res, next) => {
   try {
-    console.log("update data : ", req.body);
-    console.log("Coupon id : ", req.params.couponId);
     const updateData = req.body;
     const coupontest = await coupon.findOne({ _id: req.params.couponId });
-    console.log("coupon exist : ", coupontest);
     await coupon.updateOne({ _id: req.params.couponId }, { $set: updateData });
-    console.log("Coupon updated");
     res.status(200).json("Coupon updated");
   } catch (err) {
     next(err);
@@ -330,7 +311,6 @@ export const dashboardData = async (req, res, next) => {
 //fetch all dtdc orders
 export const fetchAllOrders = async (req, res, next) => {
   try {
-    console.log("fetching orderssss....");
     let allOrders = await order.aggregate([
       {
         $unwind: "$orders",
@@ -415,7 +395,6 @@ export const fetchAllOrders = async (req, res, next) => {
       },
     ]);
 
-    console.log("allOrders : ", allOrders);
     res.status(200).json({ allOrders: allOrders });
   } catch (err) {
     next(err);
@@ -432,10 +411,7 @@ export const updateOrderStatus = async (req, res, next) => {
     } else if (orderStatus === "Delivered") {
       updateFields["orders.$.deliveredDate"] = new Date();
     }
-    await order.updateOne(
-      { "orders._id": orderId },
-      { $set: updateFields }
-    );
+    await order.updateOne({ "orders._id": orderId }, { $set: updateFields });
     res.status(200).send("order update");
   } catch (err) {
     next(err);
