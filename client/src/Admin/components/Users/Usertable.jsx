@@ -28,7 +28,7 @@ const Usertable = ({ users, searching }) => {
     setCurrentUsers(usersList);
   };
   return (
-    <div className="mt-7 lg:ms-64 px-2">
+    <div className="mt-7 lg:ms-64 px-2 bg-white">
       <div className="relative overflow-x-auto sm:rounded-lg md:flex justify-center">
         <table className="w-4/5 px-3 text-xs md:text-sm shadow-md text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase">

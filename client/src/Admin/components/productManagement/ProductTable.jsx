@@ -86,7 +86,7 @@ const ProductTable = ({
   };
 
   return (
-    <div className="mt-7 lg:ms-64">
+    <div className="mt-7 lg:ms-64 bg-white h-full">
       <div className="flex justify-end pe-8 md:pe-16">
         <button
           className="border py-1 px-2 md:py-2 md:px-4 hover:bg-blue-700 bg-blue-600 font-semibold text-white text-sm rounded mb-2"
@@ -180,7 +180,7 @@ const ProductTable = ({
         />
       </div>
 
-      <div className="md:ms-28 mt-10">
+      <div className="md:ms-28 mt-10 mb-20 ms-10 w-full bg-white">
         <label htmlFor="icon-input" className="text-xs">
           Click here to add icons.
         </label>
@@ -189,7 +189,7 @@ const ProductTable = ({
           type="file"
           accept="image/*"
           multiple
-          className="file-input file-input-bordered file-input-sm text-xs w-1/2 "
+          className="file-input file-input-bordered file-input-sm text-xs w-1/2 bg-white text-black"
           id="icon-input"
           onChange={(e)=>setIcons(e.target.files)}
         />

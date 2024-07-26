@@ -140,7 +140,7 @@ const App = () => {
               </button>
             </>
           ) : (
-            <>
+            <div className="">
               <div className="bg-white text-emerald-500 w-fit mx-auto p-4 rounded-full">
                 <BsTelephoneFill size={30} />
               </div>
@@ -160,7 +160,7 @@ const App = () => {
                 )}
                 <span>Send code via SMS</span>
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>

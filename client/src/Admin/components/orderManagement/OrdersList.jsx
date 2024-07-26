@@ -74,10 +74,10 @@ function OrdersList() {
   };
 
   return (
-    <div>
+    <div className="bg-white">
       <Navbar />
       <SideBar />
-      <section className="bg-white">
+      <section className=" h-full">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <h1 className="text-2xl text-green-700 underline-offset-0 font-medium mb-3">
             DTDC ORDERS
@@ -110,7 +110,7 @@ function OrdersList() {
 
         <div className="flex justify-end">
           <div className="relative overflow-x-auto sm:rounded-lg md:flex justify-center">
-            <div>
+            <div className="px-5">
               <div className="flex justify-start mb-3">
                 <form className="">
                   <label

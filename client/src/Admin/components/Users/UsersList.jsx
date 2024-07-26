@@ -57,7 +57,7 @@ const UsersList = () => {
     <div>
       <Navbar />
       <SideBar />
-      <section className="">
+      <section className="bg-white h-full">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <div className="relative">
