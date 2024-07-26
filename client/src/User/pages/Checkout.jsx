@@ -61,7 +61,7 @@ const Checkout = () => {
   const { userId } = useContext(userContext);
 
   useEffect(() => {
-    if (userId == null || userId == undefined || userId || "null") {
+    if (userId == null || userId == undefined || userId == 'null') {
       navigate("/");
     }
   }, []);
