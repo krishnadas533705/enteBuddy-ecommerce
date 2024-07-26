@@ -49,7 +49,7 @@ const BannerList = () => {
     <div>
       <Navbar />
       <SideBar />
-      <section className="">
+      <section className="bg-white">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <label

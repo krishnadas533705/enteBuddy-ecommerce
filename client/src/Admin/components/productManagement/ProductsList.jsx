@@ -56,7 +56,7 @@ const ProductsList = () => {
         <SideBar />
 
         {/* search bar */}
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full bg-white">
           <div className="mt-5 lg:ms-72 flex justify-center gap-0">
             <form className="md:w-1/2 mx-auto">
               <label

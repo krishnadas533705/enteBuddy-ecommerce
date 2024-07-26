@@ -80,15 +80,15 @@ const CouponTable = () => {
 
   return (
     <div className="mt-7 lg:ms-64">
-      <div className="flex justify-end pe-8 md:pe-16">
+      <div className="text-end justify-end pe-8 md:pe-16">
         <button
-          className="px-4 rounded py-2 bg-green-600 text-white font-bold"
+          className="px-2 py-2 rounded  text-sm bg-green-600 text-white font-medium"
           onClick={() => showPrinter(true)}
         >
           Print All
         </button>
         <button
-          className="px-4 rounded py-2 bg-slate-600 text-white font-bold ms-1 me-1"
+          className="px-2 rounded py-2 bg-slate-600 text-white font-medium text-sm ms-1 me-1"
           onClick={() => showCurrentCouponPrinter(true)}
         >
           Print Table

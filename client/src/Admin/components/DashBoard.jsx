@@ -31,7 +31,7 @@ const DashBoard = () => {
         <SideBar />
 
         {/* <!-- Main content --> */}
-        <div className="lg:w-3/4">
+        <div className="lg:w-3/4 bg-white">
           {/* <!-- Content header --> */}
           <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker">
             <h1 className="text-2xl font-semibold">Dashboard</h1>

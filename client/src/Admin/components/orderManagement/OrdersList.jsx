@@ -77,7 +77,7 @@ function OrdersList() {
     <div>
       <Navbar />
       <SideBar />
-      <section className="">
+      <section className="bg-white">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <h1 className="text-2xl text-green-700 underline-offset-0 font-medium mb-3">
             DTDC ORDERS
