@@ -57,7 +57,14 @@ const Checkout = () => {
   const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
 
-  console.log("coupon id : ", localStorage.getItem("enteBuddyCouponId"));
+  const navigate = useNavigate();
+  const { userId } = useContext(userContext);
+
+  useEffect(() => {
+    if (userId == null || userId == undefined || userId || "null") {
+      navigate("/");
+    }
+  }, []);
   useEffect(() => {
     setOrderDetails((prev) => ({
       ...prev,
@@ -65,23 +72,20 @@ const Checkout = () => {
     }));
   }, [cart]);
 
-  const { userId } = useContext(userContext);
-
   const handleOrderDetails = (name, value) => {
-    console.log("name : ", name, ": value : ", value);
+   
     setOrderDetails((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("order details : ", orderDetails);
+    
     // Perform validation
     if (!validateName(orderDetails.name)) {
-      console.log("working");
+      
       setNameError("Please enter your name");
     } else {
       setNameError("");
@@ -133,7 +137,7 @@ const Checkout = () => {
       paymentError == false
     ) {
       // Form submission logic here
-      console.log("pushing order to server");
+      
       if (
         (orderDetails.shippingMethod == "shiprocket" &&
           orderDetails.paymentMethod == "Prepaid") ||
@@ -187,7 +191,7 @@ const Checkout = () => {
           localStorage.setItem("enteBuddyCartPrice", 0);
           localStorage.setItem("enteBuddyCart", null);
           localStorage.setItem("enteBuddyCouponId", "");
-          navigate("/");
+          navigate(`/fetchOrders/${userId}`);
           clearCart();
           handleClose();
         } else {
@@ -198,7 +202,7 @@ const Checkout = () => {
   };
 
   return (
-    <div>
+    <div className="font-poppins">
       <Toaster toastOptions={{ duration: 2000 }} />
       <div className="flex flex-col items-center border-b bg-white py-2 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <a
@@ -283,8 +287,8 @@ const Checkout = () => {
         </div>
       </div>
       <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-        <div className="px-4 pt-8">
-          <p className="text-xl font-medium">Order Summary</p>
+        <div className="px-4 pt-8 bg-gray-50">
+          <p className="text-lg font-medium">Order Summary</p>
           <p className="text-gray-400">
             Check your items. And select a suitable shipping method.
           </p>
@@ -444,7 +448,7 @@ const Checkout = () => {
         </div>
         <form className="mt-5 grid gap-6">
           <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-            <p className="text-xl font-medium">Payment Details</p>
+            <p className="text-lg font-medium">Payment Details</p>
             <p className="text-gray-400">
               Complete your order by providing your payment details.
             </p>

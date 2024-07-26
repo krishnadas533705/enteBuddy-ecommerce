@@ -11,7 +11,7 @@ const EditProduct = ({
 }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [updateData, setUpdateData] = useState({});
-  const { adminId } = useContext(AdminContext);
+  const { adminId,logoutAdmin } = useContext(AdminContext);
   const API = import.meta.env.VITE_API_URL
   useEffect(() => {
     if (editingProduct) {
@@ -23,7 +23,6 @@ const EditProduct = ({
     const { name, value } = e.target;
 
     if (name == 'primaryImage') {
-      console.log('Primary image changed');
       setUpdateData((prev) => ({
         ...prev,
         [name]: e.target.files[0],
@@ -83,6 +82,9 @@ const EditProduct = ({
         setUpdateData({});
         setFetchProduct((prev) => !prev);
         showEditForm(false);
+      }
+      else if(response.status == 401 || response.status == 403){
+        logoutAdmin()
       }
     } catch (err) {
       console.log('Error in updating : ', err);

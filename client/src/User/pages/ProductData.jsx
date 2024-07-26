@@ -42,7 +42,7 @@ const ProductData = () => {
     serviceFeatures,
   } = product;
 
-  console.log(product);
+ 
 
   return (
     <div>

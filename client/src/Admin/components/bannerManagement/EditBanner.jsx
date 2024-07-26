@@ -11,12 +11,11 @@ const EditBanner = ({
 }) => {
   const [updateData, setUpdateData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
-  const { adminId } = useContext(AdminContext);
-  const API = import.meta.env.VITE_API_URL
+  const { adminId, logoutAdmin } = useContext(AdminContext);
+  const API = import.meta.env.VITE_API_URL;
   useEffect(() => {
     if (editingBanner) {
-      const url =
-        API + editingBanner.path.split("server")[1];
+      const url = API + editingBanner.path.split("server")[1];
       setImageUrl(url);
     }
   }, [editingBanner]);
@@ -59,11 +58,12 @@ const EditBanner = ({
     );
 
     if (response.ok) {
-      console.log("Banner updated");
       setUpdateData({});
       setImageUrl(null);
       setFetchBanners((prev) => !prev);
       showBannerEditForm(!bannerEditForm);
+    } else if (response.status == 401 || response.status == 403) {
+      logoutAdmin();
     } else {
       console.log("Error in updating banner");
     }
@@ -147,7 +147,7 @@ const EditBanner = ({
                             min={
                               updateData.startDate
                                 ? updateData.startDate
-                                : editingBanner.startDate.split('T')[0]
+                                : editingBanner.startDate.split("T")[0]
                             }
                             onChange={handleUpdateData}
                           />

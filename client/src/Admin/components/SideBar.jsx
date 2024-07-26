@@ -25,7 +25,6 @@ const SideBar = () => {
 
   const logoutAdmin = async () => {
     try {
-      console.log("loggin out...");
       const reponse = await fetch(`/api/admin/signout/${adminId}`, {
         method: "post",
         credentials: "include",

@@ -7,19 +7,23 @@ import { getDashBoardData, getWeeklyData } from "./DashboardData";
 import BarChart from "./BarChart.jsx";
 
 const DashBoard = () => {
-  const { adminId } = useContext(AdminContext);
+  const { adminId, setAdmin } = useContext(AdminContext);
   const [data, setData] = useState(null);
   const [weeklyData, setWeeklyData] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
-    (async () => {
-      const dashBoardData = await getDashBoardData(adminId);
-      setData(dashBoardData);
+    if (!adminId) {
+      navigate("/admin/signin");
+    } else {
+      (async () => {
+        const dashBoardData = await getDashBoardData(adminId, setAdmin);
+        setData(dashBoardData);
 
-      const thisWeekData = getWeeklyData(dashBoardData.allOrders);
-      setWeeklyData(thisWeekData);
-    })();
+        const thisWeekData = getWeeklyData(dashBoardData.allOrders);
+        setWeeklyData(thisWeekData);
+      })();
+    }
   }, []);
-  console.log("data : ", data);
   return (
     <>
       <Navbar />

@@ -12,10 +12,13 @@ function OrdersList() {
   const [currentPage, setCurrentPage] = useState(() => {
     return localStorage.getItem("adminOrderPage") || 1;
   });
-  const { adminId, setOrderData, handleOrderData } = useContext(AdminContext);
+  const { adminId, setOrderData, handleOrderData, logoutAdmin } = useContext(AdminContext);
 
   const navigate = useNavigate();
   useEffect(() => {
+    if (!adminId) {
+      navigate("/admin/signin");
+    }
     (async () => {
       try {
         let response = await fetch(`/api/admin/fetchOrderDetails/${adminId}`, {
@@ -30,6 +33,9 @@ function OrdersList() {
           let page = parseInt(currentPage)
           let newOrders = result.allOrders.slice((page - 1) * 5 ,page * 5);
           setCurrentOrders(newOrders);
+        }
+        else if (response.status == 401 || response.status == 403){
+          logoutAdmin()
         }
       } catch (err) {
         console.log("error in fetching orders  : ", err);

@@ -24,11 +24,9 @@ const ProductTable = ({
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
-    console.log("products : ", products);
     if (products) {
       setTotalPages(Math.ceil(products.length / 5));
       setCurrentProducts(() => {
-        console.log("Reversing");
         return products.reverse().slice((currentPage - 1) * 5, currentPage * 5);
       });
     }
@@ -58,7 +56,6 @@ const ProductTable = ({
 
   const uploadIcons = async () => {
     try {
-      console.log("icons : ", icons);
       if (icons) {
         const formData = new FormData();
         
@@ -68,7 +65,6 @@ const ProductTable = ({
           formData.append('icons',iconFile)
         }
 
-        console.log("formData : ",formData)
 
         const response = await fetch(`/api/admin/addIcons/${adminId}`, {
           method: "POST",

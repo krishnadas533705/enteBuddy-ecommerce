@@ -11,18 +11,20 @@ export default function SignIn() {
 
   const navigate = useNavigate();
   let { setAdmin, adminId } = useContext(AdminContext);
+  useEffect(()=>{
+    if(adminId !== null && adminId !== 'null'){
+      navigate("/admin/dashboard")
+    }
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("email before : ", email);
     let error = validateForm(email, password);
     if (error.email || error.password) {
-      console.log("error true : ", error);
       setErrors(error);
       return;
     }
     const response = await verifyAdmin(email, password);
-    console.log("singin response : ", response);
     if (response.statusCode != 403) {
       localStorage.setItem("adminId",response.adminId)
       setAdmin(response.adminId);

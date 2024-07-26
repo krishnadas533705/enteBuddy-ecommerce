@@ -8,28 +8,25 @@ import { Pagination } from "@mui/material";
 const Orders = () => {
   const { orders, fetchOrders } = useContext(OrderContext);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrenPage] = useState(() => {
-    return localStorage.getItem("userOrdersPage") || 1;
-  });
+  const [currentPage, setCurrenPage] = useState(1);
 
   const [currentOrders, setCurrentOrders] = useState(null);
   useEffect(() => {
     (async () => {
       let allOrders = await fetchOrders();
-      console.log("allOrders : ",allOrders)
-      let totalPages = Math.ceil(allOrders.length / 2);
+     
+      let totalPages = Math.ceil(allOrders.length / 5);
       setTotalPages(totalPages);
       let page = parseInt(currentPage);
-      let firstPageOrders = allOrders.slice((page - 1) * 2, page * 2);
+      let firstPageOrders = allOrders.slice((page - 1) * 5, page * 5);
       setCurrentOrders(firstPageOrders);
     })();
   }, []);
 
   const handlePageChange = (event, page) => {
-    let pageOrders = orders.slice((page - 1) * 2, page * 2);
+    let pageOrders = orders.slice((page - 1) * 5, page * 5);
     setCurrentOrders(pageOrders);
     setCurrenPage(page);
-    localStorage.setItem("userOrdersPage", page);
   };
 
   if (orders.length === 0) {
@@ -48,15 +45,16 @@ const Orders = () => {
         <div className="flex justify-center mt-3 mb-2 text-3xl font-bold underline text-pink-600">
           <h1>My Orders</h1>
         </div>
-        { currentOrders && currentOrders.map((order, orderIndex) =>
-           order.products.map((product, productIndex) => (
-            <div key={`${order._id}- ${product._id}`}>
+        {currentOrders &&
+          currentOrders.map((order, orderIndex) => (
+            <div
+              key={`${order._id}- ${order.products[0]._id} - ${Math.random()}`}
+            >
               <div className="w-full mb-1 px-3 py-4 rounded-md flex md:max-w-screen-md md:mx-auto items-center font-poppins shadow-lg">
                 <Link
                   state={{
                     orderId: order._id,
                     orderStatus: order.orderStatus,
-                    product: product,
                   }}
                   to={`/orderTracking/${order._id}`}
                   className="flex items-center w-full"
@@ -74,8 +72,15 @@ const Orders = () => {
                     />
                   </div>
                   <div>
-                    <div className="font-medium text-">
-                      {product.productName}
+                    <div className="flex">
+                    {order.products.map((product,index) => (
+                      <div className="font-medium" key={product._id}>
+                        {product.productName } 
+                        {index != order.products.length - 1 && 
+                          <span className="mx-3">&</span>
+                        }
+                      </div>
+                    ))}
                     </div>
                     <div
                       className={`${
@@ -88,14 +93,17 @@ const Orders = () => {
                     >
                       {order.orderStatus}
                     </div>
-                    <div className="text-xs text-gray-500">Qty : {product.quantity}</div>
-                    <div className="text-xs mt-2 text-gray-500">{new Date(order.orderDate).toDateString()}</div>
+                    <div className="text-xs text-gray-500">
+                      Qty : {order.products.length}
+                    </div>
+                    <div className="text-xs mt-2 text-gray-500">
+                      {new Date(order.orderDate).toDateString()}
+                    </div>
                   </div>
                 </Link>
               </div>
             </div>
-          ))
-        )}
+          ))}
       </div>
 
       <div className="flex justify-center mb-14">

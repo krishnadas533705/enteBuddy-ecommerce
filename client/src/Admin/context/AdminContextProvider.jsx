@@ -17,6 +17,12 @@ const AdminContextProvider = ({ children }) => {
   });
   const [sideBarOpen, setSideBar] = useState(false);
 
+  const logoutAdmin = () => {
+    localStorage.removeItem('adminId')
+    setAdmin(null);
+    window.location.reload
+  };
+
   return (
     <AdminContext.Provider
       value={{
@@ -27,6 +33,7 @@ const AdminContextProvider = ({ children }) => {
         orderData,
         setOrderData,
         handleOrderData,
+        logoutAdmin
       }}
     >
       {children}

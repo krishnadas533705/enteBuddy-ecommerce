@@ -5,25 +5,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import BannerTable from "./BannerTable";
 import AdminContext from "../../context/AdminContext";
+import { useNavigate } from "react-router-dom";
 
 const BannerList = () => {
-  const { adminId } = useContext(AdminContext);
+  const navigate = useNavigate()
+  const { adminId, logoutAdmin } = useContext(AdminContext);
   const [banners, setBanners] = useState(null);
   const [fetchBanners, setFetchBanners] = useState(true);
 
   useEffect(() => {
+    if (!adminId) {
+      navigate("/admin/signin");
+    }
     (async () => {
       try {
-        const response = await fetch(
-          `/api/admin/getBanners/${adminId}`,
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`/api/admin/getBanners/${adminId}`, {
+          credentials: "include",
+        });
         if (response.ok) {
           const bannersList = await response.json();
-          console.log("banner list : ", bannersList);
           setBanners(bannersList);
+        } else if (response.status == 401 || response.status == 403) {
+          logoutAdmin();
         }
       } catch (err) {
         console.log("Banner fetching error : ", err);

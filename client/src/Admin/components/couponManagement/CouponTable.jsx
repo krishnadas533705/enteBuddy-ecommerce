@@ -10,7 +10,7 @@ const CouponTable = () => {
   const [currentCoupons, setCurrentCoupons] = useState(null);
   const [couponForm, showCouponForm] = useState(false);
   const [fetchCoupons, setFetchCoupons] = useState(true);
-  const { adminId } = useContext(AdminContext);
+  const { adminId, logoutAdmin } = useContext(AdminContext);
 
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(
@@ -27,7 +27,6 @@ const CouponTable = () => {
   useEffect(() => {
     (async () => {
       try {
-        console.log("fetching coupons");
         const response = await fetch(`/api/admin/getCoupons/${adminId}`, {
           credentials: "include",
         });
@@ -41,6 +40,8 @@ const CouponTable = () => {
           );
           setCurrentCoupons(couponsList);
           setTotalPages(Math.ceil(totalCoupons.length / 5));
+        } else if (response.status == 401 || response.status == 403) {
+          logoutAdmin();
         }
       } catch (err) {
         console.log("error in fetching coupons : ", err);

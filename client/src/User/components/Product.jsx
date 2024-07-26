@@ -5,7 +5,7 @@ import { CartContext } from "../contexts/CartContext";
 
 const Product = ({ product }) => { 
   const { _id, primaryImage, category, price, title, description ,discount,reviews} = product;
-  console.log(product)
+  
   const { addToCart } = useContext(CartContext);
 const API = import.meta.env.VITE_API_URL
   return (

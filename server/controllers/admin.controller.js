@@ -23,7 +23,7 @@ export const adminSignin = async (req, res, next) => {
           httpOnly: true,
           secure: true,
           sameSite: true,
-          expires: new Date(Date.now() + 24 * 60 * 60 * 10000),
+          expires: new Date(Date.now() + 24 * 60 * 60 * 100000),
         })
         .status(200)
         .json({ adminId: Admin._id });

@@ -16,7 +16,7 @@ const AddProduct = ({
   const [productFeatures, setProductFeatures] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [productError, setProductError] = useState({});
-  const { adminId } = useContext(AdminContext);
+  const { adminId, logoutAdmin } = useContext(AdminContext);
   const navigate = useNavigate();
 
   const API = import.meta.env.VITE_API_URL;
@@ -74,7 +74,6 @@ const AddProduct = ({
         productData.productFeature3,
         productData.productFeature4,
       ];
-      console.log("productData : ", productData);
       const featureIcons = [icon1, icon2, icon3, icon4];
       let productFeaturesWithIcons = [];
       for (let i = 0; i < 4; i++) {
@@ -82,7 +81,6 @@ const AddProduct = ({
           description: productFeatures[i],
           icon: featureIcons[i],
         };
-        console.log("features : ", feature);
         productFeaturesWithIcons.push(feature);
       }
 
@@ -115,7 +113,6 @@ const AddProduct = ({
 
       let serializedServiceFeatures = JSON.stringify(serviceFeaturesWithIcons);
 
-      console.log("product featues : ", productFeaturesWithIcons);
       const formData = new FormData();
       formData.append("title", productData.title);
       formData.append("category", productData.category);
@@ -132,9 +129,7 @@ const AddProduct = ({
 
       formData.append("productFeatures", serializedProductFeatures);
       formData.append("serviceFeatures", serializedServiceFeatures);
-      for (const pair of formData.entries()) {
-        console.log(pair[0], ":", pair[1]); // Access key and value
-      }
+
       const response = await fetch(`/api/admin/addProduct/${adminId}`, {
         method: "post",
         body: formData,
@@ -154,6 +149,8 @@ const AddProduct = ({
         setServiceIcon2(null);
         setServiceIcon3(null);
         setServiceIcon4(null);
+      } else if (response.status == 401 || response.status == 403) {
+        logoutAdmin();
       } else {
         console.log("failed to add product : ", response);
       }

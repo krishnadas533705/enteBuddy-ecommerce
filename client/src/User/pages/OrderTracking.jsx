@@ -5,6 +5,8 @@ import { FaCheck } from "react-icons/fa";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import logo from "../img/logo.png";
 import { OrderContext } from "../contexts/OrderContext";
+import CourierTracking from "../components/CourierTracking";
+import ShiprocketTracking from "../components/ShiprocketTracking";
 
 const OrderTracking = () => {
   const { orderId } = useParams();
@@ -16,7 +18,6 @@ const OrderTracking = () => {
 
   useEffect(() => {
     if (allOrders) {
-      console.log("allOrders : ", allOrders);
       const currentOrder = allOrders.find((o) => o._id === orderId);
       setOrder(currentOrder);
     }
@@ -33,7 +34,7 @@ const OrderTracking = () => {
     <div>
       <header className="fixed w-full h-[64px] z-20 shadow-md px-3 flex pt-5  gap-x-1 bg-hero2 bg-contain bg-tertiary justify-between">
         <div className="flex ">
-          <div className="w-5 h-10" onClick={handleNavigate}>
+          <div className="w-5 h-10 cursor-pointer" onClick={handleNavigate}>
             <FaArrowLeftLong className="text-xl text-white" />
           </div>
 
@@ -46,19 +47,22 @@ const OrderTracking = () => {
       <div className="pt-0 md:pt-24 ">
         <div className=" flex h-full flex-col overflow-hidden rounded-2xl bg-white text-gray-600 shadow-lg ring-1 ring-gray-200 md:max-w-screen-md mx-auto ">
           {/* Products Section */}
-          <div className="font-poppins text-center text-sm text-gray-400 border-b border-gray-200 pb-3">
+          <div className="font-poppins text-center text-sm text-gray-400 border-b border-gray-200 py-8 ">
             ORDER ID : {order._id}
           </div>
           {order.products &&
             order.products.map((product) => (
-              <section className="pt-24 md:py-10 " key={product._id._id}>
-                <div className="py-5 px-8 font-mono text-lg flex justify-between items-center border-b border-gray-200">
+              <section
+                className="pt-12 md:pt-3 pb-1"
+                key={product._id._id + Math.random()}
+              >
+                <div className="py-3 px-8 font-mono text-lg flex justify-between border-b border-gray-200">
                   <div className="desc">
                     <div>{product.productName}</div>
                     <div>Quantity : {product.quantity}</div>
                     <div>₹ {product.price}</div>
                   </div>
-                  <div className="w-28 h-24 px-2 py-2  flex justify-center items-center">
+                  <div className="w-24 flex justify-center items-center">
                     <img
                       src={
                         API + product._id.primaryImage.path.split("server")[1]
@@ -72,114 +76,32 @@ const OrderTracking = () => {
             ))}
 
           {/* Timeline Section */}
-          {/* initial stage */}
-          <div className="flex-auto p-6 relative">
-            <div className="absolute left-[35px] top-8 h-[70%] border-r-2 border-gray-200"></div>
-            <div className="relative mb-8 flex flex-col justify-center ">
-              <div
-                className={`
-              absolute inline-flex h-6 w-6 items-center justify-center rounded-full p-[5px] bg-green-500 text-white
-                ${
-                  order.orderStatus == "Order placed" || order.orderStatus == "Shipped" || order.orderStatus == 'Delivered'
-                    ? "bg-green-500 text-white"
-                    : "bg-white border border-gray-300"
-                }
-              `}
-              >
-                {/* Conditionally render checkmark or blank circle */}
-                {order.orderStatus <= "Order placed" || order.orderStatus == "Shipped" || order.orderStatus == 'Delivered' ? (
-                  <FaCheck className="text-white" />
-                ) : null}
-              </div>
-              <div className="ml-12 w-auto pt-1">
-                <h6 className="text-sm font-semibold text-green-900 ">
-                  Order Placed
-                </h6>
-
-                <p className="mt-1 text-xs text-gray-500">
-                  {new Date(order.orderDate).toDateString()}
-                </p>
-              </div>
+          <div className="flex flex-col-reverse md:flex-row justify-between md:me-36  px-4">
+            <div>
+              {order.shippingMethod == "shiprocket" ? (
+                <ShiprocketTracking order={order} />
+              ) : (
+                <CourierTracking order={order} />
+              )}
             </div>
-            {/* Shipped */}
-            <div className="relative mb-8 flex flex-col justify-center ">
-              <div
-                className={`
-              absolute inline-flex h-6 w-6 items-center justify-center rounded-full p-[5px] bg-green-500 text-white
 
-                ${
-                  order.orderStatus == "Shipped" || order.orderStatus == 'Delivered'
-                    ? "bg-green-500 text-white"
-                    : "bg-white border border-gray-300"
-                }
-              `}
-              >
-                {/* Conditionally render checkmark or blank circle */}
-                {order.orderStatus <= "Shipped" || order.orderStatus == 'Delivered' ? (
-                  <FaCheck className="text-white" />
-                ) :  null}
-              </div>
-              <div className="ml-12 w-auto pt-1">
-                <h6 className="text-sm font-semibold text-green-900 ">
-                  Shipped
-                </h6>
-
-                <p className="mt-1 text-xs text-gray-500">
-                  {order.orderStatus == 'Shipped' ? new Date(order.shippedDate).toDateString() : ''}
-                </p>
-              </div>
-            </div>
-          {/* Out for delivery */}
-            <div className="relative mb-8 flex flex-col justify-center ">
-              <div
-                className={`
-              absolute inline-flex h-6 w-6 items-center justify-center rounded-full p-[5px] bg-green-500 text-white
-                ${
-                  order.orderStatus == "Delivered"
-                    ? "bg-green-500 text-white"
-                    : "bg-white border border-gray-300"
-                }
-              `}
-              >
-                {/* Conditionally render checkmark or blank circle */}
-                {order.orderStatus <= "Shipped" || order.orderStatus == 'Delivered' ? (
-                  <FaCheck className="text-white" />
-                ) : null}
-              </div>
-              <div className="ml-12 w-auto pt-1">
-                <h6 className="text-sm font-semibold text-green-900 ">
-                  Out For Delivery
-                </h6>
-
-                
-              </div>
-            </div>
-          {/* Delivered */}
-            <div className="relative mb-8 flex flex-col justify-center ">
-              <div
-                className={`
-              absolute inline-flex h-6 w-6 items-center justify-center rounded-full p-[5px] bg-green-500 text-white
-                ${
-                  order.orderStatus == "Delivered"
-                    ? "bg-green-500 text-white"
-                    : "bg-white border border-gray-300"
-                }
-              `}
-              >
-                {/* Conditionally render checkmark or blank circle */}
-                {order.orderStatus <= "Delivered" ? (
-                  <FaCheck className="text-white" />
-                ) : null}
-              </div>
-              <div className="ml-12 w-auto pt-1">
-                <h6 className="text-sm font-semibold text-green-900 ">
-                  Delivery Complete
-                </h6>
-
-                <p className="mt-1 text-xs text-gray-500">
-                  {order.orderStatus == 'Delivered' ? new Date(order.deliveredDate).toDateString() : order.orderStatus == 'Shipped' ? "Your order will be delivered within a week." : ""}
-                </p>
-              </div>
+            <div>
+              <section className="py-4 md:pt-5 md:pb-1">
+                <h1 className="font-mono text-lg font-bold text-gray-700">
+                  DELIVERING TO
+                </h1>
+                <div className="pb-5 md:pb-0 border-b-2 md:border-none font-mono text-base md:text-lg border-gray-200">
+                  <div className="desc">
+                    <div>{order.billing_customer_name}</div>
+                    <div>{order.billing_address}</div>
+                    <div>{order.billing_city}</div>
+                    <div>{order.billing_state}</div>
+                    <div>{order.billing_pincode}</div>
+                    <div>{order.billing_email}</div>
+                    <div>{order.billing_phone}</div>
+                  </div>
+                </div>
+              </section>
             </div>
           </div>
         </div>

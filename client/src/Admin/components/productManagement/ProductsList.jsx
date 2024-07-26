@@ -14,7 +14,7 @@ const ProductsList = () => {
   const [searchProducts, setSearchProducts] = useState(null);
   useEffect(() => {
     if (!adminId) {
-      navigate("/signin");
+      navigate("/admin/signin");
     }
     (async function () {
       try {
@@ -23,14 +23,12 @@ const ProductsList = () => {
           credentials: "include",
         });
 
-        console.log("response from getProducts : ", response);
         if (response.ok) {
           const data = await response.json();
-          ``;
           setProducts(data);
         } else if (response.status == 401 || response.status == 403) {
           alert("Unauthorised");
-          navigate("/signin");
+          navigate("/admin/signin");
         }
       } catch (err) {
         console.log(err);
@@ -39,16 +37,12 @@ const ProductsList = () => {
   }, [fetchProduct]);
 
   const handleProductSearch = async (e) => {
-    console.log("Products : ", products);
     const searchProducts = await products.filter((item) =>
       item.title.startsWith(e.target.value)
     );
-    console.log("target value : ", e.target.value);
     if (e.target.value.trim() === "") {
-      console.log("target value empty");
       setSearchProducts(null);
     } else {
-      console.log("Searchproducts :", searchProducts);
       setSearchProducts(searchProducts);
     }
   };

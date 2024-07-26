@@ -150,7 +150,10 @@ export const createOrder = async (req, res, next) => {
 
     // Construct the formatted current date string
     const formattedCurrentDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    const sellingPrice = req.body.paymentMethod == 'Prepaid' ? req.body.sellingPrice/100 : req.body.sellingPrice
+    const sellingPrice =
+      req.body.paymentMethod == "Prepaid"
+        ? req.body.sellingPrice / 100
+        : req.body.sellingPrice;
     const orderDetails = {
       orderDate: formattedCurrentDate,
       billing_customer_name: req.body.name,
@@ -160,13 +163,14 @@ export const createOrder = async (req, res, next) => {
       billing_email: req.body.email,
       billing_phone: req.body.mobile,
       billing_address: req.body.billing_address,
-      paymentMethod:req.body.shippingMethod == 'DTDC' ? "Prepaid" : req.body.paymentMethod,
+      paymentMethod:
+        req.body.shippingMethod == "DTDC" ? "Prepaid" : req.body.paymentMethod,
       paymentId: req.body.paymentId,
       products: req.body.products,
       sellingPrice: sellingPrice,
       discount: req.body.discount,
       couponId: req.body.couponId ? req.body.couponId : undefined,
-      shippingMethod : req.body.shippingMethod
+      shippingMethod: req.body.shippingMethod,
     };
 
     //pushing the order to database
@@ -186,8 +190,8 @@ export const createOrder = async (req, res, next) => {
 
     ///pushing order to shiprocket if shipping method is shiprocket
     //getting authtoken of shiprocket
-    let responseText = "order placed"
-    let responseStatus = 200
+    let responseText = "order placed";
+    let responseStatus = 200;
     if (req.body.shippingMethod == "shiprocket") {
       const authToken = await generateShiprocketToken();
 
@@ -259,14 +263,14 @@ export const createOrder = async (req, res, next) => {
           }
         );
         if (shipingResponse.ok) {
-          console.log("shiping success");
           shipingResponse = await shipingResponse.json();
+          console.log("shiping success : ", shipingResponse);
           //update shiprocketId in order collection
           await order.updateOne(
             { userId: req.user._id },
             {
               $set: {
-                "orders.$[element].shipRocketOrderId": shipingResponse.id,
+                "orders.$[element].shipRocketOrderId": shipingResponse.order_id,
               },
             },
             { arrayFilters: [{ "element._id": newOrder._id }] }
@@ -280,11 +284,11 @@ export const createOrder = async (req, res, next) => {
             );
           }
           //send response to client
-          responseStatus = 200
-          responseText = "order placed successfully"
+          responseStatus = 200;
+          responseText = "order placed successfully";
         } else {
-          responseStatus = 500
-          responseText = "failed to ship order"
+          responseStatus = 500;
+          responseText = "failed to ship order";
           console.log("Failed to ship order : ", await shipingResponse.json());
         }
       } catch (err) {
@@ -292,7 +296,7 @@ export const createOrder = async (req, res, next) => {
       }
     }
 
-    res.status(responseStatus).send(responseText)
+    res.status(responseStatus).send(responseText);
   } catch (err) {
     next(err);
   }
@@ -344,18 +348,10 @@ export const getTrackingDetails = async (req, res, next) => {
       }
     );
     trackingDetails = await trackingDetails.json();
-    let trackingData;
-    if (trackingDetails.length > 0) {
-      trackingData = {
-        ...trackingDetails,
-        shipped: true,
-      };
-    } else {
-      trackingData = {
-        shipped: false,
-      };
-    }
-    console.log("Tracking datails : ", trackingDetails);
+
+    let trackingId = orderId + "";
+    let trackingData = trackingDetails[0][trackingId]["tracking_data"];
+
     res.status(200).json(trackingData);
   } catch (err) {
     next(err);
@@ -479,8 +475,7 @@ export const getBanners = async (req, res, next) => {
   try {
     const allBanners = await banner.find({});
     const currentBanner = allBanners[allBanners.length - 1];
-    console.log("allbanners : ", allBanners);
-    console.log("current banner : ", currentBanner);
+    
     res.status(200).json(currentBanner);
   } catch (err) {
     next(err);

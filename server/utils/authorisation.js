@@ -11,7 +11,6 @@ export const verifyAdmin = (req, res, next) => {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      console.log("ERROR : forbidden : ", err);
       return next(errorHandler(403, "Forbidden"));
     }
     if (req.params.adminId != user.id) {
@@ -26,7 +25,6 @@ export const verifyAdmin = (req, res, next) => {
 };
 
 export const verifyUser = (req, res, next) => {
-  console.log("req.params. ",req.params.userId)
   const token = req.cookies.enteBuddy_access_token;
 
   if (!token) {
@@ -37,7 +35,6 @@ export const verifyUser = (req, res, next) => {
         return next(errorHandler(403, "Forbidden"));
       }
       req.user = user.userInfo;
-      console.log("req.user. ",req.user._id)
       if (req.params.userId != req.user._id) {
         return next(
           errorHandler(401, "You are not authorised use this account.")
