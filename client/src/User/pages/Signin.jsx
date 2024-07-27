@@ -75,8 +75,9 @@ const App = () => {
   }
 
   async function userSignin() {
-    console.log("Mobile : ", ph);
     try {
+      console.log("Mobile : ", ph);
+      console.log("signing in....")
       const response = await fetch("/api/auth/userAuth", {
         method: "POST",
         headers: {

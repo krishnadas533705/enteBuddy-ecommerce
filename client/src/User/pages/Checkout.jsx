@@ -169,8 +169,8 @@ const Checkout = () => {
           } catch (err) {
             alert("payment failed");
           }
-        } else {
-          console.log("errro in shipping ");
+        } else{
+          alert("SERVER ERROR! TRY AGAIN.")
         }
       } else {
         // cash on delivery for shiprocket
@@ -350,11 +350,17 @@ const Checkout = () => {
                   alt="shiprocket"
                 />
                 <div className="ml-5">
-                  <span className="mt-2 font-semibold">
+                  <span className="mt-2 font-semibold uppercase">
                     Shiprocket Delivery
                   </span>
                   <p className="text-slate-500 text-sm leading-6">
                     Delivery: 2 to 4 Days
+                  </p>
+                  <p className="text-slate-500 text-sm leading-6">
+                    COD AND PREPAID
+                  </p>
+                  <p className="text-slate-500 text-sm leading-6">
+                    Home Delivery
                   </p>
                 </div>
               </label>
@@ -381,11 +387,17 @@ const Checkout = () => {
                   alt="shiprocket"
                 />
                 <div className="ml-5">
-                  <span className="mt-2 font-semibold">
-                    DTDC Courier Service
+                  <span className="mt-2 font-semibold uppercase">
+                    Collect from courier office
                   </span>
                   <p className="text-slate-500 text-sm leading-6">
                     Delivery: 1 to 2 Days
+                  </p>
+                  <p className="text-slate-500 text-sm leading-6">
+                    ONLY PREPAID AVAILABLE
+                  </p>
+                  <p className="text-slate-500 text-sm leading-6">
+                    You can collect parcel from nearby courier office DTDC,professional etc.
                   </p>
                 </div>
               </label>
@@ -439,7 +451,7 @@ const Checkout = () => {
                   className="font-medium peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4 text-black"
                   htmlFor="onlinePayment"
                 >
-                  Pay Now
+                  Prepaid
                 </label>
               </div>
             </div>
@@ -632,7 +644,7 @@ const Checkout = () => {
                     }
                   />
                 </div>
-                {console.log("isError : ", pinCodeError.error)}
+                
                 {pinCodeError.msg && (
                   <p
                     className={`text-center text-sm ${

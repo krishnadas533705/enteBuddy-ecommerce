@@ -19,8 +19,12 @@ export const addToCart = async (req, res, next) => {
       const productData = {
         _id: req.body._id,
         productName: req.body.title,
+        realPrice: req.body.price,
         price: req.body.price - discount,
       };
+      if (req.body.realPrice) {
+        productData.realPrice = req.body.realPrice;
+      }
       const userCart = await cart.findOne({ userId: req.user._id });
       if (userCart) {
         userCart.addProduct(productData);
@@ -65,14 +69,17 @@ export const getCartItems = async (req, res, next) => {
     const cartItems = await cart
       .findOne({ userId: req.user._id })
       .populate("items._id");
-    console.log("2", cartItems);
-    const cartProducts = cartItems.items.map((item) => ({
-      _id: item._id._id,
-      primaryImage: item._id.primaryImage,
-      productName: item.productName,
-      quantity: item.quantity,
-      price: item.price,
-    }));
+    let cartProducts = null;
+    if (cartItems) {
+      cartProducts = cartItems.items.map((item) => ({
+        _id: item._id._id,
+        primaryImage: item._id.primaryImage,
+        productName: item.productName,
+        quantity: item.quantity,
+        price: item.price,
+        realPrice: item.realPrice,
+      }));
+    }
     res.status(200).json(cartProducts);
   } catch (err) {
     next(err);
@@ -204,7 +211,6 @@ export const createOrder = async (req, res, next) => {
         }
       );
       if (channelId.ok) {
-
         const channelData = await channelId.json();
         channelId = channelData.data[0].id;
       }
@@ -290,7 +296,6 @@ export const createOrder = async (req, res, next) => {
 ///check courirer service availability
 export const checkPincode = async (req, res, next) => {
   try {
-    
     const authToken = await generateShiprocketToken();
     const pincode = req.params.pincode;
     const pickup = 680681;
@@ -361,7 +366,6 @@ export const checkCoupon = async (req, res, next) => {
         let endDate = new Date(couponStatus.endDate);
         let today = new Date(Date.now());
 
-        
         if (endDate > today && startDate <= today) {
           couponResponse = {
             isAvailable: true,
@@ -454,7 +458,7 @@ export const getBanners = async (req, res, next) => {
   try {
     const allBanners = await banner.find({});
     const currentBanner = allBanners[allBanners.length - 1];
-    
+
     res.status(200).json(currentBanner);
   } catch (err) {
     next(err);
@@ -488,7 +492,7 @@ const generateShiprocketToken = async () => {
         token: loginResponse.token,
         timeStamp: new Date(Date.now()),
       };
-    } 
+    }
 
     return shipRocketAuthToken.token;
   } catch (err) {

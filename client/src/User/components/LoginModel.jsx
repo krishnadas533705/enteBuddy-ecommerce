@@ -78,7 +78,6 @@
                   setTimer(60)
               })
               .catch((err) => {
-                  console.log(err);
                   setLoading(false);
                   toast.error("invalid phone number")
               });
@@ -94,16 +93,13 @@
           window.confirmationResult
               .confirm(otp)
               .then(async (res) => {
-                  console.log("firebase response : ", res);
                   setUser(res.user);
                   setLoading(false);
-                  console.log("phone number : ", ph);
                   if (res.user) {
                       await userSignin(); //call the user signin after otp verification
                   }
               })
               .catch((err) => {
-                  console.log(err);
                   setVerifyLoading(false);
                   setOtpError(true);
               });
@@ -116,14 +112,11 @@
                   headers: {
                       "content-type": "application/json",
                   },
-                  body: JSON.stringify({ value: ph }),
+                  body: JSON.stringify({ mobile: ph }),
               });
               if (response.ok) {
-                  console.log("log success");
                   const userData = await response.json();
-                  console.log(userData);
                   localStorage.setItem("enteBuddyUser", userData._id);
-                  console.log(localStorage.getItem("entebuddyUser"));
 
                   setUser(userData._id);
                   setUserId(userData._id);

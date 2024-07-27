@@ -14,7 +14,6 @@ const Orders = () => {
   useEffect(() => {
     (async () => {
       let allOrders = await fetchOrders();
-     
       let totalPages = Math.ceil(allOrders.length / 5);
       setTotalPages(totalPages);
       let page = parseInt(currentPage);

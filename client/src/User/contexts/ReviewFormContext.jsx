@@ -35,7 +35,6 @@
                 }
                 
             } catch(err){
-                console.log(err)
                 setError(err.message)
             }
             
@@ -61,7 +60,6 @@
         
             if(response.ok) { 
                 const addedReview = await response.json();
-                console.log("new review ",addedReview)
                 if (reviews) {
                     setReviews([...reviews,addedReview]);
                 }
@@ -73,7 +71,6 @@
                 throw new Error("failed to add review")
             } 
         }catch(err){
-            console.error(err)
             setError(err.message)  
         }
     }

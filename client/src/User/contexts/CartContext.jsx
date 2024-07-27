@@ -68,7 +68,6 @@ const CartProvider = ({ children }) => {
   //  add to cart
   const addToCart = async (product) => {
     try {
-      console.log(userId);
       const response = await fetch(`/api/user/addToCart/${userId}`, {
         method: "POST",
         headers: {

@@ -125,7 +125,7 @@ const Sidebar = () => {
         {cart == null ||
           cart == undefined ||
           cart == [] ||
-          cart.length == 0 && (
+          cart.length == 0 ? 
             <div className="flex justify-center items-center text-center h-1/2 px-4">
               <div>
                 <p className="font-mono uppercase font-semibold ">
@@ -142,7 +142,8 @@ const Sidebar = () => {
                 </Link>
               </div>
             </div>
-          )}
+            : ''
+          }
         {/* ////////// */}
         {/* this div is for displaying the cart items  */}
         <div className="flex flex-col h-1/2 lg:h-[400px] overflow-y-auto overflow-x-hidden border-b px-4">
