@@ -6,9 +6,7 @@ import jwt from "jsonwebtoken";
 export const userAuth = async (req, res, next) => {
   try {
     const mobile = req.body.mobile;
-    console.log("Mobile numer : ",mobile)
     const existingUser = await User.findOne({ mobile });
-    console.log("existing user found : ",existingUser)
     let userInfo;
     let newUser;
     if (existingUser) {

@@ -44,7 +44,7 @@ const OrderTracking = () => {
         </div>
         <div className="text-primary text-center text-lg font-poppins font-normal"></div>
       </header>
-      <div className="pt-0 md:pt-24 ">
+      <div className="pt-20 ">
         <div className=" flex h-full flex-col overflow-hidden rounded-2xl bg-white text-gray-600 shadow-lg ring-1 ring-gray-200 md:max-w-screen-md mx-auto ">
           {/* Products Section */}
           <div className="font-poppins text-center text-sm text-gray-400 border-b border-gray-200 py-8 ">
@@ -53,7 +53,7 @@ const OrderTracking = () => {
           {order.products &&
             order.products.map((product) => (
               <section
-                className="pt-12 md:pt-3 pb-1"
+                className="pt-6 md:pt-3 pb-1"
                 key={product._id._id + Math.random()}
               >
                 <div className="py-3 px-8 font-mono text-lg flex justify-between border-b border-gray-200">
@@ -77,7 +77,7 @@ const OrderTracking = () => {
 
           {/* Timeline Section */}
           <div className="flex flex-col-reverse md:flex-row justify-between md:me-36  px-4">
-            <div>
+            <div className="">
               {order.shippingMethod == "shiprocket" ? (
                 <ShiprocketTracking order={order} />
               ) : (
