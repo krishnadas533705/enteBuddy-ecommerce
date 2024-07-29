@@ -9,7 +9,7 @@ const DeleteProduct = ({
   productId,
   setFetchProduct,
 }) => {
-  const { adminId } = useContext(AdminContext);
+  const { adminId,logoutAdmin } = useContext(AdminContext);
 
   const handleDelete = async () => {
     try {
@@ -26,9 +26,11 @@ const DeleteProduct = ({
       );
 
       if (response.ok) {
-        console.log("product removed");
         setFetchProduct((pre) => !pre);
         showDeletePrompt(false);
+      } 
+      else if(response.status == 401 || response.status == 403){
+        logoutAdmin()
       }
     } catch (err) {
       console.log("product deleting error : ", err);

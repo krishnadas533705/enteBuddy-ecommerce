@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { IoMdArrowForward, IoMdTrash } from "react-icons/io";
+import { IoMdArrowBack, IoMdArrowForward, IoMdTrash } from "react-icons/io";
 import { CartContext } from "../contexts/CartContext";
 import CartItem from "./CartItem";
 import { FiTrash2 } from "react-icons/fi";
@@ -17,21 +17,21 @@ const Sidebar = () => {
     setDiscountPrice,
     discountPrice,
     setCouponId,
+    totalDiscount,
+    realTotalPrice,
   } = useContext(CartContext);
 
   const { userId } = useContext(userContext);
 
   const [isChecked, setIsChecked] = useState(false);
-  useEffect(() => { 
-    if(isOpen){
-    // Add class to body to disable scrolling
-    document.body.classList.add('overflow-hidden');
-    
+  useEffect(() => {
+    if (isOpen) {
+      // Add class to body to disable scrolling
+      document.body.classList.add("overflow-hidden");
     }
     // Clean up: Remove the class when the component unmounts
     return () => {
-      document.body.classList.remove('overflow-hidden'); 
-     
+      document.body.classList.remove("overflow-hidden");
     };
   }, [isOpen]);
 
@@ -43,9 +43,7 @@ const Sidebar = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponError, setCouponError] = useState(null);
   const applyCoupon = async () => {
-    console.log("Apply coupon function working...");
     if (couponCode) {
-      console.log("Coupon checking....");
       const response = await fetch(
         `/api/user/checkCoupon/${userId}/${couponCode}`,
         {
@@ -79,7 +77,7 @@ const Sidebar = () => {
           }
         } else {
           const discountPrice = (totalPrice * discount) / 100;
-          const newPrice = totalPrice - discountPrice
+          const newPrice = totalPrice - discountPrice;
           setDiscountPrice(newPrice);
           localStorage.setItem("enteBuddyCartPrice", newPrice);
         }
@@ -112,16 +110,39 @@ const Sidebar = () => {
         <div className="uppercase bg-yellow-400  flex justify-center p-1 font-medium">
           express and discreet delivery
         </div>
-        <div className="flex justify-between py-2 border-b-2 items-center border-b-gray-100 px-4">
-          <div className=" font-medium uppercase">My cart ({itemAmount})</div>
-
+        <div className="flex justify-between py-4 border-b-2 items-center border-b-gray-100 px-4">
           <div
             onClick={handleClose}
-            className="cursor-pointer w-8 h-8 flex justify-center items-center"
+            className="cursor-pointer flex  items-center"
           >
-            <IoMdArrowForward className="text-2xl" />
+            <IoMdArrowBack className="text-2xl" />
+            <span className="ms-2 font-medium">GO BACK</span>
           </div>
+
+          <div className=" font-medium uppercase">My cart ({itemAmount})</div>
         </div>
+        {/* empty cart */}
+        {cart == null || cart == undefined || cart == [] || cart.length == 0 ? (
+          <div className="flex justify-center items-center text-center h-1/2 px-4">
+            <div>
+              <p className="font-mono uppercase font-semibold ">
+                You shopping cart is empty.Browse our products and find
+                something you love!
+              </p>
+              <Link to={`/`}>
+                <button
+                  className="mt-2 border border- p-2 bg-[#5B4663] text-white w-full rounded-3xl ml-0 font-poppins hover:bg-primary hover:text-black"
+                  onClick={handleClose}
+                >
+                  Shop now
+                </button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+        {/* ////////// */}
         {/* this div is for displaying the cart items  */}
         <div className="flex flex-col h-1/2 lg:h-[400px] overflow-y-auto overflow-x-hidden border-b px-4">
           {cart &&
@@ -145,39 +166,60 @@ const Sidebar = () => {
 
                             </div> */}
         </div>
-      
         <div className="flex flex-cols h-60 mb-2 px-4 py-3 bg-[#faf9f6ca] overflow-y-auto">
-          <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}> 
-         
-          <input
-            type="text"
-            className="w-full border-black border rounded-full py-3 px-4 mt-2 mb-2"
-            placeholder="Your coupon code."
-            value={couponCode}
-            onChange={(e) => setCouponCode(e.target.value)}
-          />
-          <button
-            className={`w-full bg-hero2 bg-contain bg-tertiary px-4 text-white py-3 rounded-full  font-poppins  `}
-            onClick={applyCoupon}
-          >
-            Appply Coupon
-          </button>
-          {couponError && (
-            <p className={`text-center text-sm text-red-500`}>{couponError}</p>
-          )}
-        
+          <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}>
+            <input
+              type="text"
+              className="w-full border-black border rounded-full py-3 px-4 mt-2 mb-2"
+              placeholder="Your coupon code."
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+            />
+            <button
+              className={`w-full bg-hero2 bg-contain bg-tertiary px-4 text-white py-3 rounded-full  font-poppins  `}
+              onClick={applyCoupon}
+            >
+              Appply Coupon
+            </button>
+            {couponError && (
+              <p className={`text-center text-sm text-red-500`}>
+                {couponError}
+              </p>
+            )}
+
             {/* total */}
-            <div className="text-center underline text-sm font-poppins py-2 text-gray-500">
-              100 days warranty and discreet shipping{" "}
+            <div className="text-center text-sm font-poppins py-2 text-gray-500">
+              We provide discreet shipping for your privacy and security. Your
+              package will be securely packaged to ensure confidentiality.{" "}
             </div>
             <div>
+              <hr />
+
               <div className={`mt-5 ml-2 font-poppins flex justify-between`}>
                 <div>
                   <div className="font-medium">Mrp</div>
+                </div>
+
+                <div className="font-medium ">
+                  ₹{realTotalPrice}
+                </div>
+              </div>
+              <div className={`mt-4 ml-2 font-poppins flex justify-between`}>
+                <div>
+                  <div className="font-medium">You Save</div>
+                </div>
+
+                <div className="font-medium text-red-600">
+                  -₹{totalDiscount}
+                </div>
+              </div>
+              <div className={`mt-4 ml-2 font-poppins flex justify-between`}>
+                <div>
+                  <div className="font-medium">Total Price</div>
                   <span> (incl taxes ) </span>
                 </div>
 
-                <div className="font-medium">
+                <div className="font-medium text-xl">
                   ₹{discountPrice > 0 ? discountPrice : totalPrice}
                 </div>
               </div>
@@ -196,7 +238,7 @@ const Sidebar = () => {
                     id="termsCheckbox"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
-                    className="w-5 h-5 ml-6 my-5 "
+                    className="w-5 h-5 ml-6 my-5 bg-white"
                   />
                 </div>
 

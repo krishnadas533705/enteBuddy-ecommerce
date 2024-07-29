@@ -8,7 +8,7 @@ const AddBanner = ({ bannerForm, showBannerForm, setFetchBanners }) => {
   const [bannerData, setBannerData] = useState({});
   const [bannerError, setBannerError] = useState({});
 
-  const { adminId } = useContext(AdminContext);
+  const { adminId, logoutAdmin } = useContext(AdminContext);
   const handleBannerData = (e) => {
     const { name, value } = e.target;
     if (name == "bannerImage") {
@@ -38,21 +38,20 @@ const AddBanner = ({ bannerForm, showBannerForm, setFetchBanners }) => {
       formData.append("endDate", bannerData.endDate);
       formData.append("bannerImage", bannerData.bannerImage);
 
-      const response = await fetch(
-        `/api/admin/addBanner/${adminId}`,
-        {
-          method: "post",
-          body: formData,
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`/api/admin/addBanner/${adminId}`, {
+        method: "post",
+        body: formData,
+        credentials: "include",
+      });
 
       if (response.ok) {
         console.log("Banner added");
         setBannerData({});
         setImageUrl(null);
-        setFetchBanners((prev)=>!prev)
+        setFetchBanners((prev) => !prev);
         showBannerForm(false);
+      } else if (response.status == 401 || response.status == 403) {
+        logoutAdmin()
       } else {
         console.log("failed to add banner");
       }

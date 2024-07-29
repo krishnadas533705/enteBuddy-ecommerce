@@ -1,7 +1,7 @@
 export const makePayment = async (key, order, userId, orderDetails) => {
   return new Promise((resolve, reject) => {
     try {
-      console.log("order amount : ", order.amount);
+      
       var options = {
         key,
         amount: order.amount,

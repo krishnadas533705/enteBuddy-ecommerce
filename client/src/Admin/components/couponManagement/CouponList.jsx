@@ -1,17 +1,26 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import SideBar from "../SideBar.jsx";
 import Navbar from "../Navbar.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import CouponTable from "./CouponTable.jsx";
-
+import { useNavigate } from "react-router-dom";
+import AdminContext from "../../context/AdminContext.js";
+  
 const CouponList = () => {
+  const navigate = useNavigate()
+  const {adminId} = useContext(AdminContext)
+  useEffect(()=>{
+    if (!adminId) {
+      navigate("/admin/signin");
+    }
+  },[])
   return (
     <div className="">
       <Navbar />
       <SideBar />
 
-      <section className="">
+      <section className="bg-white">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <label

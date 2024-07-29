@@ -13,7 +13,6 @@ const Usertable = ({ users, searching }) => {
     if (users) {
       setTotalPages(Math.ceil(users.length / 5));
       setCurrentUsers(() => {
-        console.log("users in table : ", users);
         return users.reverse().slice((currentPage - 1) * 5, currentPage * 5);
       });
     }
@@ -24,12 +23,12 @@ const Usertable = ({ users, searching }) => {
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
-    localStorage.setItem("currentBannerPage", page);
+    localStorage.setItem("usersCurrentPage", page);
     const usersList = users.slice((page - 1) * 5, page * 5);
     setCurrentUsers(usersList);
   };
   return (
-    <div className="mt-7 lg:ms-64 px-2">
+    <div className="mt-7 lg:ms-64 px-2 bg-white">
       <div className="relative overflow-x-auto sm:rounded-lg md:flex justify-center">
         <table className="w-4/5 px-3 text-xs md:text-sm shadow-md text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase">
@@ -43,12 +42,12 @@ const Usertable = ({ users, searching }) => {
               <th scope="col" className="px-6 py-3">
                 Mobile
               </th>
-              <th
+              {/* <th
                 scope="col"
                 className="px-6 bg-gray-50 py-3   "
               >
                 Email
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody>
@@ -64,9 +63,9 @@ const Usertable = ({ users, searching }) => {
                   <td className="px-6 py-4 ">
                     {user.mobile ? user.mobile : ""}
                   </td>
-                  <td className="px-6 py-4 bg-gray-50 ">
+                  {/* <td className="px-6 py-4 bg-gray-50 ">
                     {user.email ? user.email : ""}
-                  </td>
+                  </td> */}
                 </tr>
               ))}
           </tbody>

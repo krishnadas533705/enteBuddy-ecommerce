@@ -27,6 +27,9 @@ const CartProvider = ({ children }) => {
   }, []);
   const [itemAmount, setItemAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalDiscount,setTotalDiscount] = useState(0)
+  const [realTotalPrice,setRealTotalPrice] = useState(0)
+  
 
   // setting the total price in the cart
   useEffect(() => {
@@ -34,7 +37,14 @@ const CartProvider = ({ children }) => {
       const amount = cart.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.price * currentItem.quantity;
       }, 0);
+
       setTotalPrice(amount);
+      const realPriceTotal = cart.reduce((accumulator, currentItem) => {
+        return accumulator + currentItem.realPrice * currentItem.quantity;
+      }, 0);
+      setRealTotalPrice(realPriceTotal)
+      let total_discount = (realPriceTotal - amount) + parseInt(discountPrice)
+      setTotalDiscount(total_discount)
     }
   }, [cart]);
 
@@ -46,9 +56,7 @@ const CartProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        console.log("Response : ", response);
         const cartData = await response.json();
-        console.log("cartData : ", cartData);
         const localCart = JSON.stringify(cartData);
         localStorage.setItem("enteBuddyCart", localCart);
         setCart(cartData);
@@ -57,8 +65,10 @@ const CartProvider = ({ children }) => {
         localStorage.setItem("enteBuddyCouponId", "");
         setCouponId("");
         setCart(cartData);
-      } else {
-        console.log("failed to update cart");
+      } else if (response.status == 401 || response.status == 403) {
+        alert("Your session has been expired, Please login again.");
+        localStorage.clear();
+        window.location.href = "/";
       }
       return;
     } catch (err) {
@@ -68,7 +78,6 @@ const CartProvider = ({ children }) => {
   //  add to cart
   const addToCart = async (product) => {
     try {
-      console.log(userId);
       const response = await fetch(`/api/user/addToCart/${userId}`, {
         method: "POST",
         headers: {
@@ -78,12 +87,13 @@ const CartProvider = ({ children }) => {
         credentials: "include",
       });
       if (response.ok) {
-        console.log("Cart updated");
         toast.success("product added to cart");
 
         fetchCart(userId);
-      } else {
-        console.log("failed to update cart");
+      } else if (response.status == 401 || response.status == 403) {
+        alert("Your session has been expired, Please login again.");
+        localStorage.clear();
+        window.location.href = "/";
       }
     } catch (err) {
       console.log("error in adding to cart : ", err);
@@ -98,8 +108,10 @@ const CartProvider = ({ children }) => {
       });
       if (response.ok) {
         fetchCart(userId);
-      } else {
-        console.log("cart update failed");
+      } else if (response.status == 401 || response.status == 403) {
+        alert("Your session has been expired, Please login again.");
+        localStorage.clear();
+        window.location.href = "/";
       }
     } catch (err) {
       console.log(err);
@@ -108,15 +120,16 @@ const CartProvider = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      console.log("clearing cart...");
       const response = await fetch(`/api/user/removeAllFromCart/${userId}`, {
         method: "delete",
         credentials: "include",
       });
       if (response.ok) {
         fetchCart(userId);
-      } else {
-        console.log("cart update failed");
+      } else if (response.status == 401 || response.status == 403) {
+        alert("Your session has been expired, Please login again.");
+        localStorage.clear();
+        window.location.href = "/";
       }
     } catch (err) {
       console.log(err);
@@ -145,14 +158,15 @@ const CartProvider = ({ children }) => {
           credentials: "include",
         });
         if (response.ok) {
-          console.log("Cart updated");
           const cartItem = cart.find((item) => {
             return item.id === id;
           });
 
           fetchCart(userId);
-        } else {
-          console.log("failed to update cart");
+        } else if (response.status == 401 || response.status == 403) {
+          alert("Your session has been expired, Please login again.");
+          localStorage.clear();
+          window.location.href = "/";
         }
       }
     } catch (err) {
@@ -168,8 +182,7 @@ const CartProvider = ({ children }) => {
       }, 0);
       setItemAmount(amount);
     }
-
-  }, [cart]); 
+  }, [cart]);
 
   const handleCart = () => {
     if (userId) {
@@ -196,7 +209,11 @@ const CartProvider = ({ children }) => {
         handleCart,
         discountPrice,
         setDiscountPrice,
-        setCouponId
+        setCouponId,
+        totalDiscount,
+        setTotalDiscount,
+        realTotalPrice,
+        setRealTotalPrice
       }}
     >
       {children}

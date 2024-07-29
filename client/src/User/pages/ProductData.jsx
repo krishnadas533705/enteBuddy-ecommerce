@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react';
-import { ProductContext } from '../contexts/ProductContext';
-import { CartContext } from '../contexts/CartContext';
-import { Link, useParams } from 'react-router-dom';
-import { SidebarContext } from '../contexts/SidebarContext';
-import Rating from '../components/Rating';
-import RatingBar from '../components/RatingBar';
-import Reviews from '../components/Reviews';
-import ReviewFormProvider from '../contexts/ReviewFormContext';
-import Shimmer from '../components/Shimmer';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css/pagination';
-import 'swiper/css';
-import 'swiper/css/navigation';
+import React, { useContext, useState } from "react";
+import { ProductContext } from "../contexts/ProductContext";
+import { CartContext } from "../contexts/CartContext";
+import { Link, useParams } from "react-router-dom";
+import { SidebarContext } from "../contexts/SidebarContext";
+import Rating from "../components/Rating";
+import RatingBar from "../components/RatingBar";
+import Reviews from "../components/Reviews";
+import ReviewFormProvider from "../contexts/ReviewFormContext";
+import Shimmer from "../components/Shimmer";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css/pagination";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const ProductData = () => {
   const { id } = useParams();
@@ -20,7 +20,7 @@ const ProductData = () => {
   const { addToCart, handleCart } = useContext(CartContext);
   const { setIsOpen, isOpen } = useContext(SidebarContext);
   const [revCount, setRevCount] = useState(0);
-  const API = import.meta.env.VITE_API_URL
+  const API = import.meta.env.VITE_API_URL;
   const product = products.find((item) => {
     return item._id === id;
   });
@@ -38,9 +38,9 @@ const ProductData = () => {
     category,
     discount,
     secondaryImages,
+    productFeatures,
+    serviceFeatures,
   } = product;
-
-  console.log(product);
 
   return (
     <div>
@@ -56,7 +56,7 @@ const ProductData = () => {
             {[primaryImage, ...secondaryImages].map((image) => (
               <SwiperSlide key={image.name}>
                 <img
-                  src={API + image.path.split('server')[1]}
+                  src={API + image.path.split("server")[1]}
                   className="object-fit w-full"
                   alt="img"
                 />
@@ -75,6 +75,21 @@ const ProductData = () => {
           <div className="py-1 font-medium font-poppins text-sm md:text-[16px]">
             {description}
           </div>
+          <div className="py-1 font-poppins text-sm md:text-[16px] flex mt-3 mb-1 ">
+            {productFeatures &&
+              productFeatures.map((feature) => (
+                <div className="flex flex-col items-center" key={feature._id}>
+                  <img
+                    src={API + feature.icon.split("server")[1]}
+                    alt=""
+                    className="h-10 w-10 rounded-full"
+                  />
+                  <div className="text-xs flex text-center mt-2">
+                    <h1 className="w-20">{feature.description}</h1>
+                  </div>
+                </div>
+              ))}
+          </div>
           <div className="review flex  items-center my-2 ">
             <div className="rating">
               <Rating />
@@ -84,7 +99,7 @@ const ProductData = () => {
             </div>
           </div>
           {/*  icons are added here */}
-          <div className=" w-full flex justify-between items-center my-5">
+          <div className=" w-full flex justify-between items-center my-5 border-b-2">
             <div className="flex justify-center place-items-center">
               <div className="text-black text-2xl font-semibold">
                 ₹ {Math.floor(price - (discount / 100) * price)}
@@ -107,16 +122,37 @@ const ProductData = () => {
               handleCart();
               addToCart(product, id);
             }}
-            className="bg-primary text-black font-bold font-poppins p-2  w-52 flex items-center justify-center  mx-auto  rounded-full text-lg "
+            className=" bg-blue-950 text-white hover:bg-primary hover:text-black focus:bg-primary focus:text-black font-medium font-poppins p-2  w-52 flex items-center justify-center  mx-auto  rounded-full text-lg "
           >
             Add to cart
           </button>
+
+          <div className="pb-1 pt-4 font-poppins text-sm md:text-[16px] mt-5 mb-1 grid grid-cols-2 gap-4 w-full border-t-2 ">
+            {serviceFeatures &&
+              serviceFeatures.map((feature) => (
+                <div
+                  className="flex items-center justify-around"
+                  key={feature._id}
+                >
+                  <div className="flex">
+                    <img
+                      src={API + feature.icon.split("server")[1]}
+                      alt=""
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <div className="text-xs flex text-center mt-2">
+                      <h1 className="w-20">{feature.description}</h1>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
 
           <div className="fixed bottom-0 bg-blue-950 text-white justify-evenly p-4 w-full left-0 flex z-10">
             <div className="w-6/12 flex items-center ">
               <div className="max-w-[45px] rounded-full">
                 <img
-                  src={API + primaryImage.path.split('server')[1]}
+                  src={API + primaryImage.path.split("server")[1]}
                   alt="img w-full rounded-full"
                 />
               </div>
@@ -130,7 +166,7 @@ const ProductData = () => {
                 handleCart();
                 addToCart(product, id);
               }}
-              className="w-6/12 md:w-3/12  bg-yellow-300 text-black p-2 rounded-full text-lg font-medium flex items-center justify-center"
+              className="w-6/12 md:w-3/12  bg-primary text-black font-medium font-poppins p-2 rounded-full text-lg flex items-center justify-center"
             >
               Add to cart
             </div>

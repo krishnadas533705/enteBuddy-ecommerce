@@ -32,7 +32,7 @@ const AddCoupon = ({ couponForm, showCouponForm, setFetchCoupons }) => {
   };
 
   const [couponError, setCouponError] = useState({});
-  const { adminId } = useContext(AdminContext);
+  const { adminId, logoutAdmin } = useContext(AdminContext);
   const handleSubmit = async () => {
     const err = validateCoupon(couponData, setCouponError);
     if (!err) {
@@ -54,7 +54,11 @@ const AddCoupon = ({ couponForm, showCouponForm, setFetchCoupons }) => {
         setCouponData({});
         setCouponError({});
         setFetchCoupons((prev)=>!prev)
-      } else {
+      }
+      else if(response.status == 401 || response.status == 403){
+        logoutAdmin()
+      }
+       else {
         alert("Failed to add coupon");
         setCouponError({});
       }

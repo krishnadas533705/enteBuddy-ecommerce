@@ -5,13 +5,11 @@ export const verifyAdmin = (req, res, next) => {
   const token = req.cookies.admin_token;
 
   if (!token) {
-    console.log("no token")
     return next(errorHandler(401, "Unauthorised"));
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      console.log("ERROR : forbidden : ", err);
       return next(errorHandler(403, "Forbidden"));
     }
     if (req.params.adminId != user.id) {

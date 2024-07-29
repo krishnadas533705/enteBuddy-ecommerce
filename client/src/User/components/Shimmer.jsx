@@ -11,12 +11,7 @@ const Shimmer = () => {
             <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
             <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
             <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
-            <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
-            <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
-            <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
-            <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
-            <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
-            <div className='h-[400px] bg-gray-200 gap-x-3 gap-y-3 mt-2 rounded-2xl'></div>
+            
            
         
         </div>

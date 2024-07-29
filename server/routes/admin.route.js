@@ -8,16 +8,20 @@ import {
   deleteBanner,
   deleteCoupon,
   deleteProduct,
+  fetchAllOrders,
+  fetchIcons,
   getBanners,
   getCoupons,
   getProduct,
   getUserDetails,
   updateBanner,
   updateCoupon,
+  updateOrderStatus,
   updateProduct,
+  uploadIcons,
   uploadProduct,
 } from "../controllers/admin.controller.js";
-import { bannerImageUpload, imageUpload } from "../utils/fileUpload.js";
+import { addIcons, bannerImageUpload, imageUpload } from "../utils/fileUpload.js";
 import { verifyAdmin } from "../utils/authorisation.js";
 const router = Router();
 
@@ -25,6 +29,12 @@ router.post("/signin", adminSignin);
 
 //add new product
 router.post("/addProduct/:adminId", verifyAdmin, imageUpload, uploadProduct);
+
+//add icons
+router.post("/addIcons/:adminId",verifyAdmin,addIcons,uploadIcons)
+
+//fetch all icons
+router.get("/fetchIcons/:adminId",verifyAdmin,fetchIcons)
 
 //get all products from database
 router.get("/getProducts/:adminId", verifyAdmin, getProduct);
@@ -74,6 +84,10 @@ router.delete("/deleteCoupon/:adminId/:couponId", verifyAdmin, deleteCoupon);
 //dashboard
 router.get('/dashBoardData/:adminId',verifyAdmin,dashboardData)
 
+// fetch all dtdc orders
+router.get('/fetchOrderDetails/:adminId',verifyAdmin,fetchAllOrders)
+
+router.put('/updateOrderStatus/:adminId',verifyAdmin,updateOrderStatus)
 
 ///logout
 router.post("/signout/:adminId", verifyAdmin, adminLogout);
