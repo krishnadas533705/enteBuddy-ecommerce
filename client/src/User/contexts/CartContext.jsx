@@ -27,6 +27,9 @@ const CartProvider = ({ children }) => {
   }, []);
   const [itemAmount, setItemAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalDiscount,setTotalDiscount] = useState(0)
+  const [realTotalPrice,setRealTotalPrice] = useState(0)
+  
 
   // setting the total price in the cart
   useEffect(() => {
@@ -34,7 +37,14 @@ const CartProvider = ({ children }) => {
       const amount = cart.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.price * currentItem.quantity;
       }, 0);
+
       setTotalPrice(amount);
+      const realPriceTotal = cart.reduce((accumulator, currentItem) => {
+        return accumulator + currentItem.realPrice * currentItem.quantity;
+      }, 0);
+      setRealTotalPrice(realPriceTotal)
+      let total_discount = (realPriceTotal - amount) + parseInt(discountPrice)
+      setTotalDiscount(total_discount)
     }
   }, [cart]);
 
@@ -200,6 +210,10 @@ const CartProvider = ({ children }) => {
         discountPrice,
         setDiscountPrice,
         setCouponId,
+        totalDiscount,
+        setTotalDiscount,
+        realTotalPrice,
+        setRealTotalPrice
       }}
     >
       {children}

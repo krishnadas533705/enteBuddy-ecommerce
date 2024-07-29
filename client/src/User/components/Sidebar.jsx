@@ -17,6 +17,8 @@ const Sidebar = () => {
     setDiscountPrice,
     discountPrice,
     setCouponId,
+    totalDiscount,
+    realTotalPrice,
   } = useContext(CartContext);
 
   const { userId } = useContext(userContext);
@@ -41,9 +43,7 @@ const Sidebar = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponError, setCouponError] = useState(null);
   const applyCoupon = async () => {
-    
     if (couponCode) {
-     
       const response = await fetch(
         `/api/user/checkCoupon/${userId}/${couponCode}`,
         {
@@ -122,28 +122,26 @@ const Sidebar = () => {
           <div className=" font-medium uppercase">My cart ({itemAmount})</div>
         </div>
         {/* empty cart */}
-        {cart == null ||
-          cart == undefined ||
-          cart == [] ||
-          cart.length == 0 ? 
-            <div className="flex justify-center items-center text-center h-1/2 px-4">
-              <div>
-                <p className="font-mono uppercase font-semibold ">
-                  You shopping cart is empty.Browse our products and find
-                  something you love!
-                </p>
-                <Link to={`/`}>
-                  <button
-                    className="mt-2 border border- p-2 bg-[#5B4663] text-white w-full rounded-3xl ml-0 font-poppins hover:bg-primary hover:text-black"
-                    onClick={handleClose}
-                  >
-                    Shop now
-                  </button>
-                </Link>
-              </div>
+        {cart == null || cart == undefined || cart == [] || cart.length == 0 ? (
+          <div className="flex justify-center items-center text-center h-1/2 px-4">
+            <div>
+              <p className="font-mono uppercase font-semibold ">
+                You shopping cart is empty.Browse our products and find
+                something you love!
+              </p>
+              <Link to={`/`}>
+                <button
+                  className="mt-2 border border- p-2 bg-[#5B4663] text-white w-full rounded-3xl ml-0 font-poppins hover:bg-primary hover:text-black"
+                  onClick={handleClose}
+                >
+                  Shop now
+                </button>
+              </Link>
             </div>
-            : ''
-          }
+          </div>
+        ) : (
+          ""
+        )}
         {/* ////////// */}
         {/* this div is for displaying the cart items  */}
         <div className="flex flex-col h-1/2 lg:h-[400px] overflow-y-auto overflow-x-hidden border-b px-4">
@@ -190,17 +188,38 @@ const Sidebar = () => {
             )}
 
             {/* total */}
-            <div className="text-center underline text-sm font-poppins py-2 text-gray-500">
-              100 days warranty and discreet shipping{" "}
+            <div className="text-center text-sm font-poppins py-2 text-gray-500">
+              We provide discreet shipping for your privacy and security. Your
+              package will be securely packaged to ensure confidentiality.{" "}
             </div>
             <div>
+              <hr />
+
               <div className={`mt-5 ml-2 font-poppins flex justify-between`}>
                 <div>
                   <div className="font-medium">Mrp</div>
+                </div>
+
+                <div className="font-medium ">
+                  ₹{realTotalPrice}
+                </div>
+              </div>
+              <div className={`mt-4 ml-2 font-poppins flex justify-between`}>
+                <div>
+                  <div className="font-medium">You Save</div>
+                </div>
+
+                <div className="font-medium text-red-600">
+                  -₹{totalDiscount}
+                </div>
+              </div>
+              <div className={`mt-4 ml-2 font-poppins flex justify-between`}>
+                <div>
+                  <div className="font-medium">Total Price</div>
                   <span> (incl taxes ) </span>
                 </div>
 
-                <div className="font-medium">
+                <div className="font-medium text-xl">
                   ₹{discountPrice > 0 ? discountPrice : totalPrice}
                 </div>
               </div>
@@ -219,7 +238,7 @@ const Sidebar = () => {
                     id="termsCheckbox"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
-                    className="w-5 h-5 ml-6 my-5 "
+                    className="w-5 h-5 ml-6 my-5 bg-white"
                   />
                 </div>
 

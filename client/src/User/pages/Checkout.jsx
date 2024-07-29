@@ -28,7 +28,15 @@ import { toast, Toaster } from "react-hot-toast";
 import { SidebarContext } from "../contexts/SidebarContext";
 
 const Checkout = () => {
-  const { cart, totalPrice, couponId, discountPrice } = useContext(CartContext);
+  const {
+    cart,
+    totalPrice,
+    couponId,
+    discountPrice,
+    totalDiscount,
+    realTotalPrice,
+  } = useContext(CartContext);
+
   const [stateid, setstateid] = useState(0);
   const [cityid, setcityid] = useState(0);
   const [nameError, setNameError] = useState(null);
@@ -61,7 +69,7 @@ const Checkout = () => {
   const { userId } = useContext(userContext);
 
   useEffect(() => {
-    if (userId == null || userId == undefined || userId == 'null') {
+    if (userId == null || userId == undefined || userId == "null") {
       navigate("/");
     }
   }, []);
@@ -73,7 +81,7 @@ const Checkout = () => {
   }, [cart]);
 
   const handleOrderDetails = (name, value) => {
-   
+    console.log("name : ",name," ", " value :" , value)
     setOrderDetails((prev) => ({
       ...prev,
       [name]: value,
@@ -82,10 +90,9 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Perform validation
     if (!validateName(orderDetails.name)) {
-      
       setNameError("Please enter your name");
     } else {
       setNameError("");
@@ -137,7 +144,7 @@ const Checkout = () => {
       paymentError == false
     ) {
       // Form submission logic here
-      
+
       if (
         (orderDetails.shippingMethod == "shiprocket" &&
           orderDetails.paymentMethod == "Prepaid") ||
@@ -169,8 +176,8 @@ const Checkout = () => {
           } catch (err) {
             alert("payment failed");
           }
-        } else{
-          alert("SERVER ERROR! TRY AGAIN.")
+        } else {
+          alert("SERVER ERROR! TRY AGAIN.");
         }
       } else {
         // cash on delivery for shiprocket
@@ -318,8 +325,222 @@ const Checkout = () => {
               ))}
           </div>
 
+          {/* ///// */}
+          <form className="mt-5 grid gap-6 bg-gray-50">
+            <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
+              <p className="text-lg font-medium">Payment Details</p>
+              <p className="text-gray-400">
+                Complete your order by providing your payment details.
+              </p>
+
+              <div className=" main div">
+                <label
+                  htmlFor="email"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                >
+                  Name
+                </label>
+                <div className="">
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={orderDetails.name}
+                    className={`w-full rounded-md border ${
+                      nameError ? "border-red-500" : "border-gray-200"
+                    }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
+                    placeholder="your name"
+                    required={true}
+                    onChange={(e) =>
+                      handleOrderDetails(e.target.name, e.target.value)
+                    }
+                    onBlur={() => {
+                      if (!validateName(orderDetails.name)) {
+                        setNameError("Please provide your name");
+                      } else {
+                        setNameError(null);
+                      }
+                    }}
+                  />
+                </div>
+                {nameError && (
+                  <p className="text-red-500  text-center my-1">{nameError}</p>
+                )}
+                <label
+                  htmlFor="email"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                >
+                  Email
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    className={`w-full rounded-md border ${
+                      emailError ? "border-red-500" : "border-gray-200   "
+                    } px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
+                    placeholder="Your.email@gmail.com"
+                    value={orderDetails.email}
+                    required
+                    onChange={(e) =>
+                      handleOrderDetails(e.target.name, e.target.value)
+                    }
+                    onBlur={() => {
+                      if (!validateEmail(orderDetails.email)) {
+                        setEmailError("Please provide a valid email address");
+                      } else {
+                        setEmailError("");
+                      }
+                    }}
+                  />
+
+                  <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                {emailError && (
+                  <p className="text-red-500 text-center">{emailError}</p>
+                )}
+                <label
+                  htmlFor="phone number"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                >
+                  Phone number
+                </label>
+                <div className="">
+                  <input
+                    type="text"
+                    id="phonenumber"
+                    name="mobile"
+                    value={orderDetails.mobile}
+                    className={`w-full rounded-md border ${
+                      phoneNumberError ? "border-red-500" : "border-gray-200"
+                    }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
+                    placeholder="Your phone number"
+                    required
+                    onChange={(e) =>
+                      handleOrderDetails(e.target.name, e.target.value)
+                    }
+                    onBlur={() => {
+                      if (!validatePhoneNumber(orderDetails.mobile)) {
+                        setPhoneNumberError(
+                          "Please enter a valid Phone number"
+                        );
+                      } else {
+                        setPhoneNumberError("");
+                      }
+                    }}
+                  />
+                </div>
+                {phoneNumberError && (
+                  <p className="text-red-500  text-center">
+                    {phoneNumberError}
+                  </p>
+                )}
+                <label
+                  htmlFor="billing-address"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                >
+                  Billing Address
+                </label>
+                <div className="">
+                  <div className="relative flex-shrink-0 sm:w-7/12 ">
+                    <input
+                      type="text"
+                      id="billing-address"
+                      name="billing_address"
+                      value={orderDetails.billing_address}
+                      className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      placeholder="Street Address"
+                      required
+                      onChange={(e) =>
+                        handleOrderDetails(e.target.name, e.target.value)
+                      }
+                    />
+                    <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                      <img
+                        className="h-4 w-4 object-contain"
+                        src={flag}
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                  <div className="font-medium font-poppins text-sm my-2 ">
+                    <h6 className="mb-2">State</h6>
+                    <StateSelect
+                      countryid={101}
+                      onChange={(e) => {
+                        setstateid(e.id);
+                        handleOrderDetails("state", e.name);
+                      }}
+                      placeHolder="Select State"
+                      required
+                    />
+                  </div>
+
+                  <div className="font-poppins text-sm font-medium my-2">
+                    <div></div>
+                    <h2 className="mb-2">City</h2>
+                    <CitySelect
+                      countryid={101}
+                      stateid={stateid}
+                      onChange={(e) => {
+                        setcityid(e.id);
+                        handleOrderDetails("city", e.name);
+                      }}
+                      placeHolder="Select city"
+                      required
+                    />
+
+                    <input
+                      type="text"
+                      name="pincode"
+                      value={orderDetails.pincode}
+                      className="flex-shrink-0 w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      placeholder="Pin code"
+                      onChange={(e) => {
+                        handleOrderDetails(e.target.name, e.target.value);
+                      }}
+                      onInput={(e) =>
+                        validatePinCode(e.target.value, setPinCodeError, userId)
+                      }
+                    />
+                  </div>
+
+                  {pinCodeError.msg && (
+                    <p
+                      className={`text-center text-sm ${
+                        !pinCodeError.error ? "text-green-500" : "text-red-500"
+                      }`}
+                    >
+                      {pinCodeError.msg}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        {/*  */}
+        {/* shipping method */}
+        <div className="p-7">
           <p className="mt-8 text-lg font-medium">Shipping Methods</p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 mb-10">
             Choose any one of the shipping methods.
           </p>
           {shipMethodError && (
@@ -397,12 +618,14 @@ const Checkout = () => {
                     ONLY PREPAID AVAILABLE
                   </p>
                   <p className="text-slate-500 text-sm leading-6">
-                    You can collect parcel from nearby courier office DTDC,professional etc.
+                    You can collect parcel from nearby courier office
+                    DTDC,professional etc.
                   </p>
                 </div>
               </label>
             </div>
           </form>
+          {/*  */}
           {/* payment method */}
           {orderDetails.shippingMethod == "shiprocket" && (
             <div className="mt-8">
@@ -410,6 +633,7 @@ const Checkout = () => {
               <p className="text-sm text-gray-600">
                 Choose payment method for shiprocket delivery.
               </p>
+
               {paymentError && (
                 <p className="text-red-500  my-1">
                   Select payment method before placing the order.
@@ -447,233 +671,47 @@ const Checkout = () => {
                   }
                 />
                 <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
-                <label
-                  className="font-medium peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4 text-black"
-                  htmlFor="onlinePayment"
-                >
-                  Prepaid
-                </label>
+                <div className="border p-4 border-gray-300 rounded-lg peer-checked:border-gray-700 text-black font-medium peer-checked:border-2">
+                  <label
+                    className="font-medium   flex peer-checked:bg-gray-50 cursor-pointer select-none"
+                    htmlFor="onlinePayment"
+                  >
+                    Prepaid
+                  </label>
+                  <p className="text-xs font-medium text-gray-600">
+                    UPI, Debit card, Credit card, Net Banking etc.
+                  </p>
+                </div>
               </div>
             </div>
           )}
-          {/* ///// */}
-        </div>
-        <form className="mt-5 grid gap-6 bg-gray-50">
-          <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-            <p className="text-lg font-medium">Payment Details</p>
-            <p className="text-gray-400">
-              Complete your order by providing your payment details.
-            </p>
 
-            <div className=" main div">
-              <label
-                htmlFor="email"
-                className="mt-4 mb-2 block text-sm font-medium font-poppins"
-              >
-                Name
-              </label>
-              <div className="">
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={orderDetails.name}
-                  className={`w-full rounded-md border ${
-                    nameError ? "border-red-500" : "border-gray-200"
-                  }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
-                  placeholder="your name"
-                  required={true}
-                  onChange={(e) =>
-                    handleOrderDetails(e.target.name, e.target.value)
-                  }
-                  onBlur={() => {
-                    if (!validateName(orderDetails.name)) {
-                      setNameError("Please provide your name");
-                    } else {
-                      setNameError(null);
-                    }
-                  }}
-                />
-              </div>
-              {nameError && (
-                <p className="text-red-500  text-center my-1">{nameError}</p>
-              )}
-              <label
-                htmlFor="email"
-                className="mt-4 mb-2 block text-sm font-medium font-poppins"
-              >
-                Email
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  className={`w-full rounded-md border ${
-                    emailError ? "border-red-500" : "border-gray-200   "
-                  } px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
-                  placeholder="Your.email@gmail.com"
-                  value={orderDetails.email}
-                  required
-                  onChange={(e) =>
-                    handleOrderDetails(e.target.name, e.target.value)
-                  }
-                  onBlur={() => {
-                    if (!validateEmail(orderDetails.email)) {
-                      setEmailError("Please provide a valid email address");
-                    } else {
-                      setEmailError("");
-                    }
-                  }}
-                />
+          {/* <!-- Total --> */}
 
-                <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                    />
-                  </svg>
-                </div>
-              </div>
-              {emailError && (
-                <p className="text-red-500 text-center">{emailError}</p>
-              )}
-              <label
-                htmlFor="phone number"
-                className="mt-4 mb-2 block text-sm font-medium font-poppins"
-              >
-                Phone number
-              </label>
-              <div className="">
-                <input
-                  type="text"
-                  id="phonenumber"
-                  name="mobile"
-                  value={orderDetails.mobile}
-                  className={`w-full rounded-md border ${
-                    phoneNumberError ? "border-red-500" : "border-gray-200"
-                  }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
-                  placeholder="Your phone number"
-                  required
-                  onChange={(e) =>
-                    handleOrderDetails(e.target.name, e.target.value)
-                  }
-                  onBlur={() => {
-                    if (!validatePhoneNumber(orderDetails.mobile)) {
-                      setPhoneNumberError("Please enter a valid Phone number");
-                    } else {
-                      setPhoneNumberError("");
-                    }
-                  }}
-                />
-              </div>
-              {phoneNumberError && (
-                <p className="text-red-500  text-center">{phoneNumberError}</p>
-              )}
-              <label
-                htmlFor="billing-address"
-                className="mt-4 mb-2 block text-sm font-medium font-poppins"
-              >
-                Billing Address
-              </label>
-              <div className="">
-                <div className="relative flex-shrink-0 sm:w-7/12 ">
-                  <input
-                    type="text"
-                    id="billing-address"
-                    name="billing_address"
-                    value={orderDetails.billing_address}
-                    className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Street Address"
-                    required
-                    onChange={(e) =>
-                      handleOrderDetails(e.target.name, e.target.value)
-                    }
-                  />
-                  <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                    <img className="h-4 w-4 object-contain" src={flag} alt="" />
-                  </div>
-                </div>
-                <div className="font-medium font-poppins text-sm my-2 ">
-                  <h6 className="mb-2">State</h6>
-                  <StateSelect
-                    countryid={101}
-                    onChange={(e) => {
-                      setstateid(e.id);
-                      handleOrderDetails("state", e.name);
-                    }}
-                    placeHolder="Select State"
-                    required
-                  />
-                </div>
-
-                <div className="font-poppins text-sm font-medium my-2">
-                  <div></div>
-                  <h2 className="mb-2">City</h2>
-                  <CitySelect
-                    countryid={101}
-                    stateid={stateid}
-                    onChange={(e) => {
-                      setcityid(e.id);
-                      handleOrderDetails("city", e.name);
-                    }}
-                    placeHolder="Select city"
-                    required
-                  />
-
-                  <input
-                    type="text"
-                    name="pincode"
-                    value={orderDetails.pincode}
-                    className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Pin code"
-                    onChange={(e) => {
-                      handleOrderDetails(e.target.name, e.target.value);
-                    }}
-                    onInput={(e) =>
-                      validatePinCode(e.target.value, setPinCodeError, userId)
-                    }
-                  />
-                </div>
-                
-                {pinCodeError.msg && (
-                  <p
-                    className={`text-center text-sm ${
-                      !pinCodeError.error ? "text-green-500" : "text-red-500"
-                    }`}
-                  >
-                    {pinCodeError.msg}
-                  </p>
-                )}
-              </div>
-
-              {/* <!-- Total --> */}
-
-              <div className="mt-6 flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900">Total</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  ₹{discountPrice > 0 ? discountPrice : totalPrice}
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
-            >
-              Place Order
-            </button>
+          <div className="mt-10 flex items-center justify-between">
+            <p className="text-sm font-medium text-gray-900">Total Price</p>
+            <p className="font-semibold text-gray-900">₹ {realTotalPrice}</p>
           </div>
-        </form>
+          <div className="mt-3 flex items-center justify-between">
+            <p className="text-sm font-medium text-gray-900">You Save</p>
+            <p className="font-semibold text-red-600">- ₹ {totalDiscount}</p>
+          </div>
+          <div className="mt-3 flex items-center justify-between">
+            <p className="text-sm font-medium text-gray-900">
+              Total Amount Due
+            </p>
+            <p className="text-2xl font-semibold text-gray-900">
+              ₹{discountPrice > 0 ? discountPrice : totalPrice}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+          >
+            Place Order
+          </button>
+        </div>
       </div>
     </div>
   );
