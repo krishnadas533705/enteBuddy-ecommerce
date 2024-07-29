@@ -37,10 +37,10 @@ const IconsList = ({ listPrompt, setListPrompt, updateIcon }) => {
     <div
       className={`${
         listPrompt ? "" : "hidden"
-      } inset-0 fixed overflow-auto backdrop-blur-sm bg-black bg-opacity-30`}
+      } inset-0 fixed mt-36 max-h-screen min-h-screen flex flex-col items-center justify-center z-10 overflow-auto backdrop-blur-xl bg-black bg-opacity-30`}
     >
-      <div className="flex justify-center items-center w-full h-full px-3">
-        <div className="relative bg-white rounded-lg shadow h-1/2 w-4/5 gap-5 pt-2 px-2 ">
+      <div className="flex justify-center text-center items-center w-full h-screen px-3">
+        <div className=" bg-white rounded-lg shadow h-1/2 w-4/5 gap-5 pt-2 px-2 ">
           <div className="flex justify-end">
             <button
               className="text-black rounded-full text-sm px-2 py-1"

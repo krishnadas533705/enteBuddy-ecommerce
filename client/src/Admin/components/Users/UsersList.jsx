@@ -8,11 +8,12 @@ import AdminContext from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
 
 const UsersList = () => {
-  const { adminId,logoutAdmin } = useContext(AdminContext);
+  const { adminId,logoutAdmin, setSideBar } = useContext(AdminContext);
   const [users, setUsers] = useState(null);
   const [currentUsers, setCurrentUsers] = useState(null);
   const navigate = useNavigate()
   useEffect(() => {
+    setSideBar(false)
     if (!adminId) {
       navigate("/admin/signin");
     }
@@ -54,10 +55,10 @@ const UsersList = () => {
     }
   };
   return (
-    <div>
+    <div className="h-screen">
       <Navbar />
       <SideBar />
-      <section className="bg-white h-full">
+      <section className="bg-white h-screen">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <div className="relative">
@@ -79,11 +80,11 @@ const UsersList = () => {
             </div>
           </form>
         </div>
-      </section>
       <Usertable
         users={currentUsers ? currentUsers : users}
         searching={currentUsers ? true : false}
       />
+      </section>
     </div>
   );
 };

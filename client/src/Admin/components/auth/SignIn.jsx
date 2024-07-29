@@ -25,6 +25,7 @@ export default function SignIn() {
       return;
     }
     const response = await verifyAdmin(email, password);
+    console.log("response : ",response)
     if (response.statusCode != 403) {
       localStorage.setItem("adminId",response.adminId)
       setAdmin(response.adminId);

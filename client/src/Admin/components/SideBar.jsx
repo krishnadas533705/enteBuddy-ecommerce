@@ -29,7 +29,6 @@ const SideBar = () => {
         method: "post",
         credentials: "include",
       });
-      console.log("logout response : ", reponse);
       if (reponse.ok) {
         localStorage.setItem("adminId", null);
         setAdmin(null);

@@ -9,11 +9,12 @@ import { useNavigate } from "react-router-dom";
 
 const BannerList = () => {
   const navigate = useNavigate()
-  const { adminId, logoutAdmin } = useContext(AdminContext);
+  const { adminId, logoutAdmin, setSideBar } = useContext(AdminContext);
   const [banners, setBanners] = useState(null);
   const [fetchBanners, setFetchBanners] = useState(true);
 
   useEffect(() => {
+    setSideBar(false)
     if (!adminId) {
       navigate("/admin/signin");
     }
@@ -46,10 +47,10 @@ const BannerList = () => {
     }
   };
   return (
-    <div>
+    <div className="h-screen">
       <Navbar />
       <SideBar />
-      <section className="bg-white">
+      <section className="bg-white h-screen">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <label

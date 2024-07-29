@@ -12,10 +12,12 @@ function OrdersList() {
   const [currentPage, setCurrentPage] = useState(() => {
     return localStorage.getItem("adminOrderPage") || 1;
   });
-  const { adminId, setOrderData, handleOrderData, logoutAdmin } = useContext(AdminContext);
+  const { adminId, setOrderData, handleOrderData, logoutAdmin, setSideBar } = useContext(AdminContext);
 
   const navigate = useNavigate();
   useEffect(() => {
+    setSideBar(false)
+
     if (!adminId) {
       navigate("/admin/signin");
     }
@@ -74,7 +76,7 @@ function OrdersList() {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white h-screen">
       <Navbar />
       <SideBar />
       <section className=" h-full">

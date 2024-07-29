@@ -9,18 +9,19 @@ import AdminContext from "../../context/AdminContext.js";
   
 const CouponList = () => {
   const navigate = useNavigate()
-  const {adminId} = useContext(AdminContext)
+  const {adminId,setSideBar} = useContext(AdminContext)
   useEffect(()=>{
     if (!adminId) {
       navigate("/admin/signin");
     }
+    setSideBar(false)
   },[])
   return (
-    <div className="">
+    <div className="h-screen">
       <Navbar />
       <SideBar />
 
-      <section className="bg-white">
+      <section className="bg-white h-screen">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <label
@@ -47,8 +48,8 @@ const CouponList = () => {
             </div>
           </form>
         </div>
-    <div>
       <CouponTable />
+    <div>
     </div>
 
       </section>

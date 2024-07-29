@@ -8,11 +8,12 @@ import AdminContext from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
 const ProductsList = () => {
   const navigate = useNavigate();
-  let { adminId } = useContext(AdminContext);
+  let { adminId, setSideBar } = useContext(AdminContext);
   let [products, setProducts] = useState(null);
   const [fetchProduct, setFetchProduct] = useState(true);
   const [searchProducts, setSearchProducts] = useState(null);
   useEffect(() => {
+    setSideBar(false)
     if (!adminId) {
       navigate("/admin/signin");
     }
@@ -52,7 +53,7 @@ const ProductsList = () => {
   return (
     <>
       <Navbar />
-      <div className="flex">
+      <div className="flex h-screen">
         <SideBar />
 
         {/* search bar */}

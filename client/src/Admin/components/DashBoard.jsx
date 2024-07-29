@@ -7,11 +7,13 @@ import { getDashBoardData, getWeeklyData } from "./DashboardData";
 import BarChart from "./BarChart.jsx";
 
 const DashBoard = () => {
-  const { adminId, setAdmin } = useContext(AdminContext);
+  const { adminId, setAdmin, setSideBar } = useContext(AdminContext);
   const [data, setData] = useState(null);
   const [weeklyData, setWeeklyData] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
+    setSideBar(false)
+
     if (!adminId) {
       navigate("/admin/signin");
     } else {
@@ -31,7 +33,7 @@ const DashBoard = () => {
         <SideBar />
 
         {/* <!-- Main content --> */}
-        <div className="lg:w-3/4 bg-white">
+        <div className="lg:w-3/4 bg-white h-screen">
           {/* <!-- Content header --> */}
           <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker">
             <h1 className="text-2xl font-semibold">Dashboard</h1>

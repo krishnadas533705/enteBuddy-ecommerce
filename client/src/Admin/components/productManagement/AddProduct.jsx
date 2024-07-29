@@ -183,7 +183,7 @@ const AddProduct = ({
     <div
       className={`${
         !productForm ? "hidden" : ""
-      } fixed overflow-scroll inset-0 bg-black backdrop-blur-sm bg-opacity-30`}
+      } fixed h-screen overflow-scroll inset-0 bg-black backdrop-blur-sm bg-opacity-30`}
     >
       <div className="min-h-screen p-6 flex items-center justify-center">
         <div className="container max-w-screen-lg mx-auto">
@@ -692,16 +692,16 @@ const AddProduct = ({
                     </div>
                   </div>
                 </div>
-                <IconsList
-                  listPrompt={listPrompt}
-                  setListPrompt={setListPrompt}
-                  updateIcon={updateIcon}
-                />
               </div>
             </div>
           </div>
         </div>
       </div>
+      <IconsList
+        listPrompt={listPrompt}
+        setListPrompt={setListPrompt}
+        updateIcon={updateIcon}
+      />
     </div>
   );
 };

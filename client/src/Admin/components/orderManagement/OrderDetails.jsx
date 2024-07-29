@@ -42,7 +42,7 @@ function OrderDetails() {
     <div>
       <Navbar />
 
-      <section className="p-8 bg-white">
+      <section className="p-8 bg-white h-screen">
         <div className="flex justify-between">
           <h1 className="text-2xl font-medium ">Order Details </h1>
           <h1 className="text-xl font-medium">
