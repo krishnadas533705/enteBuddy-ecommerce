@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { IoMdArrowBack, IoMdArrowForward, IoMdTrash } from "react-icons/io";
+import { IoMdArrowBack, IoMdTrash } from "react-icons/io";
+import { FaArrowRight } from "react-icons/fa6";
 import { CartContext } from "../contexts/CartContext";
 import CartItem from "./CartItem";
 import { FiTrash2 } from "react-icons/fi";
@@ -107,25 +108,26 @@ const Sidebar = () => {
       duration-300  lg:px-[15px] `}
       >
         {" "}
-        <div className="uppercase bg-yellow-400  flex justify-center p-1 font-medium">
+        <div className="uppercase bg-yellow-400  flex justify-center p-1 font-medium dark:text-black">
           express and discreet delivery
         </div>
         <div className="flex justify-between py-4 border-b-2 items-center border-b-gray-100 px-4">
           <div
             onClick={handleClose}
-            className="cursor-pointer flex  items-center"
+            className=" cursor-pointer flex flex-row items-center " 
           >
-            <IoMdArrowBack className="text-2xl" />
-            <span className="ms-2 font-medium">GO BACK</span>
+           
+            <span className=" font-medium dark:text-black">GO BACK</span>
+            <FaArrowRight className="ml-3  text-xl dark:text-black" />
           </div>
 
-          <div className=" font-medium uppercase">My cart ({itemAmount})</div>
+          <div className=" font-medium uppercase dark:text-black">My cart ({itemAmount})</div>
         </div>
         {/* empty cart */}
         {cart == null || cart == undefined || cart == [] || cart.length == 0 ? (
           <div className="flex justify-center items-center text-center h-1/2 px-4">
             <div>
-              <p className="font-mono uppercase font-semibold ">
+              <p className="font-mono uppercase font-semibold dark:text-black">
                 You shopping cart is empty.Browse our products and find
                 something you love!
               </p>

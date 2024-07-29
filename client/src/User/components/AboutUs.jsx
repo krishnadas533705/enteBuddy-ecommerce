@@ -13,13 +13,13 @@ const AboutUs = ({ onClose }) => {
         <div
             ref={modalRef}
             onClick={closeModal}
-            className="text-white z-10 fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center m-3"
+            className="text-white z-10 fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center px-6"
         >
             <div className="flex flex-col">
-                <button onClick={onClose} className="place-self-end">
+                <button onClick={onClose} className="place-self-end mr-2">
                     X
                 </button>
-                <div className="border border-blue-100 py-8 px-10 bg-hero2 bg-contain bg-[#3A2D3F] rounded-xl flex flex-col gap-5 font-poppins ">
+                <div className="border border-blue-100 py-8 px-10 bg-hero2 bg-contain bg-[#3A2D3F] rounded-xl flex flex-col gap-5 font-poppins  ">
                     <h1 className=" font-extrabold text-3xl text-center text-primary">
                         About us{" "}
                     </h1>

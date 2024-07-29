@@ -175,12 +175,13 @@
                               </label>
                               <OtpInput
                                   value={otp}
+                                  
                                   onChange={setOtp}
                                   OTPLength={6}
                                   otpType="number"
                                   disabled={false}
                                   autoFocus
-                                  className="opt-container text-black"
+                                  className="opt-container text-black dark:text-white "
                               ></OtpInput>
 
                               {otpError && (

@@ -78,3 +78,4 @@ const IconsList = ({ listPrompt, setListPrompt, updateIcon }) => {
 };
 
 export default IconsList;
+ 

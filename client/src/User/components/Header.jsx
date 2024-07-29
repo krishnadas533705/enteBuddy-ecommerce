@@ -155,7 +155,7 @@ const Header = (cookies) => {
             </div>
             <ul
               tabIndex={0}
-              className={`menu menu-sm dropdown-content mt-1 z-[1]  shadow bg-base-100 rounded-box w-32  transition-transform duration-300`}
+              className={`menu menu-sm dropdown-content mt-1 z-[1]  shadow bg-base-100 rounded-box w-32  transition-transform duration-300 dark:bg-white dark:text-black`}
               style={{ display: dropDown ? "block" : "none" }}
             >
               <li>

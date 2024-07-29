@@ -295,7 +295,7 @@ const Checkout = () => {
       </div>
       <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
         <div className="px-4 pt-8 bg-gray-50">
-          <p className="text-lg font-medium">Order Summary</p>
+          <p className="text-lg font-medium dark:text-black">Order Summary</p>
           <p className="text-gray-400">
             Check your items. And select a suitable shipping method.
           </p>
@@ -312,11 +312,11 @@ const Checkout = () => {
                     alt=""
                   />
 
-                  <div className="flex w-full flex-col px-4 py-4 font-poppins">
+                  <div className="flex w-full flex-col px-4 py-4 font-poppins dark:text-black">
                     <span className="font-semibold text-xl mb-2">
                       {item.productName}
                     </span>
-                    <span className="float-right font-medium text-[14px]">
+                    <span className="float-right font-medium text-[14px] dark:text-black">
                       Quantity : {item.quantity}
                     </span>
                     <p className="  text-[14px]  font-medium ">₹{item.price}</p>
@@ -328,17 +328,17 @@ const Checkout = () => {
           {/* ///// */}
           <form className="mt-5 grid gap-6 bg-gray-50">
             <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-              <p className="text-lg font-medium">Payment Details</p>
-              <p className="text-gray-400">
+              <p className="text-lg font-medium dark:text-black">Payment Details</p>
+              <p className="text-gray-400 dark:text-blaxk">
                 Complete your order by providing your payment details.
               </p>
 
               <div className=" main div">
                 <label
                   htmlFor="email"
-                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins dark:text-black"
                 >
-                  Name
+                 Name
                 </label>
                 <div className="">
                   <input
@@ -346,7 +346,7 @@ const Checkout = () => {
                     id="name"
                     name="name"
                     value={orderDetails.name}
-                    className={`w-full rounded-md border ${
+                    className={`w-full rounded-md border dark:bg-white  ${
                       nameError ? "border-red-500" : "border-gray-200"
                     }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="your name"
@@ -368,7 +368,7 @@ const Checkout = () => {
                 )}
                 <label
                   htmlFor="email"
-                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins dark:text-black"
                 >
                   Email
                 </label>
@@ -378,7 +378,7 @@ const Checkout = () => {
                     id="email"
                     name="email"
                     className={`w-full rounded-md border ${
-                      emailError ? "border-red-500" : "border-gray-200   "
+                      emailError ? "border-red-500" : "border-gray-200  dark:bg-white "
                     } px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="Your.email@gmail.com"
                     value={orderDetails.email}
@@ -417,7 +417,7 @@ const Checkout = () => {
                 )}
                 <label
                   htmlFor="phone number"
-                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins dark:text-black"
                 >
                   Phone number
                 </label>
@@ -428,7 +428,7 @@ const Checkout = () => {
                     name="mobile"
                     value={orderDetails.mobile}
                     className={`w-full rounded-md border ${
-                      phoneNumberError ? "border-red-500" : "border-gray-200"
+                      phoneNumberError ? "border-red-500" : "border-gray-200 dark:bg-white"
                     }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="Your phone number"
                     required
@@ -453,7 +453,7 @@ const Checkout = () => {
                 )}
                 <label
                   htmlFor="billing-address"
-                  className="mt-4 mb-2 block text-sm font-medium font-poppins"
+                  className="mt-4 mb-2 block text-sm font-medium font-poppins dark:text-black"
                 >
                   Billing Address
                 </label>
@@ -464,7 +464,7 @@ const Checkout = () => {
                       id="billing-address"
                       name="billing_address"
                       value={orderDetails.billing_address}
-                      className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      className="w-full rounded-md border  border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-white"
                       placeholder="Street Address"
                       required
                       onChange={(e) =>
@@ -479,22 +479,24 @@ const Checkout = () => {
                       />
                     </div>
                   </div>
-                  <div className="font-medium font-poppins text-sm my-2 ">
-                    <h6 className="mb-2">State</h6>
-                    <StateSelect
+                  <div className="font-medium font-poppins text-sm my-2  ">
+                    <h6 className="mb-2 dark:text-black">State</h6>
+                    <StateSelect 
+                      darkMode={true}
                       countryid={101}
                       onChange={(e) => {
                         setstateid(e.id);
                         handleOrderDetails("state", e.name);
                       }}
                       placeHolder="Select State"
-                      required
+                      required 
+                      
                     />
                   </div>
 
                   <div className="font-poppins text-sm font-medium my-2">
                     <div></div>
-                    <h2 className="mb-2">City</h2>
+                    <h2 className="mb-2 dark:text-black">City</h2>
                     <CitySelect
                       countryid={101}
                       stateid={stateid}
@@ -503,14 +505,15 @@ const Checkout = () => {
                         handleOrderDetails("city", e.name);
                       }}
                       placeHolder="Select city"
-                      required
+                      required 
+                      style={{background: "white"}}
                     />
 
                     <input
                       type="text"
                       name="pincode"
                       value={orderDetails.pincode}
-                      className="flex-shrink-0 w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      className="flex-shrink-0 w-full  rounded-md border dark:bg-white dark:text-black border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Pin code"
                       onChange={(e) => {
                         handleOrderDetails(e.target.name, e.target.value);
@@ -539,12 +542,12 @@ const Checkout = () => {
         {/*  */}
         {/* shipping method */}
         <div className="p-7">
-          <p className="mt-8 text-lg font-medium">Shipping Methods</p>
-          <p className="text-sm text-gray-600 mb-10">
+          <p className="mt-8 text-lg font-medium dark:text-black">Shipping Methods</p>
+          <p className="text-sm text-gray-600 mb-10 dark:text-black">
             Choose any one of the shipping methods.
           </p>
           {shipMethodError && (
-            <p className="text-red-500  my-1">
+            <p className="text-red-500  my-1 ">
               Select a shipping method before placing the order.
             </p>
           )}
@@ -571,16 +574,16 @@ const Checkout = () => {
                   alt="shiprocket"
                 />
                 <div className="ml-5">
-                  <span className="mt-2 font-semibold uppercase">
+                  <span className="mt-2 font-semibold uppercase dark:text-black">
                     Shiprocket Delivery
                   </span>
-                  <p className="text-slate-500 text-sm leading-6">
-                    Delivery: 2 to 4 Days
+                  <p className="text-slate-500 text-sm leading-6 dark:text-black">
+                    Delivery: 2 to 4 Days 
                   </p>
-                  <p className="text-slate-500 text-sm leading-6">
+                  <p className="text-slate-500 text-sm leading-6 dark:text-black">
                     COD AND PREPAID
                   </p>
-                  <p className="text-slate-500 text-sm leading-6">
+                  <p className="text-slate-500 text-sm leading-6 dark:text-black">
                     Home Delivery
                   </p>
                 </div>
@@ -608,16 +611,16 @@ const Checkout = () => {
                   alt="shiprocket"
                 />
                 <div className="ml-5">
-                  <span className="mt-2 font-semibold uppercase">
+                  <span className="mt-2 font-semibold uppercase dark:text-black">
                     Collect from courier office
                   </span>
-                  <p className="text-slate-500 text-sm leading-6">
+                  <p className="text-slate-500 text-sm leading-6 dark:text-black">
                     Delivery: 1 to 2 Days
                   </p>
-                  <p className="text-slate-500 text-sm leading-6">
+                  <p className="text-slate-500 text-sm leading-6 dark:text-black">
                     ONLY PREPAID AVAILABLE
                   </p>
-                  <p className="text-slate-500 text-sm leading-6">
+                  <p className="text-slate-500 text-sm leading-6 dark:text-black">
                     You can collect parcel from nearby courier office
                     DTDC,professional etc.
                   </p>
@@ -629,8 +632,8 @@ const Checkout = () => {
           {/* payment method */}
           {orderDetails.shippingMethod == "shiprocket" && (
             <div className="mt-8">
-              <h1 className="font-medium text-xl">Payment Method</h1>
-              <p className="text-sm text-gray-600">
+              <h1 className="font-medium text-xl dark:text-black">Payment Method</h1>
+              <p className="text-sm text-gray-600 dark:text-black">
                 Choose payment method for shiprocket delivery.
               </p>
 
