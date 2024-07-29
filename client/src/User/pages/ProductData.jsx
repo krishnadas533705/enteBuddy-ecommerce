@@ -78,7 +78,7 @@ const ProductData = () => {
           <div className="py-1 font-poppins text-sm md:text-[16px] flex mt-3 mb-1 ">
             {productFeatures &&
               productFeatures.map((feature) => (
-                <div key={feature.icon._id}>
+                <div key={feature._id}>
                   {feature.icon && (
                     <div className="flex flex-col items-center">
                       <img
