@@ -77,7 +77,6 @@ const ProductData = () => {
           </div>
           <div className="py-1 font-poppins text-sm md:text-[16px] flex mt-3 mb-1 ">
             {productFeatures &&
-              productFeatures.icon &&
               productFeatures.map((feature) => (
                 <div className="flex flex-col items-center" key={feature._id}>
                   <img
@@ -129,7 +128,7 @@ const ProductData = () => {
           </button>
 
           <div className="pb-1 pt-4 font-poppins text-sm md:text-[16px] mt-5 mb-1 grid grid-cols-2 gap-4 w-full border-t-2 ">
-            {serviceFeatures && serviceFeatures.icon &&
+            {serviceFeatures &&
               serviceFeatures.map((feature) => (
                 <div
                   className="flex items-center justify-around"
