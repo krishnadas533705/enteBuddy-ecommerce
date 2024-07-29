@@ -1,3 +1,4 @@
+import { response } from "express";
 import { banner } from "../models/banner.model.js";
 import cart from "../models/cart.model.js";
 import coupon from "../models/coupons.model.js";
@@ -112,7 +113,7 @@ export const removeAllFromCart = async (req, res, next) => {
 //get product list
 export const getProducts = async (req, res, next) => {
   try {
-    let products = await product.find({});
+    let products = await product.find({ quantity: { $gt: 0 } });
     let allReviews = await reviews.find({});
     let productMap = new Map();
     products.forEach((product) => {
@@ -140,7 +141,6 @@ export const getProducts = async (req, res, next) => {
 export const createOrder = async (req, res, next) => {
   try {
     const currentDate = new Date();
-
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const day = String(currentDate.getDate()).padStart(2, "0");
@@ -280,11 +280,25 @@ export const createOrder = async (req, res, next) => {
         } else {
           responseStatus = 500;
           responseText = "failed to ship order";
-          console.log("Failed to ship order : ", await shipingResponse.json());
+          await order.updateOne(
+            { userId: req.user._id },
+            { $pull: { orders: { _id: newOrder._id } } }
+          );
         }
       } catch (err) {
         console.log("error in pushing to shiprocket : ", err);
       }
+    }
+
+    if (responseStatus == 200) {
+      req.body.products.forEach((doc) => {
+        (async () => {
+          await product.updateOne(
+            { _id: doc._id },
+            { $inc: { quantity: -doc.quantity } }
+          );
+        })();
+      });
     }
 
     res.status(responseStatus).send(responseText);

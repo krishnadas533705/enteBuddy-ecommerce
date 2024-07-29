@@ -68,15 +68,28 @@ const AddProduct = ({
     const error = validateProductData(productData, setProductError);
     if (!error) {
       //set product features
-      const productFeatures = [
-        productData.productFeature1,
-        productData.productFeature2,
-        productData.productFeature3,
-        productData.productFeature4,
-      ];
-      const featureIcons = [icon1, icon2, icon3, icon4];
+      const productFeatures = [];
+
+      const featureIcons = [];
+      if (productData.productFeature1) {
+        productFeatures.push(productData.productFeature1);
+        featureIcons.push(icon1);
+      }
+
+      if (productData.productFeature2) {
+        productFeatures.push(productData.productFeature2);
+        featureIcons.push(icon2);
+      }
+      if (productData.productFeature3) {
+        productFeatures.push(productData.productFeature3);
+        featureIcons.push(icon3);
+      }
+      if (productData.productFeature4) {
+        productFeatures.push(productData.productFeature4);
+        featureIcons.push(icon4);
+      }
       let productFeaturesWithIcons = [];
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < productFeatures.length; i++) {
         let feature = {
           description: productFeatures[i],
           icon: featureIcons[i],
@@ -88,22 +101,31 @@ const AddProduct = ({
 
       //set service features
 
-      const serviceFeatures = [
-        productData.serviceFeature1,
-        productData.serviceFeature2,
-        productData.serviceFeature3,
-        productData.serviceFeature4,
-      ];
+      const serviceFeatures = [];
 
-      const serviceFeatureIcons = [
-        serviceIcon1,
-        serviceIcon2,
-        serviceIcon3,
-        serviceIcon4,
-      ];
+      const serviceFeatureIcons = [];
+
+      if (productData.serviceFeature1) {
+        serviceFeatures.push(productData.serviceFeature1);
+        featureIcons.push(serviceIcon1);
+      }
+      if (productData.serviceFeature2) {
+        serviceFeatures.push(productData.serviceFeature2);
+        featureIcons.push(serviceIcon2);
+      }
+      if (productData.serviceFeature3) {
+        serviceFeatures.push(productData.serviceFeature3);
+        featureIcons.push(serviceIcon3);
+      }
+
+      if (productData.serviceFeature4) {
+        serviceFeatures.push(productData.serviceFeature4);
+        featureIcons.push(serviceIcon4);
+      }
+
       let serviceFeaturesWithIcons = [];
 
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < serviceFeatures.length; i++) {
         let feature = {
           description: serviceFeatures[i],
           icon: serviceFeatureIcons[i],

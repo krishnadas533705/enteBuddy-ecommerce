@@ -75,8 +75,14 @@ export const uploadProduct = async (req, res, next) => {
     if (req.body.color) {
       colors = req.body.color.split(",");
     }
-    let productFeatures = JSON.parse(req.body.productFeatures);
-    let serviceFeatures = JSON.parse(req.body.serviceFeatures);
+    let productFeatures = null
+    let serviceFeatures = null
+    if (req.body.productFeatures) {
+      productFeatures = JSON.parse(req.body.productFeatures);
+    }
+    if (req.body.serviceFeatures) {
+      serviceFeatures = JSON.parse(req.body.serviceFeatures);
+    }
     const newProduct = new product({
       title: req.body.title,
       category: req.body.category,
@@ -134,6 +140,14 @@ export const updateProduct = async (req, res, next) => {
     if (req.body.color) {
       colors = req.body.color.split(",");
     }
+    let productFeatures
+    let serviceFeatures
+    if(req.body.productFeatures){
+      productFeatures = JSON.parse(req.body.productFeatures)
+    }
+    if(req.body.serviceFeatures){
+      serviceFeatures = JSON.parse(req.body.serviceFeatures)
+    }
 
     const update = {
       title: req.body.title,
@@ -147,6 +161,8 @@ export const updateProduct = async (req, res, next) => {
       discount: req.body.discount,
       primaryImage: primaryImage,
       secondaryImages: secondaryImages,
+      productFeatures:productFeatures,
+      serviceFeatures:serviceFeatures
     };
     await product.updateOne({ _id: productId }, { $set: update });
     res.status(200).json({ "product updated with id :": productId });

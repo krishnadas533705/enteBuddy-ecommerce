@@ -47,8 +47,9 @@ const OrderTracking = () => {
       <div className="pt-20 ">
         <div className=" flex h-full flex-col overflow-hidden rounded-2xl bg-white text-gray-600 shadow-lg ring-1 ring-gray-200 md:max-w-screen-md mx-auto ">
           {/* Products Section */}
-          <div className="font-poppins text-center text-sm text-gray-400 border-b border-gray-200 py-8 ">
-            ORDER ID : {order._id}
+          <div className="font-poppins text-center text-sm text-black border-b border-gray-200 py-8 ">
+           <p> ORDER ID : {order._id}</p>
+           <p >TOTAL : ₹ {order.sellingPrice}</p>
           </div>
           {order.products &&
             order.products.map((product) => (

@@ -42,8 +42,6 @@ const ProductData = () => {
     serviceFeatures,
   } = product;
 
- 
-
   return (
     <div>
       <div className="flex flex-col md:flex-row pt-[65px] md:pb-1 md:w-screen md:h-screen  items-center overflow-visible bg font">
@@ -80,15 +78,19 @@ const ProductData = () => {
           <div className="py-1 font-poppins text-sm md:text-[16px] flex mt-3 mb-1 ">
             {productFeatures &&
               productFeatures.map((feature) => (
-                <div className="flex flex-col items-center" key={feature.description}>
-                  <img
-                    src={API + feature.icon.split("server")[1]}
-                    alt=""
-                    className="h-10 w-10 rounded-full"
-                  />
-                  <div className="text-xs flex text-center mt-2">
-                    <h1 className="w-20">{feature.description}</h1>
-                  </div>
+                <div key={feature.icon._id}>
+                  {feature.icon && (
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={API + feature.icon.split("server")[1]}
+                        alt=""
+                        className="h-10 w-10 rounded-full"
+                      />
+                      <div className="text-xs flex text-center mt-2">
+                        <h1 className="w-20">{feature.description}</h1>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
           </div>
@@ -132,20 +134,24 @@ const ProductData = () => {
           <div className="pb-1 pt-4 font-poppins text-sm md:text-[16px] mt-5 mb-1 grid grid-cols-2 gap-4 w-full border-t-2 ">
             {serviceFeatures &&
               serviceFeatures.map((feature) => (
-                <div
-                  className="flex items-center justify-around"
-                  key={feature.description}
-                >
-                  <div className="flex">
-                    <img
-                      src={API + feature.icon.split("server")[1]}
-                      alt=""
-                      className="h-10 w-10 rounded-full"
-                    />
-                    <div className="text-xs flex text-center mt-2">
-                      <h1 className="w-20">{feature.description}</h1>
+                <div key={feature._id}>
+                  {feature.icon && (
+                    <div
+                      className="flex items-center justify-around"
+                      key={feature._id}
+                    >
+                      <div className="flex">
+                        <img
+                          src={API + feature.icon.split("server")[1]}
+                          alt=""
+                          className="h-10 w-10 rounded-full"
+                        />
+                        <div className="text-xs flex text-center mt-2">
+                          <h1 className="w-20">{feature.description}</h1>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               ))}
           </div>

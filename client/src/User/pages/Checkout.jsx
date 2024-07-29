@@ -53,7 +53,7 @@ const Checkout = () => {
     shippingMethod: null,
     paymentMethod: null,
   });
-  const [shipMethodError, setShipMethodError] = useState(false);
+  const [shipMethodError, setShipMethodError] = useState(null);
   const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
 
@@ -191,9 +191,9 @@ const Checkout = () => {
           localStorage.setItem("enteBuddyCartPrice", 0);
           localStorage.setItem("enteBuddyCart", null);
           localStorage.setItem("enteBuddyCouponId", "");
-          navigate(`/fetchOrders/${userId}`);
           clearCart();
           handleClose();
+          navigate(`/fetchOrders/${userId}`);
         } else {
           alert("Failed to place order, please try again.");
         }

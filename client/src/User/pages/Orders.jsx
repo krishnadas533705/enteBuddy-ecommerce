@@ -73,7 +73,7 @@ const Orders = () => {
                   <div>
                     <div className="flex">
                     {order.products.map((product,index) => (
-                      <div className="font-medium" key={product._id}>
+                      <div className="font-medium" key={product._id + Math.random()}>
                         {product.productName } 
                         {index != order.products.length - 1 && 
                           <span className="mx-3">&</span>
