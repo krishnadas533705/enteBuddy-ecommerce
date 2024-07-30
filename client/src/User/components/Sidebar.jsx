@@ -240,6 +240,7 @@ const Sidebar = () => {
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     className="w-5 h-5 ml-6 my-5 bg-white dark:bg-white dark:text-black"
+                    style={{background:"white"}}
                   />
                 </div>
 
