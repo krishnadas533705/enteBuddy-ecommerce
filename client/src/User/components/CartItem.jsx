@@ -30,7 +30,7 @@ const CartItem = ({ item }) => {
             <div>
               <Link
                 to={`/product/${_id}`}
-                className="uppercase  text-xl  max-w-[240px] hover:underline pb-2 pl-4 font-medium"
+                className="uppercase  text-lg  max-w-[240px] hover:underline pb-2 pl-4 font-medium"
               >
                 {productName}
               </Link>

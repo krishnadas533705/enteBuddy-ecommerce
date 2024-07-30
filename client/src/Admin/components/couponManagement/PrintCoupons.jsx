@@ -1,4 +1,3 @@
-import { Preview, print } from "react-html2pdf";
 const PrintCoupons = ({
   allCoupons,
   currentCoupons,
@@ -7,46 +6,57 @@ const PrintCoupons = ({
   currentCouponPrinter,
   showCurrentCouponsPrinter,
 }) => {
+
+
+  const printCoupons = (className)=>{
+    let originalContent = document.body.innerHTML
+    let printContent = document.querySelector('.' + className).outerHTML
+    document.body.innerHTML = printContent
+    window.print()
+    document.body.innerHTML = originalContent
+    showCurrentCouponsPrinter(false);
+    showPrinter(false)
+    window.location.reload()
+  }
+
   return (
     <div className="">
       {printer && (
         <div
           id="content"
-          className="fixed overflow-auto inset-0 bg-black backdrop-blur-sm bg-opacity-30"
+          className="fixed h-screen w-screen flex flex-col items-center justify-center overflow-auto inset-0 bg-black backdrop-blur-sm bg-opacity-30"
         >
           <div className="flex items-center justify-center h-full">
-            <div className=" bg-white w-full md:w-2/4 lg:w-1/4 p-7 ">
+            <div className=" bg-white w-fit p-7 ">
               <h1 className="text-3xl text-gray-600 font-bold underline">
                 PRINT COUPONS
               </h1>
-              <Preview id={"allCoupons"}>
+              <div className="print-section-1">
                 {allCoupons &&
                   allCoupons.map((coupon) => (
                     <div
                       className="list-none leading-loose my-5"
                       key={coupon._id}
                     >
-                      {console.log("coupon ID : ", coupon._id)}
                       <li>
                         <h1>
-                          <span className="text-blue-900">{coupon.title}</span>
+                          <span className="text-blue-900">Coupon Name : {coupon.title}</span>
                         </h1>
                         <h1>
                           <span className="text-emerald-700">
-                            {coupon.couponCode}
+                            Coupon code : {coupon.couponCode}
                           </span>
                         </h1>
                       </li>
                     </div>
                   ))}
-              </Preview>
+              </div>
 
               <div className="flex justify-end mt-3">
                 <button
                   className="px-4 rounded py-2 bg-green-600 text-white font-bold"
                   onClick={() => {
-                    print("EnteBuddy_coupons", "allCoupons");
-                    showPrinter(false);
+                    printCoupons('print-section-1')
                   }}
                 >
                   Print
@@ -63,13 +73,13 @@ const PrintCoupons = ({
         </div>
       )}
       {currentCouponPrinter && (
-        <div className="fixed overflow-auto inset-0 bg-black backdrop-blur-sm bg-opacity-30">
+        <div className="fixed h-screen w-screen flex flex-col items-center justify-center overflow-auto inset-0 bg-black backdrop-blur-sm bg-opacity-30">
           <div className="flex items-center justify-center h-full">
-            <div className=" bg-white w-full md:w-2/4 lg:w-1/4 p-7 ">
+            <div className=" bg-white w-full p-7 ">
               <h1 className="text-3xl text-gray-600 font-bold underline">
                 PRINT COUPONS
               </h1>
-              <Preview id={"currentCoupons"}>
+              <div className="print-section-2">
                 {currentCoupons &&
                   currentCoupons.map((coupon) => (
                     <div
@@ -77,23 +87,23 @@ const PrintCoupons = ({
                       key={coupon._id}
                     >
                       <li>
-                        <span className="text-blue-900">{coupon.title}</span>
+                        <span className="text-blue-900 font-medium">{coupon.title}</span>
                         <p>
-                          <span className="text-emerald-700">
+                          <span className="text-emerald-700 font-medium">
                             {coupon.couponCode}
                           </span>
                         </p>
                       </li>
                     </div>
                   ))}
-              </Preview>
+              </div>
 
               <div className="flex justify-end mt-3">
                 <button
                   className="px-4 rounded py-2 bg-green-600 text-white font-bold"
                   onClick={() => {
-                    print("EnteBuddy_coupons", "currentCoupons");
-                    showCurrentCouponsPrinter(false);
+                    printCoupons('print-section-2')
+
                   }}
                 >
                   Print
@@ -114,3 +124,6 @@ const PrintCoupons = ({
 };
 
 export default PrintCoupons;
+
+
+

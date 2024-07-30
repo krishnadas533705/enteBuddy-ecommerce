@@ -22,7 +22,6 @@ const ProductTable = ({
   const [currentProducts, setCurrentProducts] = useState(null);
   const API = import.meta.env.VITE_API_URL;
   const [deleteId, setDeleteId] = useState(null);
-
   useEffect(() => {
     if (products) {
       setTotalPages(Math.ceil(products.length / 5));
@@ -49,7 +48,7 @@ const ProductTable = ({
 
   const [deletePrompt, showDeletePrompt] = useState(false);
 
-  const {adminId} = useContext(AdminContext)
+  const { adminId } = useContext(AdminContext);
 
   //icons
   const [icons, setIcons] = useState(null);
@@ -58,13 +57,12 @@ const ProductTable = ({
     try {
       if (icons) {
         const formData = new FormData();
-        
-        for(let i = 0 ; i < icons.length;i++){
-          console.log('icon of ',i , ' : ',icons[i])
-          const iconFile = icons[i]
-          formData.append('icons',iconFile)
-        }
 
+        for (let i = 0; i < icons.length; i++) {
+          console.log("icon of ", i, " : ", icons[i]);
+          const iconFile = icons[i];
+          formData.append("icons", iconFile);
+        }
 
         const response = await fetch(`/api/admin/addIcons/${adminId}`, {
           method: "POST",
@@ -86,7 +84,7 @@ const ProductTable = ({
   };
 
   return (
-    <div className="mt-7 lg:ms-64 bg-white h-screen flex flex-col justify-center">
+    <div className="mt-7 lg:ms-64 bg-white h-screen">
       <div className="flex justify-end pe-8 md:pe-16">
         <button
           className="border py-1 px-2 md:py-2 md:px-4 hover:bg-blue-700 bg-blue-600 font-semibold text-white text-sm rounded mb-2"
@@ -191,7 +189,7 @@ const ProductTable = ({
           multiple
           className="file-input file-input-bordered file-input-sm text-xs w-1/2 bg-white text-black"
           id="icon-input"
-          onChange={(e)=>setIcons(e.target.files)}
+          onChange={(e) => setIcons(e.target.files)}
         />
 
         <button
@@ -203,12 +201,12 @@ const ProductTable = ({
       </div>
 
       <div className="h-screen flex justify-center items-center">
-      <AddProduct
-        productForm={productForm}
-        showProductForm={showProductForm}
-        fetchProduct={fetchProduct}
-        setFetchProduct={setFetchProduct}
-      />
+        <AddProduct
+          productForm={productForm}
+          showProductForm={showProductForm}
+          fetchProduct={fetchProduct}
+          setFetchProduct={setFetchProduct}
+        />
       </div>
       <EditProduct
         editForm={editForm}

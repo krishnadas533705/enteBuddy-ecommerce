@@ -30,7 +30,7 @@ function OrdersList() {
         if (response.ok) {
           let result = await response.json();
           setOrders(result.allOrders);
-          let totalPages = Math.ceil(result.allOrders.length / 1);
+          let totalPages = Math.ceil(result.allOrders.length / 5);
           setTotalPages(totalPages);
           let page = parseInt(currentPage)
           let newOrders = result.allOrders.slice((page - 1) * 5 ,page * 5);

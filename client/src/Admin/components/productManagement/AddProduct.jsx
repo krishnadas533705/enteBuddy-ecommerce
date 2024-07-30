@@ -251,7 +251,7 @@ const AddProduct = ({
                         name="category"
                         placeholder="Enter catergory name"
                         id="category"
-                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50"
+                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 uppercase text-xs"
                         onChange={handleProductData}
                         value={
                           productData && productData.category

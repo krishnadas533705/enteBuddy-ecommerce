@@ -79,7 +79,7 @@ const CouponTable = () => {
   const [currentCouponPrinter, showCurrentCouponPrinter] = useState(false);
 
   return (
-    <div className="mt-7 lg:ms-64">
+    <div className="mt-7 lg:ms-64 h-screen">
       <div className="text-end justify-end pe-8 md:pe-16">
         <button
           className="px-2 py-2 rounded  text-sm bg-green-600 text-white font-medium"

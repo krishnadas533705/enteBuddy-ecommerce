@@ -111,17 +111,18 @@ const Sidebar = () => {
         <div className="uppercase bg-yellow-400  flex justify-center p-1 font-medium dark:text-black">
           express and discreet delivery
         </div>
-        <div className="flex justify-between py-4 border-b-2 items-center border-b-gray-100 px-4">
+        <div className="flex justify-between py-4 border-b-2 items-center border-b-gray-100 px-8">
           <div
             onClick={handleClose}
-            className=" cursor-pointer flex flex-row items-center " 
+            className=" cursor-pointer flex flex-row items-center "
           >
-           
             <span className=" font-medium dark:text-black">GO BACK</span>
             <FaArrowRight className="ml-3  text-xl dark:text-black" />
           </div>
 
-          <div className=" font-medium uppercase dark:text-black">My cart ({itemAmount})</div>
+          <div className=" font-medium uppercase dark:text-black">
+            My cart ({itemAmount})
+          </div>
         </div>
         {/* empty cart */}
         {cart == null || cart == undefined || cart == [] || cart.length == 0 ? (
@@ -146,7 +147,7 @@ const Sidebar = () => {
         )}
         {/* ////////// */}
         {/* this div is for displaying the cart items  */}
-        <div className="flex flex-col h-1/2 lg:h-[400px] overflow-y-auto overflow-x-hidden border-b px-4">
+        <div className="flex flex-col h-1/2  overflow-y-auto overflow-x-hidden border-b px-8">
           {cart &&
             cart.map((item) => (
               <div key={item._id}>
@@ -168,7 +169,7 @@ const Sidebar = () => {
 
                             </div> */}
         </div>
-        <div className="flex flex-cols h-60 mb-2 px-4 py-3 bg-[#faf9f6ca] overflow-y-auto">
+        <div className="flex flex-cols h-96 mb-2 px-10 pt-3 bg-[#faf9f6ca] overflow-y-auto">
           <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}>
             <input
               type="text"
@@ -199,16 +200,14 @@ const Sidebar = () => {
 
               <div className={`mt-5 ml-2 font-poppins flex justify-between`}>
                 <div>
-                  <div className="font-medium">Mrp</div>
+                  <div className="font-medium text-black">Mrp</div>
                 </div>
 
-                <div className="font-medium ">
-                  ₹{realTotalPrice}
-                </div>
+                <div className="font-medium text-black">₹{realTotalPrice}</div>
               </div>
               <div className={`mt-4 ml-2 font-poppins flex justify-between`}>
                 <div>
-                  <div className="font-medium">You Save</div>
+                  <div className="font-medium text-black">You Save</div>
                 </div>
 
                 <div className="font-medium text-red-600">
@@ -217,20 +216,20 @@ const Sidebar = () => {
               </div>
               <div className={`mt-4 ml-2 font-poppins flex justify-between`}>
                 <div>
-                  <div className="font-medium">Total Price</div>
+                  <div className="font-medium text-black">Total Price</div>
                   <span> (incl taxes ) </span>
                 </div>
 
-                <div className="font-medium text-xl">
+                <div className="font-medium text-xl text-black">
                   ₹{discountPrice > 0 ? discountPrice : totalPrice}
                 </div>
               </div>
 
-              <div>
+              <div className="h-52 md:h-60">
                 <div className="flex justify-center items-center font-poppins">
                   <label
                     htmlFor="termsCheckbox"
-                    className="text-[14px]  my-3  sm:my-5"
+                    className="text-[14px]  my-3  sm:my-5 text-black"
                   >
                     You are 21 and agree to the Terms & Conditions
                   </label>
@@ -240,7 +239,7 @@ const Sidebar = () => {
                     id="termsCheckbox"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
-                    className="w-5 h-5 ml-6 my-5 bg-white"
+                    className="w-5 h-5 ml-6 my-5 bg-white dark:bg-white dark:text-black"
                   />
                 </div>
 

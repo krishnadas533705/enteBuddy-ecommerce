@@ -16,14 +16,26 @@ const CouponList = () => {
     }
     setSideBar(false)
   },[])
+
+  const handleProductSearch = async (e) => {
+    const searchProducts = await products.filter((item) =>
+      item.title.startsWith(e.target.value)
+    );
+    if (e.target.value.trim() === "") {
+      setSearchProducts(null);
+    } else {
+      setSearchProducts(searchProducts);
+    }
+  };
+
   return (
     <div className="h-screen">
       <Navbar />
       <SideBar />
 
-      <section className="bg-white h-screen">
+      <section className=" h-screen">
         <div className="mt-5 lg:ms-32 flex justify-center">
-          <form className="md:w-1/3 mx-auto">
+          {/* <form className="md:w-1/3 mx-auto">
             <label
               htmlFor="default-search"
               className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -46,7 +58,7 @@ const CouponList = () => {
                 <FontAwesomeIcon icon={faSearch} />
               </button>
             </div>
-          </form>
+          </form> */}
         </div>
       <CouponTable />
     <div>

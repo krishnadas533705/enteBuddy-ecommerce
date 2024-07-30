@@ -227,7 +227,7 @@ const EditProduct = ({
                       <select
                         name="category"
                         id="category"
-                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50"
+                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 text-xs uppercase"
                         onChange={handleProductData}
                         value={updateData.category ? updateData.category : ""}
                       >

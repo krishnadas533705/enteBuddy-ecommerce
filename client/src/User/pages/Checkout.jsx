@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import logo from "../img/logo.png";
-import shiprokcet from "../img/shiprocket.jpeg";
+import homeDelivery from "../img/homeDelivery.jpg";
 import { CartContext } from "../contexts/CartContext";
 import { useContext, useState } from "react";
 import flag from "../img/flag.jpg";
@@ -81,7 +81,7 @@ const Checkout = () => {
   }, [cart]);
 
   const handleOrderDetails = (name, value) => {
-    console.log("name : ",name," ", " value :" , value)
+    console.log("name : ", name, " ", " value :", value);
     setOrderDetails((prev) => ({
       ...prev,
       [name]: value,
@@ -293,7 +293,7 @@ const Checkout = () => {
           </div>
         </div>
       </div>
-      <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
+      <div className="grid px-5 lg:grid-cols-2 lg:px-20 xl:px-32">
         <div className="px-4 pt-8 bg-gray-50">
           <p className="text-lg font-medium dark:text-black">Order Summary</p>
           <p className="text-gray-400">
@@ -327,8 +327,10 @@ const Checkout = () => {
 
           {/* ///// */}
           <form className="mt-5 grid gap-6 bg-gray-50">
-            <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-              <p className="text-lg font-medium dark:text-black">Payment Details</p>
+            <div className=" bg-gray-50 px-4 pt-8 lg:mt-0">
+              <p className="text-lg font-medium dark:text-black">
+                Payment Details
+              </p>
               <p className="text-gray-400 dark:text-blaxk">
                 Complete your order by providing your payment details.
               </p>
@@ -338,7 +340,7 @@ const Checkout = () => {
                   htmlFor="email"
                   className="mt-4 mb-2 block text-sm font-medium font-poppins dark:text-black"
                 >
-                 Name
+                  Name
                 </label>
                 <div className="">
                   <input
@@ -378,7 +380,9 @@ const Checkout = () => {
                     id="email"
                     name="email"
                     className={`w-full rounded-md border ${
-                      emailError ? "border-red-500" : "border-gray-200  dark:bg-white "
+                      emailError
+                        ? "border-red-500"
+                        : "border-gray-200  dark:bg-white "
                     } px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="Your.email@gmail.com"
                     value={orderDetails.email}
@@ -428,7 +432,9 @@ const Checkout = () => {
                     name="mobile"
                     value={orderDetails.mobile}
                     className={`w-full rounded-md border ${
-                      phoneNumberError ? "border-red-500" : "border-gray-200 dark:bg-white"
+                      phoneNumberError
+                        ? "border-red-500"
+                        : "border-gray-200 dark:bg-white"
                     }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="Your phone number"
                     required
@@ -481,7 +487,7 @@ const Checkout = () => {
                   </div>
                   <div className="font-medium font-poppins text-sm my-2  ">
                     <h6 className="mb-2 dark:text-black">State</h6>
-                    <StateSelect 
+                    <StateSelect
                       darkMode={true}
                       countryid={101}
                       onChange={(e) => {
@@ -489,13 +495,12 @@ const Checkout = () => {
                         handleOrderDetails("state", e.name);
                       }}
                       placeHolder="Select State"
-                      required 
-                      
+                      style={{ background: "white" }}
+                      required
                     />
                   </div>
 
                   <div className="font-poppins text-sm font-medium my-2">
-                    <div></div>
                     <h2 className="mb-2 dark:text-black">City</h2>
                     <CitySelect
                       countryid={101}
@@ -505,24 +510,31 @@ const Checkout = () => {
                         handleOrderDetails("city", e.name);
                       }}
                       placeHolder="Select city"
-                      required 
-                      style={{background: "white"}}
+                      required
+                      style={{ background: "white" }}
                     />
 
-                    <input
-                      type="text"
-                      name="pincode"
-                      value={orderDetails.pincode}
-                      className="flex-shrink-0 w-full  rounded-md border dark:bg-white dark:text-black border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="Pin code"
-                      onChange={(e) => {
-                        handleOrderDetails(e.target.name, e.target.value);
-                      }}
-                      onInput={(e) =>
-                        validatePinCode(e.target.value, setPinCodeError, userId)
-                      }
-                    />
+                   
                   </div>
+                   <div className="mt-3 w-full">
+                      <input
+                        type="text"
+                        name="pincode"
+                        value={orderDetails.pincode}
+                        className="flex-shrink-0 w-full  rounded-md border dark:bg-white dark:text-black border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                        placeholder="Pin code"
+                        onChange={(e) => {
+                          handleOrderDetails(e.target.name, e.target.value);
+                        }}
+                        onInput={(e) =>
+                          validatePinCode(
+                            e.target.value,
+                            setPinCodeError,
+                            userId
+                          )
+                        }
+                      />
+                    </div>
 
                   {pinCodeError.msg && (
                     <p
@@ -542,7 +554,9 @@ const Checkout = () => {
         {/*  */}
         {/* shipping method */}
         <div className="p-7">
-          <p className="mt-8 text-lg font-medium dark:text-black">Shipping Methods</p>
+          <p className="mt-8 text-lg font-medium dark:text-black">
+            Shipping Methods
+          </p>
           <p className="text-sm text-gray-600 mb-10 dark:text-black">
             Choose any one of the shipping methods.
           </p>
@@ -569,16 +583,16 @@ const Checkout = () => {
                 htmlFor="radio_1"
               >
                 <img
-                  className="w-8 object-contain"
-                  src={shiprokcet}
+                  className="w-12 md:w-14 object-contain"
+                  src={homeDelivery}
                   alt="shiprocket"
                 />
                 <div className="ml-5">
                   <span className="mt-2 font-semibold uppercase dark:text-black">
-                    Shiprocket Delivery
+                    Door Delivery
                   </span>
                   <p className="text-slate-500 text-sm leading-6 dark:text-black">
-                    Delivery: 2 to 4 Days 
+                    Delivery: 2 to 4 Days
                   </p>
                   <p className="text-slate-500 text-sm leading-6 dark:text-black">
                     COD AND PREPAID
@@ -606,7 +620,7 @@ const Checkout = () => {
                 htmlFor="dtdc"
               >
                 <img
-                  className="w-8 object-contain"
+                  className="w-12 md:w-14 object-contain"
                   src={DTDC}
                   alt="shiprocket"
                 />
@@ -632,7 +646,9 @@ const Checkout = () => {
           {/* payment method */}
           {orderDetails.shippingMethod == "shiprocket" && (
             <div className="mt-8">
-              <h1 className="font-medium text-xl dark:text-black">Payment Method</h1>
+              <h1 className="font-medium text-xl dark:text-black">
+                Payment Method
+              </h1>
               <p className="text-sm text-gray-600 dark:text-black">
                 Choose payment method for shiprocket delivery.
               </p>
