@@ -173,10 +173,11 @@ const Sidebar = () => {
           <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}>
             <input
               type="text"
-              className="w-full border-black border rounded-full py-3 px-4 mt-2 mb-2"
+              className="w-full border-black bg-white dark:bg-white dark:text-black border rounded-full py-3 px-4 mt-2 mb-2"
               placeholder="Your coupon code."
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value)}
+              style={{backgroundColor:"white"}}
             />
             <button
               className={`w-full bg-hero2 bg-contain bg-tertiary px-4 text-white py-3 rounded-full  font-poppins  `}
@@ -240,7 +241,7 @@ const Sidebar = () => {
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     className="w-5 h-5 ml-6 my-5 bg-white dark:bg-white dark:text-black"
-                    style={{background:"white"}}
+                    style={{backgroundColor:"white"}}
                   />
                 </div>
 
