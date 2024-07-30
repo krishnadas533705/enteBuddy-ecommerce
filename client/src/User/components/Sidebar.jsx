@@ -169,7 +169,7 @@ const Sidebar = () => {
 
                             </div> */}
         </div>
-        <div className="flex flex-cols h-96 mb-2 px-10 pt-3 bg-[#faf9f6ca] overflow-y-auto">
+        <div className="flex flex-col h-96 mb-2 px-10 pt-3 bg-[#faf9f6ca] overflow-y-scroll">
           <div className={` ${itemAmount === 0 ? "hidden" : "block"}  w-full `}>
             <input
               type="text"
@@ -225,7 +225,7 @@ const Sidebar = () => {
                 </div>
               </div>
 
-              <div className="h-52 md:h-60">
+              <div className="h-96 ">
                 <div className="flex justify-center items-center font-poppins">
                   <label
                     htmlFor="termsCheckbox"

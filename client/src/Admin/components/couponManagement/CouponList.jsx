@@ -33,7 +33,7 @@ const CouponList = () => {
       <Navbar />
       <SideBar />
 
-      <section className=" h-screen">
+      <section className=" h-screen dark:bg-white dark:text-black">
         <div className="mt-5 lg:ms-32 flex justify-center">
           {/* <form className="md:w-1/3 mx-auto">
             <label
