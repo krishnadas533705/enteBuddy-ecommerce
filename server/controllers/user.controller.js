@@ -140,7 +140,6 @@ export const getProducts = async (req, res, next) => {
 //create new order
 export const createOrder = async (req, res, next) => {
   try {
-    
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");

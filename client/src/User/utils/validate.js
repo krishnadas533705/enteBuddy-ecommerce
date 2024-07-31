@@ -23,30 +23,34 @@ export const validatePhoneNumber = (phoneNumber) => {
 export const validatePinCode = async (pinCode, setError, userId) => {
   // Regular expression for pin code validation (assuming 6 digits)
   try {
-    const pinCodeRegex = /^\d{6}$/;
-    if (!pinCodeRegex.test(pinCode)) {
-      setError({ msg: "Not a valid pincode", error: true });
-    } else {
-      const response = await fetch(
-        `/api/user/checkPostCode/${userId}/${pinCode}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        const result = await response.json();
-        if (result.isAvailable) {
-          console.log("valid pincode true ");
-          setError({ msg: "Pincode is valid.", error: false });
-        } else {
-          setError({
-            msg: "Delivery is not available at this location",
-            error: true,
-          });
+    return new Promise(async (resolve, reject) => {
+      const pinCodeRegex = /^\d{6}$/;
+      if (!pinCodeRegex.test(pinCode)) {
+        setError({ msg: "Not a valid pincode", error: true });
+        
+      } else {
+        const response = await fetch(
+          `/api/user/checkPostCode/${userId}/${pinCode}`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          const result = await response.json();
+          if (result.isAvailable) {
+            setError({ msg: "Pincode is valid.", error: false });
+            resolve("Valid pincode.");
+          } else {
+            setError({
+              msg: "Delivery is not available at this location",
+              error: true,
+            });
+            reject("Delivery is not available at this location.");
+          }
         }
       }
-    }
+    });
   } catch (err) {
     console.log("Error in validating pincode : ", err);
   }

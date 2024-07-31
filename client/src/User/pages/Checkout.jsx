@@ -64,7 +64,7 @@ const Checkout = () => {
     shippingMethod: null,
     paymentMethod: null,
   });
-  const [shipMethodError, setShipMethodError] = useState(null);
+  const [shipMethodError, setShipMethodError] = useState(false);
   const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
   const { setOrderPlaced } = useContext(OrderContext);
@@ -92,23 +92,25 @@ const Checkout = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     // Perform validation
+    let error = false;
     if (!validateName(orderDetails.name)) {
       setNameError("Please enter your name");
+      error = true;
     } else {
       setNameError("");
     }
 
     if (!validateEmail(orderDetails.email)) {
       setEmailError("Please enter a valid email address");
+      error = true;
     } else {
       setEmailError("");
     }
 
     if (!validatePhoneNumber(orderDetails.mobile)) {
       setPhoneNumberError("Please enter a valid phone number");
+      error = true;
     } else {
       setPhoneNumberError("");
     }
@@ -118,6 +120,7 @@ const Checkout = () => {
       orderDetails.shippingMethod == ""
     ) {
       setShipMethodError(true);
+      error = true;
     } else {
       setShipMethodError(false);
     }
@@ -127,6 +130,7 @@ const Checkout = () => {
       orderDetails.paymentMethod == null
     ) {
       setPaymentError(true);
+      error = true;
     } else {
       setPaymentError(false);
     }
@@ -134,83 +138,93 @@ const Checkout = () => {
 
     if (cityid === 0 || stateid === 0) {
       toast.error("Please choose your city and state");
+      error = true;
     }
     // Additional logic for handling form submission
-    if (
-      validateName(orderDetails.name) &&
-      validateEmail(orderDetails.email) &&
-      validatePhoneNumber(orderDetails.mobile) &&
-      !pinCodeError.error &&
-      cityid !== 0 &&
-      stateid !== 0 &&
-      shipMethodError == false &&
-      paymentError == false
-    ) {
+    
+    if (error == false) {
       // Form submission logic here
-
       if (
         (orderDetails.shippingMethod == "shiprocket" &&
           orderDetails.paymentMethod == "Prepaid") ||
         orderDetails.shippingMethod == "DTDC"
       ) {
-        const response = await fetch(`/api/payment/createPayment/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: discountPrice > 0 ? discountPrice : totalPrice,
-          }),
-          credentials: "include",
-        });
+        const newOrder = async () => {
 
-        if (response.ok) {
-          const paymentOrder = await response.json();
-          try {
-            await makePayment(
-              paymentOrder.key_id,
-              paymentOrder.order,
-              userId,
-              orderDetails
-            );
-            clearCart();
-            handleClose();
-            setOrderPlaced(orderDetails);
-            navigate(`/fetchOrders/${userId}`)
-            
-          } catch (err) {
-            toast.error("Payment failed");
+          const response = await fetch(`/api/payment/createPayment/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              amount: discountPrice > 0 ? discountPrice : totalPrice,
+            }),
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            const paymentOrder = await response.json();
+            try {
+              await makePayment(
+                paymentOrder.key_id,
+                paymentOrder.order,
+                userId,
+                orderDetails
+              );
+              clearCart();
+              handleClose();
+              setOrderPlaced(orderDetails);
+              navigate(`/fetchOrders/${userId}`);
+            } catch (err) {
+              toast.error("Payment failed");
+            }
+          } else {
+            toast.error("SERVER ERROR! TRY AGAIN.");
+            throw new Error("SERVER ERROR! TRY AGAIN.");
           }
-        } else {
-          toast.error("SERVER ERROR! TRY AGAIN.");
-        }
+        };
+
+        toast.promise(newOrder(), {
+          loading: "Creating Your Order...",
+          success: <b>Order Placed.</b>,
+          error: <b>Failed to create order, try again.</b>,
+        });
       } else {
         // cash on delivery for shiprocket
-        const response = await fetch(`/api/user/newOrder/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...orderDetails,
-            sellingPrice: discountPrice > 0 ? discountPrice : totalPrice,
-          }),
-          credentials: "include",
-        });
+        const newCodOrder = async () => {
+          const response = await fetch(`/api/user/newOrder/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...orderDetails,
+              sellingPrice: discountPrice > 0 ? discountPrice : totalPrice,
+            }),
+            credentials: "include",
+          });
 
-        if (response.ok) {
-          setOrderPlaced(orderDetails);
-          localStorage.setItem("enteBuddyCartPrice", 0);
-          localStorage.setItem("enteBuddyCart", null);
-          localStorage.setItem("enteBuddyCouponId", "");
-          clearCart();
-          handleClose();
-          navigate(`/fetchOrders/${userId}`);
-        } else {
-          toast.error("Failed to place order, please try again.");
-        }
+          if (response.ok) {
+            setOrderPlaced(orderDetails);
+            localStorage.setItem("enteBuddyCartPrice", 0);
+            localStorage.setItem("enteBuddyCart", null);
+            localStorage.setItem("enteBuddyCouponId", "");
+            clearCart();
+            handleClose();
+            navigate(`/fetchOrders/${userId}`);
+          } else {
+            toast.error("Failed to place order, please try again.");
+            throw new Error("Failed to create order");
+          }
+        };
+
+        toast.promise(newCodOrder(), {
+          loading: "Creating Your Order...",
+          success: <b>Order Placed.</b>,
+          error: <b>Failed to create order, try again.</b>,
+        });
       }
-    }
+    } 
   };
 
   return (
@@ -529,9 +543,33 @@ const Checkout = () => {
                       onChange={(e) => {
                         handleOrderDetails(e.target.name, e.target.value);
                       }}
-                      onInput={(e) =>
-                        validatePinCode(e.target.value, setPinCodeError, userId)
-                      }
+                      onInput={(e) => {
+                        if (e.target.value.length == 6) {
+                          toast.promise(
+                            validatePinCode(
+                              e.target.value,
+                              setPinCodeError,
+                              userId
+                            ),
+                            {
+                              loading: "Checking pincode...",
+                              success: <b>Pincode is valid.</b>,
+                              error: (
+                                <b>
+                                  Delivery not available at this
+                                  location.
+                                </b>
+                              ),
+                            }
+                          );
+                        } else {
+                          validatePinCode(
+                            e.target.value,
+                            setPinCodeError,
+                            userId
+                          );
+                        }
+                      }}
                     />
                   </div>
 
@@ -576,7 +614,10 @@ const Checkout = () => {
                   handleOrderDetails(e.target.name, e.target.value)
                 }
               />
-              <label htmlFor="radio_1" className="peer-checked:border-gray-700 absolute cursor-pointer right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></label>
+              <label
+                htmlFor="radio_1"
+                className="peer-checked:border-gray-700 absolute cursor-pointer right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"
+              ></label>
               <label
                 className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
                 htmlFor="radio_1"
@@ -613,7 +654,10 @@ const Checkout = () => {
                   handleOrderDetails(e.target.name, e.target.value)
                 }
               />
-              <label htmlFor="dtdc" className="peer-checked:border-gray-700 cursor-pointer absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></label>
+              <label
+                htmlFor="dtdc"
+                className="peer-checked:border-gray-700 cursor-pointer absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"
+              ></label>
               <label
                 className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
                 htmlFor="dtdc"
