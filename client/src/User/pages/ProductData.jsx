@@ -54,7 +54,7 @@ const ProductData = () => {
             className="mySwiper"
           >
             {[primaryImage, ...secondaryImages].map((image) => (
-              <SwiperSlide key={image.name}>
+              <SwiperSlide key={image.name + Math.random()}>
                 <img
                   src={API + image.path.split("server")[1]}
                   className="object-fit w-full"
@@ -75,7 +75,7 @@ const ProductData = () => {
           <div className="py-1 font-medium font-poppins text-sm md:text-[16px]">
             {description}
           </div>
-          <div className="py-1 font-poppins text-sm md:text-[16px] flex mt-3 mb-1 ">
+          <div className="py-1 font-poppins text-sm md:text-[16px] flex justify-center mt-3 mb-1 gap-3 ">
             {productFeatures &&
               productFeatures.map((feature) => (
                 <div className="flex flex-col items-center" key={feature._id}>
@@ -148,7 +148,7 @@ const ProductData = () => {
               ))}
           </div>
 
-          <div className="fixed bottom-0 bg-blue-950 text-white justify-evenly p-4 w-full left-0 flex z-10">
+          <div className="fixed bottom-0 bg-blue-950 text-white justify-evenly p-4 w-full left-0 flex">
             <div className="w-6/12 flex items-center ">
               <div className="max-w-[45px] rounded-full">
                 <img

@@ -26,6 +26,9 @@ import { makePayment } from "../utils/payment";
 import { Navigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 import { SidebarContext } from "../contexts/SidebarContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHourglass } from "@fortawesome/free-solid-svg-icons";
+import { OrderContext } from "../contexts/OrderContext";
 
 const Checkout = () => {
   const {
@@ -64,6 +67,7 @@ const Checkout = () => {
   const [shipMethodError, setShipMethodError] = useState(null);
   const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
+  const { setOrderPlaced } = useContext(OrderContext);
 
   const navigate = useNavigate();
   const { userId } = useContext(userContext);
@@ -81,7 +85,6 @@ const Checkout = () => {
   }, [cart]);
 
   const handleOrderDetails = (name, value) => {
-    console.log("name : ", name, " ", " value :", value);
     setOrderDetails((prev) => ({
       ...prev,
       [name]: value,
@@ -170,14 +173,16 @@ const Checkout = () => {
               userId,
               orderDetails
             );
-            navigate("/");
             clearCart();
             handleClose();
+            setOrderPlaced(orderDetails);
+            navigate(`/fetchOrders/${userId}`)
+            
           } catch (err) {
-            alert("payment failed");
+            toast.error("Payment failed");
           }
         } else {
-          alert("SERVER ERROR! TRY AGAIN.");
+          toast.error("SERVER ERROR! TRY AGAIN.");
         }
       } else {
         // cash on delivery for shiprocket
@@ -194,7 +199,7 @@ const Checkout = () => {
         });
 
         if (response.ok) {
-          alert("order placed successfully");
+          setOrderPlaced(orderDetails);
           localStorage.setItem("enteBuddyCartPrice", 0);
           localStorage.setItem("enteBuddyCart", null);
           localStorage.setItem("enteBuddyCouponId", "");
@@ -202,14 +207,14 @@ const Checkout = () => {
           handleClose();
           navigate(`/fetchOrders/${userId}`);
         } else {
-          alert("Failed to place order, please try again.");
+          toast.error("Failed to place order, please try again.");
         }
       }
     }
   };
 
   return (
-    <div className="font-poppins bg-gray-50">
+    <div className="font-poppins bg-gray-50 pb-16">
       <Toaster toastOptions={{ duration: 2000 }} />
       <div className="flex flex-col items-center border-b bg-white py-2 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <a
@@ -513,28 +518,22 @@ const Checkout = () => {
                       required
                       style={{ background: "white" }}
                     />
-
-                   
                   </div>
-                   <div className="mt-3 w-full">
-                      <input
-                        type="text"
-                        name="pincode"
-                        value={orderDetails.pincode}
-                        className="flex-shrink-0 w-full  rounded-md border dark:bg-white dark:text-black border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                        placeholder="Pin code"
-                        onChange={(e) => {
-                          handleOrderDetails(e.target.name, e.target.value);
-                        }}
-                        onInput={(e) =>
-                          validatePinCode(
-                            e.target.value,
-                            setPinCodeError,
-                            userId
-                          )
-                        }
-                      />
-                    </div>
+                  <div className="mt-3 w-full">
+                    <input
+                      type="text"
+                      name="pincode"
+                      value={orderDetails.pincode}
+                      className="flex-shrink-0 w-full  rounded-md border dark:bg-white dark:text-black border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      placeholder="Pin code"
+                      onChange={(e) => {
+                        handleOrderDetails(e.target.name, e.target.value);
+                      }}
+                      onInput={(e) =>
+                        validatePinCode(e.target.value, setPinCodeError, userId)
+                      }
+                    />
+                  </div>
 
                   {pinCodeError.msg && (
                     <p
@@ -577,7 +576,7 @@ const Checkout = () => {
                   handleOrderDetails(e.target.name, e.target.value)
                 }
               />
-              <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+              <label htmlFor="radio_1" className="peer-checked:border-gray-700 absolute cursor-pointer right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></label>
               <label
                 className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
                 htmlFor="radio_1"
@@ -614,7 +613,7 @@ const Checkout = () => {
                   handleOrderDetails(e.target.name, e.target.value)
                 }
               />
-              <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+              <label htmlFor="dtdc" className="peer-checked:border-gray-700 cursor-pointer absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></label>
               <label
                 className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
                 htmlFor="dtdc"
@@ -726,7 +725,7 @@ const Checkout = () => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white hover:bg-gray-600 "
           >
             Place Order
           </button>

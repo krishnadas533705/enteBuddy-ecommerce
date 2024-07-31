@@ -140,6 +140,7 @@ export const getProducts = async (req, res, next) => {
 //create new order
 export const createOrder = async (req, res, next) => {
   try {
+    
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -185,7 +186,7 @@ export const createOrder = async (req, res, next) => {
       });
       await newOrder.save();
     }
-
+    
     ///pushing order to shiprocket if shipping method is shiprocket
     //getting authtoken of shiprocket
     let responseText = "order placed";

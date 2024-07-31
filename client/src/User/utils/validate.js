@@ -36,7 +36,6 @@ export const validatePinCode = async (pinCode, setError, userId) => {
       );
       if (response.ok) {
         const result = await response.json();
-        console.log("result : ", result);
         if (result.isAvailable) {
           console.log("valid pincode true ");
           setError({ msg: "Pincode is valid.", error: false });

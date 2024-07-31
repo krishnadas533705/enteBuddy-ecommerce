@@ -16,8 +16,8 @@ const Footer = () => {
   const { userId } = useContext(userContext);
   return (
     <>
-      <div className="px-7 py-5 md:px-40 bg-hero2 bg-tertiary bg-contain text-secondary font-poppins font-medium">
-        <div className="flex justify-between ">
+      <div className="py-5 md:px-20 bg-hero2 bg-tertiary bg-contain text-secondary font-poppins font-medium h-fit bottom-0 left-0 right-0 flex z-20 relative">
+        <div className="flex justify-between w-full  ps-8 pe-3 md:gap-10 lg:ps-14">
           <div className="flex flex-col uppercase text-[8px] py-5 md:text-lg">
             <Link to="/privacypolicy">
               {" "}
@@ -42,12 +42,12 @@ const Footer = () => {
               </div>{" "}
             </Link>
           </div>
-          <div className="'flex flex-col w-80 md:w-60 justify-center items-center">
+          <div className="flex flex-col w-44 md:w-60 justify-center items-center">
             <div>
               <img src={logo} alt="logo" className="" />
             </div>
 
-            <div className="flex justify-between  text-primary px-16 py-5 ">
+            <div className="flex justify-between  text-primary px-16 py-5 gap-5 ">
               <FaFacebookF />
               <FaInstagram className="mx-1" />
               <FaTwitter />

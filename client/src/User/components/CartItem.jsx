@@ -6,7 +6,7 @@ import { FiTrash2 } from "react-icons/fi";
 
 const CartItem = ({ item }) => {
   const { removeFromCart, addToCart, decreaseCart } = useContext(CartContext);
-  console.log("item : ",item)
+  
   // destructure item
   const { _id, primaryImage, productName, price, quantity,realPrice } = item;
   let [discountPrice, setDiscountPrice] = useState(null);

@@ -80,6 +80,7 @@
               .catch((err) => {
                   setLoading(false);
                   toast.error("invalid phone number")
+                  console.log(err)
               });
       }
       const resendOTP = () => {
@@ -127,7 +128,7 @@
                   await new Promise((resolve) => setTimeout(resolve, 2000));
                   onClose();
               } else {
-                  alert("failed to log in ");
+                  alert("Failed to log in. ");
               }
           } catch (err) {
               console.log("error signing in : ", err);

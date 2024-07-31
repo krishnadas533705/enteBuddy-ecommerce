@@ -56,12 +56,12 @@ const Header = (cookies) => {
     if (!userId) {
       e.preventDefault();
       setShowModal(true);
-      toast.error("Please login to view your orders !!!");
+      toast.error("Please login to continue!!!");
     }
   };
   return (
     <div>
-      <Toaster toastOptions={{ duration: 1000 }} />
+      <Toaster toastOptions={{ duration: 2000 }} />
       <div
         className={`navbar bg-hero2 bg-tertiary bg-contain z-10 fixed transition-transform duration-300 ${
           visible ? "" : "transform -translate-y-full "
@@ -179,9 +179,11 @@ const Header = (cookies) => {
           <button className="btn btn-ghost btn-circle" onClick={handleCart}>
             <div className="indicator">
               <FaShoppingCart className="text-2xl text-yellow-400" />
-              <span className="badge badge-sm badge-secondary bg-red-500  indicator-item">
-                {itemAmount}
-              </span>
+              {itemAmount > 0 && (
+                <span className="badge badge-sm badge-secondary  indicator-item" style={{backgroundColor:"#DE5B9D"}}>
+                  {itemAmount}
+                </span>
+              )}
             </div>
           </button>
         </div>

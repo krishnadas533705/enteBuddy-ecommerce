@@ -22,8 +22,6 @@ const Logout = () => {
        
         window.location.reload();
         
-
-        navigate('/');
       } else {
         console.error('Logout failed:', response.statusText);
        

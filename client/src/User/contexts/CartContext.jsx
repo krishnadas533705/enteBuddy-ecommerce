@@ -27,9 +27,8 @@ const CartProvider = ({ children }) => {
   }, []);
   const [itemAmount, setItemAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [totalDiscount,setTotalDiscount] = useState(0)
-  const [realTotalPrice,setRealTotalPrice] = useState(0)
-  
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [realTotalPrice, setRealTotalPrice] = useState(0);
 
   // setting the total price in the cart
   useEffect(() => {
@@ -42,9 +41,9 @@ const CartProvider = ({ children }) => {
       const realPriceTotal = cart.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.realPrice * currentItem.quantity;
       }, 0);
-      setRealTotalPrice(realPriceTotal)
-      let total_discount = (realPriceTotal - amount) + parseInt(discountPrice)
-      setTotalDiscount(total_discount)
+      setRealTotalPrice(realPriceTotal);
+      let total_discount = realPriceTotal - amount + parseInt(discountPrice);
+      setTotalDiscount(total_discount);
     }
   }, [cart]);
 
@@ -66,9 +65,14 @@ const CartProvider = ({ children }) => {
         setCouponId("");
         setCart(cartData);
       } else if (response.status == 401 || response.status == 403) {
-        alert("Your session has been expired, Please login again.");
+        toast.error(
+          "Your session has been expired, Please login again to continue shopping.",
+          { duration: 6000 }
+        );
         localStorage.clear();
-        window.location.href = "/";
+        setCart(null);
+        setIsOpen(false);
+        setShowModal(true);
       }
       return;
     } catch (err) {
@@ -91,9 +95,14 @@ const CartProvider = ({ children }) => {
 
         fetchCart(userId);
       } else if (response.status == 401 || response.status == 403) {
-        alert("Your session has been expired, Please login again.");
+        toast.error(
+          "Your session has been expired, Please login again to continue shopping.",
+          { duration: 6000 }
+        );
         localStorage.clear();
-        window.location.href = "/";
+        setCart(null)
+        setIsOpen(false)
+        setShowModal(true);
       }
     } catch (err) {
       console.log("error in adding to cart : ", err);
@@ -109,9 +118,11 @@ const CartProvider = ({ children }) => {
       if (response.ok) {
         fetchCart(userId);
       } else if (response.status == 401 || response.status == 403) {
-        alert("Your session has been expired, Please login again.");
+        toast.error("Your session has been expired, Please login again.");
         localStorage.clear();
-        window.location.href = "/";
+        setCart(null);
+        setIsOpen(false);
+        setShowModal(true);
       }
     } catch (err) {
       console.log(err);
@@ -127,9 +138,11 @@ const CartProvider = ({ children }) => {
       if (response.ok) {
         fetchCart(userId);
       } else if (response.status == 401 || response.status == 403) {
-        alert("Your session has been expired, Please login again.");
+        toast.error("Your session has been expired, Please login again.");
         localStorage.clear();
-        window.location.href = "/";
+        setCart(null);
+        setIsOpen(false);
+        setShowModal(true);
       }
     } catch (err) {
       console.log(err);
@@ -164,9 +177,11 @@ const CartProvider = ({ children }) => {
 
           fetchCart(userId);
         } else if (response.status == 401 || response.status == 403) {
-          alert("Your session has been expired, Please login again.");
+          toast.error("Your session has been expired, Please login again.");
           localStorage.clear();
-          window.location.href = "/";
+          setCart(null);
+          setIsOpen(false);
+          setShowModal(true);
         }
       }
     } catch (err) {
@@ -188,7 +203,7 @@ const CartProvider = ({ children }) => {
     if (userId) {
       setIsOpen((prev) => !prev);
     } else {
-      toast.error("Please log in to order");
+      toast.error("Please log in to continue shopping.");
       setShowModal(true);
     }
   };
@@ -213,7 +228,7 @@ const CartProvider = ({ children }) => {
         totalDiscount,
         setTotalDiscount,
         realTotalPrice,
-        setRealTotalPrice
+        setRealTotalPrice,
       }}
     >
       {children}

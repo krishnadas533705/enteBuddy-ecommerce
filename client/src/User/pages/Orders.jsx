@@ -5,8 +5,10 @@ import logo from "../img/logo.png";
 import { Link } from "react-router-dom";
 import { OrderContext } from "../contexts/OrderContext";
 import { Pagination } from "@mui/material";
+import toast from "react-hot-toast";
 const Orders = () => {
-  const { orders, fetchOrders } = useContext(OrderContext);
+  const { orders, fetchOrders, orderPlaced, setOrderPlaced } =
+    useContext(OrderContext);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrenPage] = useState(1);
 
@@ -14,11 +16,26 @@ const Orders = () => {
   useEffect(() => {
     (async () => {
       let allOrders = await fetchOrders();
-      let totalPages = Math.ceil(allOrders.length / 5);
-      setTotalPages(totalPages);
-      let page = parseInt(currentPage);
-      let firstPageOrders = allOrders.slice((page - 1) * 5, page * 5);
-      setCurrentOrders(firstPageOrders);
+      if (allOrders && allOrders.length) {
+        let totalPages = Math.ceil(allOrders.length / 5);
+        setTotalPages(totalPages);
+        let page = parseInt(currentPage);
+        let firstPageOrders = allOrders.slice((page - 1) * 5, page * 5);
+        setCurrentOrders(firstPageOrders);
+      }
+      if (orderPlaced != null) {
+        toast.success(
+          `Order Placed Successfully. Your order will be delivered to : ${orderPlaced.name},
+            ${orderPlaced.billing_address},
+            ${orderPlaced.city},
+            ${orderPlaced.state},
+            ${orderPlaced.pincode}`,
+          {
+            duration: 10000,
+          }
+        );
+        setOrderPlaced(null);
+      }
     })();
   }, []);
 
@@ -27,8 +44,7 @@ const Orders = () => {
     setCurrentOrders(pageOrders);
     setCurrenPage(page);
   };
-
-  if (orders.length === 0) {
+  if (!orders) {
     return (
       <div>
         <Shimmer />
@@ -44,6 +60,24 @@ const Orders = () => {
         <div className="flex justify-center mt-3 mb-2 text-3xl font-bold underline text-pink-600">
           <h1>My Orders</h1>
         </div>
+
+        {orders && orders.length == 0 ? (
+          <div className="flex justify-center items-center text-center px-4 py-8">
+            <div className="md:w-1/2">
+              <p className="font-mono uppercase font-semibold dark:text-black">
+                You order history is currently empty. Explore our products and
+                place your first order today!
+              </p>
+              <Link to={`/`}>
+                <button className="mt-2 border border- px-6 py-3 bg-[#5B4663] text-white rounded-3xl ml-0 font-poppins hover:bg-primary hover:text-black">
+                  Shop now
+                </button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
         {currentOrders &&
           currentOrders.map((order, orderIndex) => (
             <div
@@ -72,14 +106,17 @@ const Orders = () => {
                   </div>
                   <div>
                     <div className="flex">
-                    {order.products.map((product,index) => (
-                      <div className="font-medium" key={product._id + Math.random()}>
-                        {product.productName } 
-                        {index != order.products.length - 1 && 
-                          <span className="mx-3">&</span>
-                        }
-                      </div>
-                    ))}
+                      {order.products.map((product, index) => (
+                        <div
+                          className="font-medium"
+                          key={product._id + Math.random()}
+                        >
+                          {product.productName}
+                          {index != order.products.length - 1 && (
+                            <span className="mx-3">&</span>
+                          )}
+                        </div>
+                      ))}
                     </div>
                     <div
                       className={`${
