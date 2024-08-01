@@ -42,12 +42,12 @@ const Footer = () => {
               </div>{" "}
             </Link>
           </div>
-          <div className="flex flex-col w-40 md:w-60 justify-center items-center ms-3">
+          <div className="flex flex-col w-56 md:w-60 justify-center items-center ms-3">
             <div>
               <img src={logo} alt="logo" className="" />
             </div>
 
-            <div className="flex justify-between  text-primary px-16 py-5 gap-3 ">
+            <div className="flex justify-evenly  text-primary pe-2 py-4 gap-2 ">
               <Link
                 target="_blank"
                 to={

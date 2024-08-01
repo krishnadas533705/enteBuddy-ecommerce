@@ -81,32 +81,41 @@ const CartProvider = ({ children }) => {
   };
   //  add to cart
   const addToCart = async (product) => {
-    try {
-      const response = await fetch(`/api/user/addToCart/${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(product),
-        credentials: "include",
-      });
-      if (response.ok) {
-        toast.success("product added to cart");
-
-        fetchCart(userId);
-      } else if (response.status == 401 || response.status == 403) {
-        toast.error(
-          "Your session has been expired, Please login again to continue shopping.",
-          { duration: 6000 }
-        );
-        localStorage.clear();
-        setCart(null)
-        setIsOpen(false)
-        setShowModal(true);
+    const addingToCart = async () => {
+      try {
+        new Promise(async (resolve, reject) => {
+          const response = await fetch(`/api/user/addToCart/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+            credentials: "include",
+          });
+          if (response.ok) {
+            fetchCart(userId);
+            resolve();
+          } else if (response.status == 401 || response.status == 403) {
+            toast.error(
+              "Your session has been expired, Please login again to continue shopping.",
+              { duration: 6000 }
+            );
+            localStorage.clear();
+            setCart(null);
+            setIsOpen(false);
+            setShowModal(true);
+            reject();
+          }
+        });
+      } catch (err) {
+        console.log("error in adding to cart : ", err);
       }
-    } catch (err) {
-      console.log("error in adding to cart : ", err);
-    }
+    };
+    toast.promise(addingToCart(), {
+      loading: "Adding product to cart...",
+      success: <b>Product added to cart.</b>,
+      error: <b>Failed to add product.</b>,
+    });
   };
 
   const removeFromCart = async (id) => {

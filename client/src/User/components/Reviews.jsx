@@ -27,7 +27,7 @@ const Reviews = ({ handleReviewCount }) => {
                           key={index}
                           type="radio"
                           name={`rating-${item.rating}`}
-                          className="mask mask-star-2 bg-yellow-400 w-5 h-5"
+                          className="mask mask-star-2 bg-[#DE5B9D] w-5 h-5"
                           disabled
                         />
                       ))}

@@ -45,7 +45,7 @@ const ProductData = () => {
   return (
     <div>
       <div className="flex flex-col md:flex-row pt-[65px] md:pb-1 md:w-screen md:h-screen  items-center overflow-visible bg font">
-        <div className="w-full  md:w-1/2 flex justify-center md:h-full">
+        <div className="w-full md:w-1/2 md:h-5/6 flex justify-center text-center">
           <Swiper
             modules={[Navigation, Pagination]} // Use pagination module
             pagination={{
@@ -54,10 +54,10 @@ const ProductData = () => {
             className="mySwiper"
           >
             {[primaryImage, ...secondaryImages].map((image) => (
-              <SwiperSlide key={image.name + Math.random()}>
+              <SwiperSlide key={image.name + Math.random()} style={{display:'flex', justifyContent:'center'}}>
                 <img
                   src={API + image.path.split("server")[1]}
-                  className="object-fit w-full"
+                  className="w-full "
                   alt="img"
                 />
               </SwiperSlide>
@@ -122,7 +122,7 @@ const ProductData = () => {
               handleCart();
               addToCart(product, id);
             }}
-            className=" bg-blue-950 text-white hover:bg-primary hover:text-black focus:bg-primary focus:text-black font-medium font-poppins p-2  w-52 flex items-center justify-center  mx-auto  rounded-full text-lg "
+            className=" hover:bg-blue-950 hover:text-white bg-primary text-black focus:bg-primary focus:text-black font-medium font-poppins p-2  w-52 flex items-center justify-center  mx-auto  rounded-full text-lg "
           >
             Add to cart
           </button>
@@ -148,7 +148,7 @@ const ProductData = () => {
               ))}
           </div>
 
-          <div className="fixed bottom-0 bg-blue-950 text-white justify-evenly p-4 w-full left-0 flex z-10">
+          <div className="fixed bottom-0 text-white justify-evenly p-4 w-full left-0 flex z-10" style={{backgroundColor:'#3A2D3F'}}>
             <div className="w-6/12 flex items-center ">
               <div className="max-w-[45px] rounded-full">
                 <img
@@ -166,7 +166,7 @@ const ProductData = () => {
                 handleCart();
                 addToCart(product, id);
               }}
-              className="w-6/12 md:w-3/12  bg-primary text-black font-medium font-poppins p-2 rounded-full text-lg flex items-center justify-center"
+              className="hover:bg-blue-950 hover:text-white cursor-pointer w-6/12 md:w-3/12  bg-primary text-black font-medium font-poppins p-2 rounded-full text-lg flex items-center justify-center"
             >
               Add to cart
             </div>
