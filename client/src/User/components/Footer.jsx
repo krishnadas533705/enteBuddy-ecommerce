@@ -42,15 +42,36 @@ const Footer = () => {
               </div>{" "}
             </Link>
           </div>
-          <div className="flex flex-col w-44 md:w-60 justify-center items-center">
+          <div className="flex flex-col w-40 md:w-60 justify-center items-center ms-3">
             <div>
               <img src={logo} alt="logo" className="" />
             </div>
 
-            <div className="flex justify-between  text-primary px-16 py-5 gap-5 ">
-              <FaFacebookF />
-              <FaInstagram className="mx-1" />
-              <FaTwitter />
+            <div className="flex justify-between  text-primary px-16 py-5 gap-3 ">
+              <Link
+                target="_blank"
+                to={
+                  "https://www.instagram.com/entebuddy/?igsh=MXNkaTZyZHdjbHU1Zw%3D%3D"
+                }
+              >
+                <FaFacebookF />
+              </Link>
+              <Link
+                target="_blank"
+                to={
+                  "https://www.instagram.com/entebuddy/?igsh=MXNkaTZyZHdjbHU1Zw%3D%3D"
+                }
+              >
+                <FaInstagram className="mx-1" />
+              </Link>
+              <Link
+                target="_blank"
+                to={
+                  "https://www.instagram.com/entebuddy/?igsh=MXNkaTZyZHdjbHU1Zw%3D%3D"
+                }
+              >
+                <FaTwitter />
+              </Link>
             </div>
           </div>
           <div className="flex flex-col uppercase text-[8px] py-6 md:text-lg font-poppins font-medium">

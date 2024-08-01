@@ -147,7 +147,7 @@ const Sidebar = () => {
         )}
         {/* ////////// */}
         {/* this div is for displaying the cart items  */}
-        <div className="flex flex-col h-1/2  overflow-y-auto overflow-x-hidden border-b px-8">
+        <div className="flex flex-col h-1/2  overflow-y-auto overflow-x-hidden border-b px-5">
           {cart &&
             cart.map((item) => (
               <div key={item._id}>
