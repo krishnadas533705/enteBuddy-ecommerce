@@ -9,7 +9,7 @@ export const makePayment = async (key, order, userId, orderDetails) => {
         currency: "INR",
         name: "EnteBuddy",
         description: "EnteBuddy products",
-        image: "",
+        image: "https://entebuddy.com/assets/logo-Q9Lqe-yu.png",
         order_id: order.id,
         handler: async function (response) {
           await verifyPaymentAndPushOrder(

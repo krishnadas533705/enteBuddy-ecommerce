@@ -75,7 +75,7 @@ const ProductData = () => {
           <div className="py-1 font-medium font-poppins text-sm md:text-[16px]">
             {description}
           </div>
-          <div className="py-1 font-poppins text-sm md:text-[16px] flex justify-center mt-3 mb-1 w-full">
+          <div className="py-1 font-poppins text-sm md:text-[16px] flex justify-center mt-3 mb-1 w-full gap-1">
             {productFeatures &&
               productFeatures.map((feature) => (
                 <div className="flex flex-col items-center" key={feature._id}>
