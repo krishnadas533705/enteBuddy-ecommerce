@@ -59,7 +59,7 @@ const ProductsList = () => {
         {/* search bar */}
         <div className="flex flex-col w-full bg-white">
           <div className="mt-5 lg:ms-72 flex justify-center gap-0">
-            <form className="md:w-1/2 mx-auto">
+            <form className="md:w-1/2 w-full px-10 mx-auto">
               <label
                 htmlFor="default-search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only "

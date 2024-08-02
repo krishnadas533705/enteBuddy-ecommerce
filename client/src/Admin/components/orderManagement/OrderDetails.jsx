@@ -3,6 +3,7 @@ import Navbar from "../Navbar";
 import AdminContext from "../../context/AdminContext";
 import { faIndianRupee } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import logo from '../../Public/Images/logo.png'
 
 function OrderDetails() {
   const API = import.meta.env.VITE_API_URL;
@@ -40,12 +41,16 @@ function OrderDetails() {
   };
   return (
     <div>
-      <Navbar />
+      <nav className="w-full items-center bg-slate-200 h-14 flex justify-center px-7">
+        <div className="w-1/3">
+          <img className="w-28" src={logo}></img>{" "}
+        </div>
+      </nav>
 
       <section className="p-8 bg-white h-screen">
         <div className="flex justify-between">
-          <h1 className="text-2xl font-medium ">Order Details </h1>
-          <h1 className="text-xl font-medium">
+          <h1 className="text-xl md:text-2xl font-medium ">Order Details </h1>
+          <h1 className=" md:text-xl font-medium">
             Status :{" "}
             <span
               className={`${
@@ -93,7 +98,7 @@ function OrderDetails() {
               </div>
             ))}
           <hr />
-          <div className="flex gap-16 p-3">
+          <div className=" flex flex-col md:flex-row gap-8 md:gap-16 p-3">
             <div>
               <h1 className="text-lg underline font-medium mb-1">
                 Shipping Address
@@ -153,16 +158,16 @@ function OrderDetails() {
           <hr />
 
           <div>
-            <form className="max-w-sm mx-auto">
+            <form className="max-w-sm mx-auto mt-8 pb-14">
               <label
                 htmlFor="orderStatus"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-lg font-medium text-gray-900 dark:text-white uppercase"
               >
                 Update Order Status
               </label>
               <select
                 id="orderStatus"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 w-full text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 onChange={updateOrderStatus}
               >
                 <option defaultValue={true} className="text-gray-300">

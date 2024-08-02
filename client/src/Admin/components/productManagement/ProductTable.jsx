@@ -178,8 +178,8 @@ const ProductTable = ({
         />
       </div>
 
-      <div className="md:ms-28 mt-10 mb-20 ms-10 w-full bg-white">
-        <label htmlFor="icon-input" className="text-xs">
+      <div className="md:ms-28 mt-10 mb-20 p-5 w-full bg-white">
+        <label htmlFor="icon-input" className="text-sm">
           Click here to add icons.
         </label>
         <br />

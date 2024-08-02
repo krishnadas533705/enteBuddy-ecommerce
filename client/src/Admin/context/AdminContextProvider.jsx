@@ -17,10 +17,22 @@ const AdminContextProvider = ({ children }) => {
   });
   const [sideBarOpen, setSideBar] = useState(false);
 
-  const logoutAdmin = () => {
-    localStorage.removeItem('adminId')
-    setAdmin(null);
-    window.location.reload
+  const logoutAdmin = async (navigate) => {
+    try {
+      const reponse = await fetch(`/api/admin/signout/${adminId}`, {
+        method: "post",
+        credentials: "include",
+      });
+      if (reponse.ok) {
+        localStorage.setItem("adminId", null);
+        setAdmin(null);
+        navigate("/admin/signin");
+      } else {
+        console.log("logout failed");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -33,7 +45,7 @@ const AdminContextProvider = ({ children }) => {
         orderData,
         setOrderData,
         handleOrderData,
-        logoutAdmin
+        logoutAdmin,
       }}
     >
       {children}
