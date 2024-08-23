@@ -122,7 +122,7 @@ const ProductData = () => {
               </div>
               <div className="ml-3">
                 <div>{title}</div>
-                <div> ₹ {price}</div>
+                <div> ₹ {Math.floor(price - (discount / 100) * price)}</div>
               </div>
             </div>
             <div
