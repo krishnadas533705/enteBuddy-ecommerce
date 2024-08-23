@@ -4,10 +4,8 @@ import jwt from "jsonwebtoken";
 
 // signup or signin controller
 export const userAuth = async (req, res, next) => {
-  console.log("User auth working....");
-  console.log("request body : ", req.body);
-  const mobile = req.body.mobile;
   try {
+    const mobile = req.body.mobile;
     const existingUser = await User.findOne({ mobile });
     let userInfo;
     let newUser;

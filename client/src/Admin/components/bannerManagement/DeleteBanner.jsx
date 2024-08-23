@@ -9,26 +9,24 @@ const DeleteBanner = ({
   bannerId,
   setFetchBanners,
 }) => {
-  const { adminId } = useContext(AdminContext);
+  const { adminId, logoutAdmin } = useContext(AdminContext);
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(
-        `/api/admin/deleteBanner/${adminId}`,
-        {
-          method: "delete",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({ bannerId }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`/api/admin/deleteBanner/${adminId}`, {
+        method: "delete",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ bannerId }),
+        credentials: "include",
+      });
 
       if (response.ok) {
-        console.log("banner removed");
         setFetchBanners((pre) => !pre);
         showDeletePrompt(false);
+      } else if (response.status == 401 || response.status == 403) {
+        logoutAdmin();
       }
     } catch (err) {
       console.log("product deleting error : ", err);

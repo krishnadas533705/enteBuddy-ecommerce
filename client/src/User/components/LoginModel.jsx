@@ -78,9 +78,9 @@
                   setTimer(60)
               })
               .catch((err) => {
-                  console.log(err);
                   setLoading(false);
                   toast.error("invalid phone number")
+                  console.log(err)
               });
       }
       const resendOTP = () => {
@@ -94,16 +94,13 @@
           window.confirmationResult
               .confirm(otp)
               .then(async (res) => {
-                  console.log("firebase response : ", res);
                   setUser(res.user);
                   setLoading(false);
-                  console.log("phone number : ", ph);
                   if (res.user) {
                       await userSignin(); //call the user signin after otp verification
                   }
               })
               .catch((err) => {
-                  console.log(err);
                   setVerifyLoading(false);
                   setOtpError(true);
               });
@@ -116,14 +113,11 @@
                   headers: {
                       "content-type": "application/json",
                   },
-                  body: JSON.stringify({ value: ph }),
+                  body: JSON.stringify({ mobile: ph }),
               });
               if (response.ok) {
-                  console.log("log success");
                   const userData = await response.json();
-                  console.log(userData);
                   localStorage.setItem("enteBuddyUser", userData._id);
-                  console.log(localStorage.getItem("entebuddyUser"));
 
                   setUser(userData._id);
                   setUserId(userData._id);
@@ -134,7 +128,7 @@
                   await new Promise((resolve) => setTimeout(resolve, 2000));
                   onClose();
               } else {
-                  alert("failed to log in ");
+                  alert("Failed to log in. ");
               }
           } catch (err) {
               console.log("error signing in : ", err);
@@ -182,12 +176,13 @@
                               </label>
                               <OtpInput
                                   value={otp}
+                                  
                                   onChange={setOtp}
                                   OTPLength={6}
                                   otpType="number"
                                   disabled={false}
                                   autoFocus
-                                  className="opt-container text-black"
+                                  className="opt-container text-black dark:text-white "
                               ></OtpInput>
 
                               {otpError && (

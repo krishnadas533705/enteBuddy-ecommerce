@@ -36,3 +36,5 @@ yarn-error.log*
 server/Public/uploads/bannerImages/*
 server/Public/uploads/primaryImages/*
 server/Public/uploads/secondaryImages/*
+server/Public/uploads/icons/*
+

@@ -1,4 +1,4 @@
-export const getDashBoardData = async (adminId) => {
+export const getDashBoardData = async (adminId,setAdmin) => {
   try {
     const response = await fetch(`/api/admin/dashBoardData/${adminId}`, {
       method: "GET",
@@ -8,7 +8,13 @@ export const getDashBoardData = async (adminId) => {
     if (response.ok) {
       const data = await response.json();
       return data;
-    } else {
+    }
+    else if(response.status == 401 || response.status == 403){
+      localStorage.setItem('adminId',null)
+      setAdmin(null)
+      window.location.href = '/admin/signin'
+    }
+     else {
       return null;
     }
   } catch (err) {

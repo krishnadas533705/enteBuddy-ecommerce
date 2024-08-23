@@ -7,19 +7,25 @@ import { getDashBoardData, getWeeklyData } from "./DashboardData";
 import BarChart from "./BarChart.jsx";
 
 const DashBoard = () => {
-  const { adminId } = useContext(AdminContext);
+  const { adminId, setAdmin, setSideBar } = useContext(AdminContext);
   const [data, setData] = useState(null);
   const [weeklyData, setWeeklyData] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
-    (async () => {
-      const dashBoardData = await getDashBoardData(adminId);
-      setData(dashBoardData);
+    setSideBar(false)
 
-      const thisWeekData = getWeeklyData(dashBoardData.allOrders);
-      setWeeklyData(thisWeekData);
-    })();
+    if (!adminId) {
+      navigate("/admin/signin");
+    } else {
+      (async () => {
+        const dashBoardData = await getDashBoardData(adminId, setAdmin);
+        setData(dashBoardData);
+
+        const thisWeekData = getWeeklyData(dashBoardData.allOrders);
+        setWeeklyData(thisWeekData);
+      })();
+    }
   }, []);
-  console.log("data : ", data);
   return (
     <>
       <Navbar />
@@ -27,7 +33,7 @@ const DashBoard = () => {
         <SideBar />
 
         {/* <!-- Main content --> */}
-        <div className="lg:w-3/4">
+        <div className="lg:w-3/4 bg-white h-screen">
           {/* <!-- Content header --> */}
           <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker">
             <h1 className="text-2xl font-semibold">Dashboard</h1>

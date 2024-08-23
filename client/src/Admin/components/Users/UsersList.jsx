@@ -5,14 +5,18 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../Navbar";
 import Usertable from "./Usertable";
 import AdminContext from "../../context/AdminContext";
+import { useNavigate } from "react-router-dom";
 
 const UsersList = () => {
-  const { adminId } = useContext(AdminContext);
-
+  const { adminId,logoutAdmin, setSideBar } = useContext(AdminContext);
   const [users, setUsers] = useState(null);
   const [currentUsers, setCurrentUsers] = useState(null);
-
+  const navigate = useNavigate()
   useEffect(() => {
+    setSideBar(false)
+    if (!adminId) {
+      navigate("/admin/signin");
+    }
     (async () => {
       try {
         let userData = await fetch(
@@ -24,6 +28,9 @@ const UsersList = () => {
         if (userData.ok) {
           userData = await userData.json();
           setUsers(userData);
+        }
+        else if(userData.status == 401 || userData.status ==403){
+          logoutAdmin()
         }
       } catch (err) {
         console.log(err);
@@ -38,11 +45,9 @@ const UsersList = () => {
         user.mobile?.startsWith(e.target.value) ||
         user.email?.toLowerCase().startsWith(e.target.value.toLowerCase())
       ) {
-        console.log("user found");
         return user;
       }
     });
-    console.log("USErs list : ", usersList);
     if (e.target.value.trim() == "") {
       setCurrentUsers(null);
     } else {
@@ -50,10 +55,10 @@ const UsersList = () => {
     }
   };
   return (
-    <div>
+    <div className="h-screen">
       <Navbar />
       <SideBar />
-      <section className="">
+      <section className="bg-white h-screen">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <div className="relative">
@@ -75,11 +80,11 @@ const UsersList = () => {
             </div>
           </form>
         </div>
-      </section>
       <Usertable
         users={currentUsers ? currentUsers : users}
         searching={currentUsers ? true : false}
       />
+      </section>
     </div>
   );
 };

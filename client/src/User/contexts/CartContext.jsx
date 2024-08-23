@@ -27,6 +27,8 @@ const CartProvider = ({ children }) => {
   }, []);
   const [itemAmount, setItemAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [realTotalPrice, setRealTotalPrice] = useState(0);
 
   // setting the total price in the cart
   useEffect(() => {
@@ -34,7 +36,14 @@ const CartProvider = ({ children }) => {
       const amount = cart.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.price * currentItem.quantity;
       }, 0);
+
       setTotalPrice(amount);
+      const realPriceTotal = cart.reduce((accumulator, currentItem) => {
+        return accumulator + currentItem.realPrice * currentItem.quantity;
+      }, 0);
+      setRealTotalPrice(realPriceTotal);
+      let total_discount = realPriceTotal - amount + parseInt(discountPrice);
+      setTotalDiscount(total_discount);
     }
   }, [cart]);
 
@@ -46,9 +55,7 @@ const CartProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        console.log("Response : ", response);
         const cartData = await response.json();
-        console.log("cartData : ", cartData);
         const localCart = JSON.stringify(cartData);
         localStorage.setItem("enteBuddyCart", localCart);
         setCart(cartData);
@@ -57,8 +64,15 @@ const CartProvider = ({ children }) => {
         localStorage.setItem("enteBuddyCouponId", "");
         setCouponId("");
         setCart(cartData);
-      } else {
-        console.log("failed to update cart");
+      } else if (response.status == 401 || response.status == 403) {
+        toast.error(
+          "Your session has been expired, Please login again to continue shopping.",
+          { duration: 6000 }
+        );
+        localStorage.clear();
+        setCart(null);
+        setIsOpen(false);
+        setShowModal(true);
       }
       return;
     } catch (err) {
@@ -67,27 +81,41 @@ const CartProvider = ({ children }) => {
   };
   //  add to cart
   const addToCart = async (product) => {
-    try {
-      console.log(userId);
-      const response = await fetch(`/api/user/addToCart/${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(product),
-        credentials: "include",
-      });
-      if (response.ok) {
-        console.log("Cart updated");
-        toast.success("product added to cart");
-
-        fetchCart(userId);
-      } else {
-        console.log("failed to update cart");
+    const addingToCart = async () => {
+      try {
+        new Promise(async (resolve, reject) => {
+          const response = await fetch(`/api/user/addToCart/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+            credentials: "include",
+          });
+          if (response.ok) {
+            fetchCart(userId);
+            resolve();
+          } else if (response.status == 401 || response.status == 403) {
+            toast.error(
+              "Your session has been expired, Please login again to continue shopping.",
+              { duration: 6000 }
+            );
+            localStorage.clear();
+            setCart(null);
+            setIsOpen(false);
+            setShowModal(true);
+            reject();
+          }
+        });
+      } catch (err) {
+        console.log("error in adding to cart : ", err);
       }
-    } catch (err) {
-      console.log("error in adding to cart : ", err);
-    }
+    };
+    toast.promise(addingToCart(), {
+      loading: "Adding product to cart...",
+      success: <b>Product added to cart.</b>,
+      error: <b>Failed to add product.</b>,
+    });
   };
 
   const removeFromCart = async (id) => {
@@ -98,8 +126,12 @@ const CartProvider = ({ children }) => {
       });
       if (response.ok) {
         fetchCart(userId);
-      } else {
-        console.log("cart update failed");
+      } else if (response.status == 401 || response.status == 403) {
+        toast.error("Your session has been expired, Please login again.");
+        localStorage.clear();
+        setCart(null);
+        setIsOpen(false);
+        setShowModal(true);
       }
     } catch (err) {
       console.log(err);
@@ -108,15 +140,18 @@ const CartProvider = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      console.log("clearing cart...");
       const response = await fetch(`/api/user/removeAllFromCart/${userId}`, {
         method: "delete",
         credentials: "include",
       });
       if (response.ok) {
         fetchCart(userId);
-      } else {
-        console.log("cart update failed");
+      } else if (response.status == 401 || response.status == 403) {
+        toast.error("Your session has been expired, Please login again.");
+        localStorage.clear();
+        setCart(null);
+        setIsOpen(false);
+        setShowModal(true);
       }
     } catch (err) {
       console.log(err);
@@ -145,14 +180,17 @@ const CartProvider = ({ children }) => {
           credentials: "include",
         });
         if (response.ok) {
-          console.log("Cart updated");
           const cartItem = cart.find((item) => {
             return item.id === id;
           });
 
           fetchCart(userId);
-        } else {
-          console.log("failed to update cart");
+        } else if (response.status == 401 || response.status == 403) {
+          toast.error("Your session has been expired, Please login again.");
+          localStorage.clear();
+          setCart(null);
+          setIsOpen(false);
+          setShowModal(true);
         }
       }
     } catch (err) {
@@ -168,14 +206,13 @@ const CartProvider = ({ children }) => {
       }, 0);
       setItemAmount(amount);
     }
-
-  }, [cart]); 
+  }, [cart]);
 
   const handleCart = () => {
     if (userId) {
       setIsOpen((prev) => !prev);
     } else {
-      toast.error("Please log in to order");
+      toast.error("Please log in to continue shopping.");
       setShowModal(true);
     }
   };
@@ -196,7 +233,11 @@ const CartProvider = ({ children }) => {
         handleCart,
         discountPrice,
         setDiscountPrice,
-        setCouponId
+        setCouponId,
+        totalDiscount,
+        setTotalDiscount,
+        realTotalPrice,
+        setRealTotalPrice,
       }}
     >
       {children}

@@ -10,7 +10,7 @@ const EditCoupon = ({
   fetchCoupon,
 }) => {
   const [updateData, setUpdateData] = useState({});
-  const { adminId } = useContext(AdminContext);
+  const { adminId, logoutAdmin } = useContext(AdminContext);
   const handleUpdateData = (e) => {
     setUpdateData((prev) => ({
       ...prev,
@@ -20,7 +20,6 @@ const EditCoupon = ({
   const handleSubmit = async () => {
     if (Object.keys(updateData).length !== 0) {
       try {
-        console.log("Updating...");
         const response = await fetch(
           `/api/admin/updateCoupon/${adminId}/${editingCoupon._id}`,
           {
@@ -38,6 +37,8 @@ const EditCoupon = ({
           showCouponEditForm(false);
           setUpdateData({});
           fetchCoupon((prev) => !prev);
+        } else if (response.status == 401 || response.status == 403) {
+          logoutAdmin()
         } else {
           alert("Coupon update failed");
         }

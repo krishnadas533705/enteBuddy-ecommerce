@@ -1,14 +1,15 @@
+import { toast } from "react-hot-toast";
+
 export const makePayment = async (key, order, userId, orderDetails) => {
   return new Promise((resolve, reject) => {
     try {
-      console.log("order amount : ", order.amount);
       var options = {
         key,
         amount: order.amount,
         currency: "INR",
         name: "EnteBuddy",
         description: "EnteBuddy products",
-        image: "",
+        image: "https://entebuddy.com/assets/logo-Q9Lqe-yu.png",
         order_id: order.id,
         handler: async function (response) {
           await verifyPaymentAndPushOrder(
@@ -20,7 +21,7 @@ export const makePayment = async (key, order, userId, orderDetails) => {
             order.amount
           );
 
-          resolve()
+          resolve();
         },
         prefill: {
           name: "",
@@ -35,8 +36,7 @@ export const makePayment = async (key, order, userId, orderDetails) => {
       var rzp1 = new Razorpay(options);
       rzp1.on("payment.failed", function (response) {
         alert("Payment failed, Try again.");
-        console.log("Payment failed : ", response.error.description);
-        reject()
+        reject();
       });
       rzp1.open();
     } catch (err) {
@@ -81,12 +81,13 @@ const verifyPaymentAndPushOrder = async (
         credentials: "include",
       });
       if (orderResponse.ok) {
-        alert("order placed successfully");
+        toast.success(`Order Placed successfully`);
+
         localStorage.setItem("enteBuddyCartPrice", 0);
-        localStorage.setCart("enteBuddyCart", null);
+        localStorage.setItem("enteBuddyCart", null);
         localStorage.setItem("enteBuddyCouponId", "");
       } else {
-        alert("shipping failed");
+        toast.error("Shipping failed");
         const refundResponse = await fetch(
           `/api/payment/refundPayment/${userId}`,
           {
@@ -99,8 +100,9 @@ const verifyPaymentAndPushOrder = async (
           }
         );
         if (refundResponse.ok) {
-          alert(
-            "failed to place order, your amount will be refunded in two weeks."
+          toast(
+            "Failed to place order, your amount will be refunded in two weeks.",
+            { duration: 5000 }
           );
         }
       }

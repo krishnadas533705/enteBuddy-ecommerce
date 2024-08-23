@@ -5,25 +5,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import BannerTable from "./BannerTable";
 import AdminContext from "../../context/AdminContext";
+import { useNavigate } from "react-router-dom";
 
 const BannerList = () => {
-  const { adminId } = useContext(AdminContext);
+  const navigate = useNavigate()
+  const { adminId, logoutAdmin, setSideBar } = useContext(AdminContext);
   const [banners, setBanners] = useState(null);
   const [fetchBanners, setFetchBanners] = useState(true);
 
   useEffect(() => {
+    setSideBar(false)
+    if (!adminId) {
+      navigate("/admin/signin");
+    }
     (async () => {
       try {
-        const response = await fetch(
-          `/api/admin/getBanners/${adminId}`,
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`/api/admin/getBanners/${adminId}`, {
+          credentials: "include",
+        });
         if (response.ok) {
           const bannersList = await response.json();
-          console.log("banner list : ", bannersList);
           setBanners(bannersList);
+        } else if (response.status == 401 || response.status == 403) {
+          logoutAdmin();
         }
       } catch (err) {
         console.log("Banner fetching error : ", err);
@@ -43,10 +47,10 @@ const BannerList = () => {
     }
   };
   return (
-    <div>
+    <div className="h-screen">
       <Navbar />
       <SideBar />
-      <section className="">
+      <section className="bg-white h-screen">
         <div className="mt-5 lg:ms-32 flex justify-center">
           <form className="md:w-1/3 mx-auto">
             <label

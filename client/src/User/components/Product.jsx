@@ -5,7 +5,7 @@ import { CartContext } from "../contexts/CartContext";
 
 const Product = ({ product }) => { 
   const { _id, primaryImage, category, price, title, description ,discount,reviews} = product;
-  console.log(product)
+  
   const { addToCart } = useContext(CartContext);
 const API = import.meta.env.VITE_API_URL
   return (
@@ -78,7 +78,7 @@ const API = import.meta.env.VITE_API_URL
           </div>
 
           <Link to={`/product/${_id}`}>
-            <button className="mt-2 border border- p-2 bg-[#5B4663] text-white w-full rounded-3xl ml-0 font-poppins">
+            <button className="mt-2 border border- p-2 bg-[#5B4663] text-white w-full rounded-3xl ml-0 font-poppins hover:bg-primary hover:text-black">
               Shop now
             </button>
           </Link>

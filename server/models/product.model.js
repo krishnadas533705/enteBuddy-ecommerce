@@ -50,6 +50,22 @@ const productSchema = mongoose.Schema(
         },
       },
     ],
+    productFeatures:[{
+      description:{
+        type:String
+      },
+      icon:{
+        type:String
+      }
+    }],
+    serviceFeatures:[{
+      description:{
+        type:String
+      },
+      icon:{
+        type:String
+      }
+    }],
     quantitySold: {
       type: Number,
       default: 0,

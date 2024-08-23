@@ -19,7 +19,7 @@ const RatingBar = () => {
       reviewsCount[review.rating]++;
     });
   }
-
+ 
   const result = Object.keys(reviewsCount).map((rating) => ({
     rating: parseInt(rating, 10),
     count: reviewsCount[rating],
@@ -53,7 +53,7 @@ const RatingBar = () => {
               <div className="flex h-16 items-center text-2xl font-bold text-blue-900">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-12 w-12 text-yellow-400"
+                  className="h-12 w-12 text-yellow-400 "
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
