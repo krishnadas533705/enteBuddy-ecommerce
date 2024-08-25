@@ -55,7 +55,7 @@ const OrderTracking = () => {
             order.products.map((product) => (
               <section
                 className="pt-6 md:pt-3 pb-1"
-                key={product._id._id + Math.random()}
+                key={ Math.random()}
               >
                 <div className="py-3 px-8 font-mono text-lg flex justify-between border-b border-gray-200">
                   <div className="desc">
