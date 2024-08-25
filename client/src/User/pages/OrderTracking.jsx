@@ -64,7 +64,7 @@ const OrderTracking = () => {
                     <div>₹ {product.price}</div>
                   </div>
                   <div className="w-24 flex justify-center items-center">
-                    {product._id && (
+                    {product && product._id ? (
                       <img
                         src={
                           API + product._id.primaryImage.path.split("server")[1]
@@ -72,6 +72,8 @@ const OrderTracking = () => {
                         alt="massager image"
                         className="w-full h-full object-fit"
                       />
+                    ) : (
+                      ""
                     )}
                   </div>
                 </div>
