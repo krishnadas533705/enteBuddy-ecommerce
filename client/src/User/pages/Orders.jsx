@@ -93,16 +93,18 @@ const Orders = () => {
                   className="flex items-center w-full"
                 >
                   <div className="w-28 h-24 px-2 py-2 mr-3 ">
-                    <img
-                      src={
-                        API +
-                        order.products[0]._id.primaryImage.path.split(
-                          "server"
-                        )[1]
-                      }
-                      alt="massager image"
-                      className="w-full h-full object-fit"
-                    />
+                    {order.products[0]._id && (
+                      <img
+                        src={
+                          API +
+                          order.products[0]._id.primaryImage.path.split(
+                            "server"
+                          )[1]
+                        }
+                        alt="massager image"
+                        className="w-full h-full object-fit"
+                      />
+                    )}
                   </div>
                   <div>
                     <div className="flex">

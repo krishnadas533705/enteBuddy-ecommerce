@@ -25,7 +25,6 @@ export const verifyAdmin = (req, res, next) => {
 
 export const verifyUser = (req, res, next) => {
   const token = req.cookies.enteBuddy_access_token;
-  console.log("request : ",req)
   if (!token) {
     return next(errorHandler(401, "Unauthorised"));
   } else {
@@ -33,9 +32,7 @@ export const verifyUser = (req, res, next) => {
       if (err) {
         return next(errorHandler(403, "Forbidden"));
       }
-      console.log("userinfo :",user.userInfo)
       req.user = user.userInfo;
-      console.log("req.user : ",req.user)
       if (req.params.userId != req.user._id) {
         return next(
           errorHandler(401, "You are not authorised use this account.")
