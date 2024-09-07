@@ -107,20 +107,20 @@ const AddProduct = ({
 
       if (productData.serviceFeature1) {
         serviceFeatures.push(productData.serviceFeature1);
-        featureIcons.push(serviceIcon1);
+        serviceFeatureIcons.push(serviceIcon1);
       }
       if (productData.serviceFeature2) {
         serviceFeatures.push(productData.serviceFeature2);
-        featureIcons.push(serviceIcon2);
+        serviceFeatureIcons.push(serviceIcon2);
       }
       if (productData.serviceFeature3) {
         serviceFeatures.push(productData.serviceFeature3);
-        featureIcons.push(serviceIcon3);
+        serviceFeatureIcons.push(serviceIcon3);
       }
 
       if (productData.serviceFeature4) {
         serviceFeatures.push(productData.serviceFeature4);
-        featureIcons.push(serviceIcon4);
+        serviceFeatureIcons.push(serviceIcon4);
       }
 
       let serviceFeaturesWithIcons = [];
@@ -134,7 +134,6 @@ const AddProduct = ({
       }
 
       let serializedServiceFeatures = JSON.stringify(serviceFeaturesWithIcons);
-
       const formData = new FormData();
       formData.append("title", productData.title);
       formData.append("category", productData.category);
