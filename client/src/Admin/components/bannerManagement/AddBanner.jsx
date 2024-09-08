@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useState } from "react";
 import AdminContext from "../../context/AdminContext";
 import validateBanner from "./validateBanner";
+import { toast } from "react-hot-toast";
+
 const AddBanner = ({ bannerForm, showBannerForm, setFetchBanners }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [bannerData, setBannerData] = useState({});
@@ -38,23 +40,38 @@ const AddBanner = ({ bannerForm, showBannerForm, setFetchBanners }) => {
       formData.append("endDate", bannerData.endDate);
       formData.append("bannerImage", bannerData.bannerImage);
 
-      const response = await fetch(`/api/admin/addBanner/${adminId}`, {
-        method: "post",
-        body: formData,
-        credentials: "include",
-      });
+      const addBanner = async () => {
+        try {
+          new Promise(async (resolve, reject) => {
+            const response = await fetch(`/api/admin/addBanner/${adminId}`, {
+              method: "post",
+              body: formData,
+              credentials: "include",
+            });
 
-      if (response.ok) {
-        console.log("Banner added");
-        setBannerData({});
-        setImageUrl(null);
-        setFetchBanners((prev) => !prev);
-        showBannerForm(false);
-      } else if (response.status == 401 || response.status == 403) {
-        logoutAdmin()
-      } else {
-        console.log("failed to add banner");
-      }
+            if (response.ok) {
+              setBannerData({});
+              setImageUrl(null);
+              setFetchBanners((prev) => !prev);
+              showBannerForm(false);
+              resolve();
+            } else if (response.status == 401 || response.status == 403) {
+              logoutAdmin();
+            } else {
+              toast.error("Failed to add banner.", { duration: 2000 });
+              reject();
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      toast.promise(addBanner(), {
+        loading: "Adding new banner...",
+        success: <b>New banner added.</b>,
+        error: <b>Failed to add banner.</b>,
+      });
     } else {
       console.log("Banner validation error");
     }

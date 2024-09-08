@@ -39,7 +39,7 @@ export const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 app.use(express.json());
 app.use(cookieParser());
-// app.use("/Public",express.static('C:/Users/ASWIN/Documents/KD/enteBuddy-ecommerce/server/Public'))
+// app.use("/Public",express.static('C:/Users/krish/Documents/entebuddy/enteBuddy-ecommerce/server/Public'))
 app.use("/Public", express.static('/var/www/enteBuddy-ecommerce/server/Public')); 
 // app.use("/Public", express.static("C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public")); 
 app.listen(port, () => console.log("server started at port : ",port));

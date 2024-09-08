@@ -18,12 +18,14 @@ export const userAuth = async (req, res, next) => {
       await newUser.save();
       userInfo = newUser;
     }
-    const token = jwt.sign({ userInfo }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userInfo }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
     res
       .cookie("enteBuddy_access_token", token, {
         httpOnly: true,
         secure: true,
-        expires: new Date(Date.now() + 24 * 60 * 60 * 10000),
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       })
       .status(200)
       .json(userInfo);

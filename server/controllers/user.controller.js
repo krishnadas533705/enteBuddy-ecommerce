@@ -67,7 +67,6 @@ export const cartMinus = async (req, res, next) => {
 ///query products in the cart
 export const getCartItems = async (req, res, next) => {
   try {
-    console.log("req.user_id : ",req.user._id)
     const cartItems = await cart
       .findOne({ userId: req.user._id })
       .populate("items._id");

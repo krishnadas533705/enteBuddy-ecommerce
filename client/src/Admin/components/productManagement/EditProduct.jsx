@@ -22,7 +22,7 @@ const EditProduct = ({
   }, [editingProduct]);
   const handleProductData = (e) => {
     const { name, value } = e.target;
-
+    console.log(name , " : ", value)
     if (name == "primaryImage") {
       setUpdateData((prev) => ({
         ...prev,
@@ -62,75 +62,73 @@ const EditProduct = ({
     try {
       const formData = new FormData();
 
-      let productFeatures = editingProduct.productFeatures
-      if(updateData.productFeature1){
+      let productFeatures = editingProduct.productFeatures;
+      if (updateData.productFeature1) {
         let feature = {
-          description:updateData.productFeature1,
-          icon:icon1
-        }
-        productFeatures[0] = feature
+          description: updateData.productFeature1,
+          icon: icon1,
+        };
+        productFeatures[0] = feature;
       }
 
-      if(updateData.productFeature2){
+      if (updateData.productFeature2) {
         let feature = {
-          description:updateData.productFeature2,
-          icon:icon2
-        }
-        productFeatures[1] = feature
+          description: updateData.productFeature2,
+          icon: icon2,
+        };
+        productFeatures[1] = feature;
       }
-      if(updateData.productFeature3){
+      if (updateData.productFeature3) {
         let feature = {
-          description:updateData.productFeature3,
-          icon:icon3
-        }
-        productFeatures[2] = feature
-      }
-      
-      if(updateData.productFeature4){
-        let feature = {
-          description:updateData.productFeature4,
-          icon:icon4
-        }
-        productFeatures[3] = feature
+          description: updateData.productFeature3,
+          icon: icon3,
+        };
+        productFeatures[2] = feature;
       }
 
-      let stringifiedProductFeatures = JSON.stringify(productFeatures)
-      formData.append('productFeatures',stringifiedProductFeatures)
-
-      let serviceFeatures = editingProduct.serviceFeatures
-      if(updateData.serviceFeature1){
+      if (updateData.productFeature4) {
         let feature = {
-          description:updateData.serviceFeature1,
-          icon:serviceIcon1
-        }
-        serviceFeatures[0] = feature
-      }
-      if(updateData.serviceFeature2){
-        let feature = {
-          description:updateData.serviceFeature2,
-          icon:serviceIcon2
-        }
-        serviceFeatures[1] = feature
-      }
-      if(updateData.serviceFeature3){
-        let feature = {
-          description:updateData.serviceFeature3,
-          icon:serviceIcon3
-        }
-        serviceFeatures[2] = feature
-      }
-      if(updateData.serviceFeature4){
-        let feature = {
-          description:updateData.serviceFeature4,
-          icon:serviceIcon4
-        }
-        serviceFeatures[3] = feature
+          description: updateData.productFeature4,
+          icon: icon4,
+        };
+        productFeatures[3] = feature;
       }
 
-      let stringifiedServiceFeatures = JSON.stringify(serviceFeatures)
-      formData.append('serviceFeatures',stringifiedServiceFeatures)
+      let stringifiedProductFeatures = JSON.stringify(productFeatures);
+      formData.append("productFeatures", stringifiedProductFeatures);
 
+      let serviceFeatures = editingProduct.serviceFeatures;
+      if (updateData.serviceFeature1) {
+        let feature = {
+          description: updateData.serviceFeature1,
+          icon: serviceIcon1,
+        };
+        serviceFeatures[0] = feature;
+      }
+      if (updateData.serviceFeature2) {
+        let feature = {
+          description: updateData.serviceFeature2,
+          icon: serviceIcon2,
+        };
+        serviceFeatures[1] = feature;
+      }
+      if (updateData.serviceFeature3) {
+        let feature = {
+          description: updateData.serviceFeature3,
+          icon: serviceIcon3,
+        };
+        serviceFeatures[2] = feature;
+      }
+      if (updateData.serviceFeature4) {
+        let feature = {
+          description: updateData.serviceFeature4,
+          icon: serviceIcon4,
+        };
+        serviceFeatures[3] = feature;
+      }
 
+      let stringifiedServiceFeatures = JSON.stringify(serviceFeatures);
+      formData.append("serviceFeatures", stringifiedServiceFeatures);
 
       // Define keys that need to be appended
       const keys = [
@@ -141,6 +139,7 @@ const EditProduct = ({
         "quantity",
         "discount",
         "primaryImage",
+        "category"
       ];
       // Append keys to FormData object
       keys.forEach((key) => {
@@ -224,17 +223,15 @@ const EditProduct = ({
 
                     <div className="md:col-span-5">
                       <label htmlFor="category">Category</label>
-                      <select
+                      <input
+                        type="text"
                         name="category"
+                        placeholder="Enter catergory name"
                         id="category"
-                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 text-xs uppercase"
+                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 uppercase text-xs"
                         onChange={handleProductData}
                         value={updateData.category ? updateData.category : ""}
-                      >
-                        <option value="">Select</option>
-                        <option value="Massagers">Massagers</option>
-                        <option value="Lubes">Lubes</option>
-                      </select>
+                      />
                     </div>
 
                     <div className="md:col-span-5">

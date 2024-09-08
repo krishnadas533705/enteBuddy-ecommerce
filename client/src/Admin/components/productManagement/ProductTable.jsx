@@ -5,6 +5,7 @@ import Pagination from "@mui/material/Pagination";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
 import AdminContext from "../../context/AdminContext";
+import toast from "react-hot-toast";
 
 const ProductTable = ({
   products,
@@ -55,29 +56,32 @@ const ProductTable = ({
 
   const uploadIcons = async () => {
     try {
-      if (icons) {
-        const formData = new FormData();
+      new Promise(async (resolve, reject) => {
+        if (icons) {
+          const formData = new FormData();
 
-        for (let i = 0; i < icons.length; i++) {
-          console.log("icon of ", i, " : ", icons[i]);
-          const iconFile = icons[i];
-          formData.append("icons", iconFile);
-        }
+          for (let i = 0; i < icons.length; i++) {
+            console.log("icon of ", i, " : ", icons[i]);
+            const iconFile = icons[i];
+            formData.append("icons", iconFile);
+          }
 
-        const response = await fetch(`/api/admin/addIcons/${adminId}`, {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        });
-        if (response.ok) {
-          setIcons(null);
-          alert("Icons uploaded");
+          const response = await fetch(`/api/admin/addIcons/${adminId}`, {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          });
+          if (response.ok) {
+            setIcons(null);
+            resolve();
+          } else {
+            reject();
+          }
         } else {
-          alert("Failed to upload icons.");
+          toast.error("Choose icons first.");
+          reject();
         }
-      } else {
-        alert("Choose icons first.");
-      }
+      });
     } catch (err) {
       throw new Error(err);
     }
@@ -193,7 +197,13 @@ const ProductTable = ({
         />
 
         <button
-          onClick={uploadIcons}
+          onClick={() => {
+            toast.promise(uploadIcons(), {
+              loading: "Adding new icon",
+              success: <b>Icon added.</b>,
+              error: <b>Error in adding icon.</b>,
+            });
+          }}
           className="px-2 py-1.5 bg-blue-700 text-white rounded text-sm ms-2 hover:bg-blue-600 focus:bg-blue-800 focus:border-slate-200 "
         >
           Submit

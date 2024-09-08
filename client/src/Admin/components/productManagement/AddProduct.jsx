@@ -5,6 +5,7 @@ import validateProductData from "./validateProductFrom";
 import AdminContext from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
 import IconsList from "./IconsList";
+import toast from "react-hot-toast";
 
 const AddProduct = ({
   productForm,
@@ -151,30 +152,43 @@ const AddProduct = ({
       formData.append("productFeatures", serializedProductFeatures);
       formData.append("serviceFeatures", serializedServiceFeatures);
 
-      const response = await fetch(`/api/admin/addProduct/${adminId}`, {
-        method: "post",
-        body: formData,
-        credentials: "include",
-      });
+      const addingProduct = async () => {
+        new Promise(async (resolve, reject) => {
+          const response = await fetch(`/api/admin/addProduct/${adminId}`, {
+            method: "post",
+            body: formData,
+            credentials: "include",
+          });
 
-      if (response.ok) {
-        setProductData(null);
-        setImageUrl(null);
-        showProductForm(false);
-        setFetchProduct(!fetchProduct);
-        setIcon1(null);
-        setIcon2(null);
-        setIcon3(null);
-        setIcon4(null);
-        setServiceIcon1(null);
-        setServiceIcon2(null);
-        setServiceIcon3(null);
-        setServiceIcon4(null);
-      } else if (response.status == 401 || response.status == 403) {
-        logoutAdmin();
-      } else {
-        console.log("failed to add product : ", response);
-      }
+          if (response.ok) {
+            setProductData(null);
+            setImageUrl(null);
+            showProductForm(false);
+            setFetchProduct(!fetchProduct);
+            setIcon1(null);
+            setIcon2(null);
+            setIcon3(null);
+            setIcon4(null);
+            setServiceIcon1(null);
+            setServiceIcon2(null);
+            setServiceIcon3(null);
+            setServiceIcon4(null);
+            resolve();
+          } else if (response.status == 401 || response.status == 403) {
+            logoutAdmin();
+            reject();
+          } else {
+            console.log("failed to add product : ", response);
+            reject();
+          }
+        });
+      };
+
+      toast.promise(addingProduct(), {
+        loading: "Adding new product...",
+        success: <b>New product added.</b>,
+        error: <b>Error in adding product.</b>,
+      });
     }
   };
 

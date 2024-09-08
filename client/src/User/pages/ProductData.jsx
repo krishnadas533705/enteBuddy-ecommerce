@@ -57,14 +57,14 @@ const ProductData = () => {
               <SwiperSlide key={image.name + Math.random()} style={{display:'flex', justifyContent:'center'}}>
                 <img
                   src={API + image.path.split("server")[1]}
-                  className="w-full "
+                  className="w-full"
                   alt="img"
                 />
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
-        <div className=" flex flex-col flex-1 px-5 md:px-20 bg-gray-50 py-5 h-full md:justify-center md:items-center">
+        <div className=" flex flex-col flex-1 px-5 md:px-20 bg-gray-50 py-5 h-full w-full md:justify-center md:items-center">
           <div className="font-medium font-poppins text-[30px] pt-2 md:text-[50px]">
             {title}
           </div>
@@ -75,7 +75,7 @@ const ProductData = () => {
           <div className="py-1 font-medium font-poppins text-sm md:text-[16px]">
             {description}
           </div>
-          <div className="py-1 font-poppins text-sm md:text-[16px] flex justify-center mt-3 mb-1 w-full gap-1">
+          <div className="py-1 font-poppins text-sm md:text-[16px] flex justify-center mt-3 mb-1 w-full gap-1 md:gap-3">
             {productFeatures &&
               productFeatures.map((feature) => (
                 <div className="flex flex-col items-center" key={feature._id}>
