@@ -50,10 +50,10 @@ const AddBanner = ({ bannerForm, showBannerForm, setFetchBanners }) => {
             });
 
             if (response.ok) {
+              showBannerForm(false);
               setBannerData({});
               setImageUrl(null);
               setFetchBanners((prev) => !prev);
-              showBannerForm(false);
               resolve();
             } else if (response.status == 401 || response.status == 403) {
               logoutAdmin();
@@ -71,7 +71,7 @@ const AddBanner = ({ bannerForm, showBannerForm, setFetchBanners }) => {
         loading: "Adding new banner...",
         success: <b>New banner added.</b>,
         error: <b>Failed to add banner.</b>,
-      });
+      }); 
     } else {
       console.log("Banner validation error");
     }

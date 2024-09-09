@@ -57,7 +57,7 @@ const IconsList = ({ listPrompt, setListPrompt, updateIcon }) => {
             </h1>
           </div>
           <div className="p-7">
-            <div className="flex gap-6">
+            <div className="grid grid-cols-3 gap-3 md:grid-cols-8">
               {allIcons &&
                 allIcons.map((icon) => (
                   <div key={icon._id} className="">
@@ -78,4 +78,3 @@ const IconsList = ({ listPrompt, setListPrompt, updateIcon }) => {
 };
 
 export default IconsList;
- 
