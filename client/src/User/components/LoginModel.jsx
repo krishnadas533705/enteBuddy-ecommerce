@@ -19,6 +19,7 @@
   const LoginModel = () => {
       const [otp, setOtp] = useState("");
       const [ph, setPh] = useState("");
+      console.log("length : ",ph.length , ph)
       const [loading, setLoading] = useState("");
       const [showOtp, setShowOtp] = useState("");
       const [user, setUser] = useState(null);
@@ -79,8 +80,8 @@
               })
               .catch((err) => {
                   setLoading(false);
-                  toast.error("invalid phone number")
-                  console.log(err)
+                //   toast.error("invalid phone number")
+                //   console.log(err)
               });
       }
       const resendOTP = () => {
@@ -236,7 +237,8 @@
                               />
                               <button
                                   onClick={onSignup}
-                                  className="bg-secondary w-full flex gap-1 items-center justify-center py-2.5 text-white font-poppins rounded"
+                                  disabled={ph.length != 12}
+                                  className={`bg-secondary w-full flex gap-1 items-center justify-center py-2.5 text-white font-poppins rounded ${ph.length == 12 ? 'cursor-pointer':'cursor-not-allowed'}`}
                               >
                                   {loading && (
                                       <CgSpinner

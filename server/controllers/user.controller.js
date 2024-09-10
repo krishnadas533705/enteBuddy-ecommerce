@@ -70,18 +70,21 @@ export const getCartItems = async (req, res, next) => {
     const cartItems = await cart
       .findOne({ userId: req.user._id })
       .populate("items._id");
+
     let cartProducts = null;
     if (cartItems) {
-      console.log("cart : ",cartItems)
-      cartProducts = cartItems.items.map((item) => ({
-        _id: item._id._id,
-        primaryImage: item._id.primaryImage,
-        productName: item.productName,
-        quantity: item.quantity,
-        price: item.price,
-        realPrice: item.realPrice,
-      }));
+      cartProducts = cartItems.items
+        .filter((item) => item._id) // Check if the product exists
+        .map((item) => ({
+          _id: item._id._id,
+          primaryImage: item._id.primaryImage,
+          productName: item._id.productName,
+          quantity: item.quantity,
+          price: item.price,
+          realPrice: item.realPrice,
+        }));
     }
+
     res.status(200).json(cartProducts);
   } catch (err) {
     next(err);
@@ -186,7 +189,7 @@ export const createOrder = async (req, res, next) => {
       });
       await newOrder.save();
     }
-    
+
     ///pushing order to shiprocket if shipping method is shiprocket
     //getting authtoken of shiprocket
     let responseText = "order placed";
