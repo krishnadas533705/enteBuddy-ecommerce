@@ -4,14 +4,14 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth} from "firebase/auth"; // Import the Auth SDK and signInWithPhoneNumber
 
 // Your web app's Firebase configuration
-const firebaseConfig =  {
-  apiKey: "AIzaSyBZKuMWiWVkpRVFGsTsUCF1QtRsvBDB9Uo",
-  authDomain: "entebuddy-2c050.firebaseapp.com",
-  projectId: "entebuddy-2c050",
-  storageBucket: "entebuddy-2c050.appspot.com",
-  messagingSenderId: "987719246996",
-  appId: "1:987719246996:web:42dcba7eaab35b8d5e4081",
-  measurementId: "G-BSW8487HZT"
+const firebaseConfig = {
+  apiKey: "AIzaSyDE_kVZ6Jn83KXCoqLiZMkh2ii2jqLshE0",
+  authDomain: "ecommmerce-cdd38.firebaseapp.com",
+  projectId: "ecommmerce-cdd38",
+  storageBucket: "ecommmerce-cdd38.appspot.com",
+  messagingSenderId: "1066670081669",
+  appId: "1:1066670081669:web:4b11b9c68188c194340bec",
+  measurementId: "G-6SK1178H53"
 };
 
 // Initialize Firebase
